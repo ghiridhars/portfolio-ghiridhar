@@ -1,0 +1,6 @@
+# This file is for URL redirects
+# It helps with clean URLs and 404 handling
+
+# Redirect 404 errors to home page
+# You can create a custom 404.html page instead
+/*    /index.html   404

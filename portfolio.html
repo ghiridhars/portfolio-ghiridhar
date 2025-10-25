@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="My professional work portfolio and projects">
+    <title>Work Portfolio - My Portfolio</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/portfolio.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>My Portfolio</h1>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span class="hamburger"></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="portfolio.html" class="active">Work</a></li>
+                <li><a href="books.html">Books</a></li>
+                <li><a href="coding.html">Coding</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Work Portfolio</h1>
+            <p>A showcase of my professional projects and creative work</p>
+        </div>
+    </section>
+
+    <!-- Filter Buttons -->
+    <section class="portfolio-filters">
+        <div class="container">
+            <button class="filter-btn active" data-filter="all">All Projects</button>
+            <button class="filter-btn" data-filter="web">Web Design</button>
+            <button class="filter-btn" data-filter="dev">Development</button>
+            <button class="filter-btn" data-filter="other">Other</button>
+        </div>
+    </section>
+
+    <!-- Portfolio Grid -->
+    <section class="portfolio-section">
+        <div class="container">
+            <div class="portfolio-grid">
+                <!-- Portfolio Item 1 -->
+                <article class="portfolio-item" data-category="web">
+                    <div class="portfolio-image">
+                        <div class="image-placeholder">Project Image</div>
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Project Title 1</h3>
+                        <p class="portfolio-category">Web Design</p>
+                        <p class="portfolio-description">
+                            A brief description of this project. Explain what it does,
+                            the technologies used, and your role in the project.
+                        </p>
+                        <div class="portfolio-tags">
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">JavaScript</span>
+                        </div>
+                        <a href="#" class="btn btn-small">View Project</a>
+                    </div>
+                </article>
+
+                <!-- Portfolio Item 2 -->
+                <article class="portfolio-item" data-category="dev">
+                    <div class="portfolio-image">
+                        <div class="image-placeholder">Project Image</div>
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Project Title 2</h3>
+                        <p class="portfolio-category">Development</p>
+                        <p class="portfolio-description">
+                            Another project description highlighting your skills and 
+                            the impact of your work. Be specific about your contributions.
+                        </p>
+                        <div class="portfolio-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">API</span>
+                        </div>
+                        <a href="#" class="btn btn-small">View Project</a>
+                    </div>
+                </article>
+
+                <!-- Portfolio Item 3 -->
+                <article class="portfolio-item" data-category="web">
+                    <div class="portfolio-image">
+                        <div class="image-placeholder">Project Image</div>
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Project Title 3</h3>
+                        <p class="portfolio-category">Web Design</p>
+                        <p class="portfolio-description">
+                            Describe the challenge, your approach, and the results.
+                            What did you learn from this project?
+                        </p>
+                        <div class="portfolio-tags">
+                            <span class="tag">UI/UX</span>
+                            <span class="tag">Responsive</span>
+                            <span class="tag">Mobile-First</span>
+                        </div>
+                        <a href="#" class="btn btn-small">View Project</a>
+                    </div>
+                </article>
+
+                <!-- Portfolio Item 4 -->
+                <article class="portfolio-item" data-category="other">
+                    <div class="portfolio-image">
+                        <div class="image-placeholder">Project Image</div>
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Project Title 4</h3>
+                        <p class="portfolio-category">Other</p>
+                        <p class="portfolio-description">
+                            Add as many projects as you'd like! Each one helps showcase
+                            your diverse skills and experience.
+                        </p>
+                        <div class="portfolio-tags">
+                            <span class="tag">Design</span>
+                            <span class="tag">Branding</span>
+                        </div>
+                        <a href="#" class="btn btn-small">View Project</a>
+                    </div>
+                </article>
+
+                <!-- Add more portfolio items as needed -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 My Portfolio. Built with HTML, CSS, and JavaScript.</p>
+            <div class="social-links">
+                <a href="#" aria-label="GitHub">GitHub</a>
+                <a href="#" aria-label="LinkedIn">LinkedIn</a>
+                <a href="#" aria-label="Twitter">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/portfolio.js"></script>
+</body>
+</html>
