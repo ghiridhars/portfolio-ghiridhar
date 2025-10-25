@@ -2,64 +2,33 @@
    GLOBAL STYLES & CSS VARIABLES
    ======================================== */
 
+/* Import Grenze Gotisch Font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@100..900&display=swap');
+
 /* CSS Custom Properties for easy theming */
 :root {
-    /* Minimalist Black & Maroon Theme - Light Mode */
-    --primary-color: #8B0000;        /* Dark Maroon */
-    --primary-dark: #660000;         /* Darker Maroon */
-    --primary-light: #A52A2A;        /* Lighter Maroon */
-    --secondary-color: #1a1a1a;      /* Almost Black */
-    --accent-color: #DC143C;         /* Crimson accent */
+    /* Light Theme: Plain White background with Black text */
+    --primary-color: #000000;        /* Black */
+    --primary-dark: #000000;         /* Black */
+    --primary-light: #000000;        /* Black */
+    --secondary-color: #000000;      /* Black */
+    --accent-color: #000000;         /* Black */
     
-    --text-dark: #1a1a1a;            /* Almost black text */
-    --text-light: #555555;           /* Medium gray */
-    --text-muted: #777777;           /* Lighter gray */
+    --text-dark: #000000;            /* Black text */
+    --text-light: #000000;           /* Black text */
+    --text-muted: #000000;           /* Black text */
     
-    --bg-light: #fafafa;             /* Very light gray */
-    --bg-white: #ffffff;             /* Pure white */
-    --bg-hover: #f5f5f5;             /* Subtle hover */
+    --bg-light: #ffffff;             /* White background */
+    --bg-white: #ffffff;             /* White background */
+    --bg-hover: #f5f5f5;             /* Light grey hover */
     
-    --border-color: #e0e0e0;         /* Light border */
-    --border-maroon: #8B0000;        /* Maroon border */
+    --border-color: #000000;         /* Black border */
+    --border-dark: #000000;          /* Black border */
     
-    --success-color: #10b981;
-    --error-color: #DC143C;
+    --success-color: #000000;
+    --error-color: #000000;
     
-    /* Shadow colors */
-    --shadow-color: rgba(0, 0, 0, 0.08);
-    --shadow-color-dark: rgba(0, 0, 0, 0.12);
-}
-
-/* Dark Theme Variables */
-[data-theme="dark"] {
-    /* Minimalist Dark Mode - Black & Maroon */
-    --primary-color: #DC143C;        /* Brighter Crimson */
-    --primary-dark: #FF1744;         /* Bright red */
-    --primary-light: #8B0000;        /* Dark maroon */
-    --secondary-color: #1a1a1a;      /* Dark gray */
-    --accent-color: #FF6B6B;         /* Light red */
-    
-    --text-dark: #e0e0e0;            /* Light text */
-    --text-light: #a0a0a0;           /* Medium gray text */
-    --text-muted: #808080;           /* Muted text */
-    
-    --bg-light: #1a1a1a;             /* Dark background */
-    --bg-white: #0f0f0f;             /* Almost black */
-    --bg-hover: #252525;             /* Subtle hover */
-    
-    --border-color: #2a2a2a;         /* Dark border */
-    --border-maroon: #DC143C;        /* Maroon border */
-    
-    --success-color: #10b981;
-    --error-color: #FF6B6B;
-    
-    /* Shadow colors for dark mode */
-    --shadow-color: rgba(0, 0, 0, 0.3);
-    --shadow-color-dark: rgba(0, 0, 0, 0.5);
-}
-
-:root {
-    /* Spacing */
+    /* Minimal spacing */
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
     --spacing-md: 1.5rem;
@@ -67,31 +36,47 @@
     --spacing-xl: 3rem;
     --spacing-2xl: 4rem;
     
-    /* Typography */
-    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    --font-mono: 'Courier New', Courier, monospace;
-    
-    /* Border radius */
-    --radius-sm: 0.25rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 1rem;
-    
-    /* Shadows - now using variable colors */
-    --shadow-sm: 0 1px 2px 0 var(--shadow-color);
-    --shadow-md: 0 4px 6px -1px var(--shadow-color);
-    --shadow-lg: 0 10px 15px -3px var(--shadow-color-dark);
-    --shadow-xl: 0 20px 25px -5px var(--shadow-color-dark);
+    /* Typography - Grenze Gotisch font */
+    --font-sans: 'Grenze Gotisch', serif;
+    --font-mono: 'Courier New', monospace;
     
     /* Transitions */
-    --transition-fast: 150ms ease-in-out;
-    --transition-base: 300ms ease-in-out;
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.2s ease;
+    
+    /* Borders - sharp rectangles */
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
 }
 
-/* Smooth theme transitions */
+/* Dark Theme Variables */
+[data-theme="dark"] {
+    /* Dark Theme: Plain Black background with White text */
+    --primary-color: #ffffff;        /* White */
+    --primary-dark: #ffffff;         /* White */
+    --primary-light: #ffffff;        /* White */
+    --secondary-color: #ffffff;      /* White */
+    --accent-color: #ffffff;         /* White */
+    
+    --text-dark: #ffffff;            /* White text */
+    --text-light: #ffffff;           /* White text */
+    --text-muted: #ffffff;           /* White text */
+    
+    --bg-light: #000000;             /* Black background */
+    --bg-white: #000000;             /* Black background */
+    --bg-hover: #1a1a1a;             /* Dark grey hover */
+    
+    --border-color: #ffffff;         /* White border */
+    --border-dark: #ffffff;          /* White border */
+    
+    --success-color: #ffffff;
+    --error-color: #ffffff;
+}
+
+/* Remove smooth theme transitions - plain design */
 * {
-    transition: background-color var(--transition-base), 
-                color var(--transition-base), 
-                border-color var(--transition-base);
+    transition: none;
 }
 
 /* ========================================
@@ -107,28 +92,30 @@
 
 /* Base HTML & Body */
 html {
-    font-size: 16px;
+    font-size: 20px;
     scroll-behavior: smooth;
 }
 
 body {
     font-family: var(--font-sans);
-    line-height: 1.6;
+    line-height: 1.8;
     color: var(--text-dark);
     background-color: var(--bg-white);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
 }
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: var(--spacing-sm);
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: var(--spacing-md);
+    letter-spacing: -0.02em;
 }
 
 h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; }
+h2 { font-size: 1.875rem; }
 h3 { font-size: 1.5rem; }
 h4 { font-size: 1.25rem; }
 h5 { font-size: 1.125rem; }
@@ -160,20 +147,21 @@ img {
 
 .container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 0 var(--spacing-md);
+    padding: 0 var(--spacing-lg);
 }
 
 .section-title {
-    font-size: 2rem;
-    text-align: center;
+    font-size: 1.875rem;
+    text-align: left;
     margin-bottom: var(--spacing-xl);
     color: var(--text-dark);
+    font-weight: 600;
 }
 
 .highlight {
-    color: var(--primary-color);
+    color: var(--text-dark);
 }
 
 /* ========================================
@@ -186,78 +174,69 @@ img {
     position: sticky;
     top: 0;
     z-index: 1000;
+    padding: var(--spacing-md) 0;
 }
 
 .navbar .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: var(--spacing-sm);
-    padding-bottom: var(--spacing-sm);
 }
 
 .nav-brand h1 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     margin: 0;
     color: var(--text-dark);
+    font-weight: 600;
+    letter-spacing: -0.01em;
 }
 
 /* Navigation Menu */
 .nav-menu {
     display: flex;
     list-style: none;
-    gap: var(--spacing-md);
+    gap: var(--spacing-lg);
     margin: 0;
     align-items: center;
 }
 
 .nav-menu a {
-    color: var(--text-light);
-    font-weight: 500;
-    padding: var(--spacing-xs) 0;
+    color: var(--text-dark);
+    font-weight: 400;
+    padding: 0;
     position: relative;
-    transition: color var(--transition-fast);
+    transition: none;
+    font-size: 1rem;
+    text-decoration: none;
 }
 
 .nav-menu a:hover,
 .nav-menu a.active {
-    color: var(--primary-color);
+    color: var(--text-dark);
+    text-decoration: underline;
 }
 
 .nav-menu a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: var(--primary-color);
-    transition: width var(--transition-fast);
-}
-
-.nav-menu a:hover::after,
-.nav-menu a.active::after {
-    width: 100%;
+    display: none;
 }
 
 /* Theme Toggle Button */
 .theme-toggle {
     background: none;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+    border: none;
     padding: 0.5rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    transition: all var(--transition-fast);
-    margin-left: var(--spacing-sm);
+    width: 32px;
+    height: 32px;
+    transition: opacity var(--transition-fast);
+    margin-left: var(--spacing-md);
 }
 
 .theme-toggle:hover {
-    border-color: var(--primary-color);
+    opacity: 0.7;
 }
 
 .theme-toggle svg {
@@ -333,38 +312,41 @@ img {
 .btn {
     display: inline-block;
     padding: 0.75rem 1.5rem;
-    border-radius: var(--radius-md);
-    font-weight: 600;
+    border-radius: 0;
+    font-weight: 400;
     text-align: center;
     cursor: pointer;
-    transition: all var(--transition-base);
-    border: 2px solid transparent;
+    transition: none;
+    border: 2px solid var(--text-dark);
+    font-size: 1rem;
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
+    background-color: var(--text-dark);
     color: var(--bg-white);
+    border-color: var(--text-dark);
 }
 
 .btn-primary:hover {
-    background-color: var(--primary-dark);
-    color: var(--bg-white);
+    background-color: var(--bg-white);
+    color: var(--text-dark);
 }
 
 .btn-secondary {
     background-color: transparent;
-    color: var(--primary-color);
-    border-color: var(--primary-color);
+    color: var(--text-dark);
+    border-color: var(--text-dark);
 }
 
 .btn-secondary:hover {
-    background-color: var(--primary-color);
+    background-color: var(--text-dark);
     color: var(--bg-white);
 }
 
 .btn-small {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
+    border-width: 2px;
 }
 
 /* ========================================
@@ -373,14 +355,14 @@ img {
 
 .card {
     background-color: var(--bg-white);
-    border-radius: var(--radius-md);
+    border-radius: 0;
     padding: var(--spacing-lg);
-    border: 1px solid var(--border-color);
-    transition: border-color var(--transition-fast);
+    border: 2px solid var(--text-dark);
+    transition: none;
 }
 
 .card:hover {
-    border-color: var(--primary-color);
+    border-color: var(--text-dark);
 }
 
 .card-icon {
@@ -407,14 +389,14 @@ img {
    ======================================== */
 
 .footer {
-    background-color: #1a1a1a;
-    color: #ffffff;
+    background-color: var(--bg-white);
+    border-top: 1px solid var(--border-color);
     padding: var(--spacing-xl) 0;
     margin-top: var(--spacing-2xl);
 }
 
 [data-theme="dark"] .footer {
-    background-color: #0a0a0a;
+    background-color: var(--bg-white);
     border-top: 1px solid var(--border-color);
 }
 
@@ -428,21 +410,23 @@ img {
 
 .footer p {
     margin: 0;
-    color: #ffffff;
+    color: var(--text-light);
+    font-size: 0.9rem;
 }
 
 .social-links {
     display: flex;
-    gap: var(--spacing-md);
+    gap: var(--spacing-lg);
 }
 
 .social-links a {
-    color: #ffffff;
+    color: var(--text-light);
     transition: color var(--transition-fast);
+    font-size: 0.9rem;
 }
 
 .social-links a:hover {
-    color: var(--primary-color);
+    color: var(--text-dark);
 }
 
 /* ========================================
@@ -450,21 +434,22 @@ img {
    ======================================== */
 
 .page-header {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: var(--bg-white);
+    background-color: var(--bg-white);
+    color: var(--text-dark);
     padding: var(--spacing-2xl) 0;
     text-align: center;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .page-header h1 {
     font-size: 2.5rem;
     margin-bottom: var(--spacing-sm);
-    color: var(--bg-white);
+    color: var(--text-dark);
 }
 
 .page-header p {
     font-size: 1.25rem;
-    opacity: 0.9;
+    color: var(--text-light);
 }
 
 /* ========================================
@@ -473,9 +458,9 @@ img {
 
 .image-placeholder,
 .cover-placeholder {
-    background: linear-gradient(135deg, var(--bg-light), var(--border-color));
-    border: 2px dashed var(--border-color);
-    border-radius: var(--radius-md);
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 0;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -19,8 +19,8 @@
 .contact-form-wrapper {
     background-color: var(--bg-white);
     padding: var(--spacing-xl);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+    border-radius: 0;
+    border: 2px solid var(--border-color);
 }
 
 .contact-form-wrapper h2 {
@@ -50,16 +50,18 @@
 .form-group textarea {
     padding: 0.75rem;
     border: 2px solid var(--border-color);
-    border-radius: var(--radius-md);
+    border-radius: 0;
     font-family: var(--font-sans);
     font-size: 1rem;
-    transition: border-color var(--transition-fast);
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    transition: none;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: var(--primary-color);
+    border-color: var(--text-dark);
 }
 
 .form-group textarea {
@@ -70,22 +72,22 @@
 /* Form Message */
 .form-message {
     padding: var(--spacing-sm);
-    border-radius: var(--radius-md);
+    border-radius: 0;
     margin-top: var(--spacing-sm);
     display: none;
 }
 
 .form-message.success {
-    background-color: #d1fae5;
-    color: #065f46;
-    border: 1px solid #10b981;
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border: 2px solid var(--border-color);
     display: block;
 }
 
 .form-message.error {
-    background-color: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #ef4444;
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border: 2px solid var(--border-color);
     display: block;
 }
 
@@ -107,23 +109,24 @@
     gap: var(--spacing-md);
     padding: var(--spacing-md);
     background-color: var(--bg-white);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    border-radius: 0;
+    border: 2px solid var(--border-color);
 }
 
 .info-icon {
     font-size: 2rem;
     flex-shrink: 0;
+    color: var(--text-dark);
 }
 
 .info-content h3 {
     font-size: 1rem;
     margin-bottom: var(--spacing-xs);
-    color: var(--primary-color);
+    color: var(--text-dark);
 }
 
 .info-content p {
-    color: var(--text-light);
+    color: var(--text-dark);
     margin: 0;
 }
 
@@ -131,8 +134,8 @@
 .social-links-vertical {
     background-color: var(--bg-white);
     padding: var(--spacing-lg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    border-radius: 0;
+    border: 2px solid var(--border-color);
 }
 
 .social-links-vertical h3 {
@@ -146,14 +149,14 @@
     gap: var(--spacing-sm);
     padding: var(--spacing-sm);
     color: var(--text-dark);
-    border-radius: var(--radius-md);
-    transition: all var(--transition-fast);
+    border-radius: 0;
+    transition: none;
     margin-bottom: var(--spacing-xs);
 }
 
 .social-link:hover {
-    background-color: var(--bg-light);
-    color: var(--primary-color);
+    background-color: var(--text-dark);
+    color: var(--bg-white);
 }
 
 .social-icon {

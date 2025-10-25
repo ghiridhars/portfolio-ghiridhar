@@ -10,8 +10,8 @@
 function initThemeToggle() {
     const themeToggle = document.querySelector('.theme-toggle');
     
-    // Get saved theme from localStorage or default to light
-    const currentTheme = localStorage.getItem('theme') || 'light';
+    // Get saved theme from localStorage or default to DARK
+    const currentTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', currentTheme);
     
     if (themeToggle) {

@@ -25,21 +25,21 @@
 .tech-item {
     background-color: var(--bg-white);
     padding: var(--spacing-lg);
-    border-radius: var(--radius-lg);
+    border-radius: 0;
     text-align: center;
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    border: 2px solid var(--border-color);
+    transition: none;
 }
 
 .tech-item:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+    border-color: var(--text-dark);
 }
 
 .tech-icon {
     font-size: 3rem;
     display: block;
     margin-bottom: var(--spacing-sm);
+    color: var(--text-dark);
 }
 
 .tech-item h4 {
@@ -64,16 +64,14 @@
 /* Project Card */
 .project-card {
     background-color: var(--bg-white);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
+    border: 2px solid var(--border-color);
+    border-radius: 0;
     padding: var(--spacing-lg);
-    transition: transform var(--transition-base), border-color var(--transition-base);
+    transition: none;
 }
 
 .project-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--primary-color);
-    box-shadow: var(--shadow-md);
+    border-color: var(--text-dark);
 }
 
 .project-header {
@@ -94,7 +92,7 @@
 
 .folder-icon {
     font-size: 1.75rem;
-    color: var(--primary-color);
+    color: var(--text-dark);
 }
 
 .project-links {
@@ -104,21 +102,22 @@
 
 .icon-link {
     padding: 0.5rem 1rem;
-    background-color: var(--bg-light);
-    border-radius: var(--radius-sm);
+    background-color: var(--bg-white);
+    border: 2px solid var(--border-color);
+    border-radius: 0;
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--text-dark);
-    transition: all var(--transition-fast);
+    transition: none;
 }
 
 .icon-link:hover {
-    background-color: var(--primary-color);
+    background-color: var(--text-dark);
     color: var(--bg-white);
 }
 
 .project-description {
-    color: var(--text-light);
+    color: var(--text-dark);
     line-height: 1.7;
     margin-bottom: var(--spacing-md);
 }
@@ -133,9 +132,10 @@
 .tech-tag {
     display: inline-block;
     padding: 0.375rem 0.75rem;
-    background-color: var(--bg-light);
-    color: var(--primary-color);
-    border-radius: var(--radius-sm);
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border: 2px solid var(--border-color);
+    border-radius: 0;
     font-size: 0.875rem;
     font-weight: 600;
 }
@@ -143,32 +143,33 @@
 /* Call to Action Section */
 .cta-section {
     padding: var(--spacing-2xl) 0;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: var(--bg-white);
+    background-color: var(--bg-white);
+    color: var(--text-dark);
     text-align: center;
+    border-top: 2px solid var(--border-color);
 }
 
 .cta-section h2 {
     font-size: 2rem;
     margin-bottom: var(--spacing-sm);
-    color: var(--bg-white);
+    color: var(--text-dark);
 }
 
 .cta-section p {
     font-size: 1.125rem;
     margin-bottom: var(--spacing-lg);
-    opacity: 0.9;
+    color: var(--text-dark);
 }
 
 .cta-section .btn {
     background-color: var(--bg-white);
-    color: var(--primary-color);
+    color: var(--text-dark);
+    border: 2px solid var(--border-color);
 }
 
 .cta-section .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-xl);
-    background-color: var(--bg-white);
+    background-color: var(--text-dark);
+    color: var(--bg-white);
 }
 
 /* ========================================

@@ -5,62 +5,61 @@
 /* Hero Section */
 .hero {
     background-color: var(--bg-white);
-    border-bottom: 1px solid var(--border-color);
-    padding: var(--spacing-2xl) 0;
-    min-height: 500px;
-    display: flex;
-    align-items: center;
+    padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
+    min-height: auto;
 }
 
 .hero-content {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 700px;
 }
 
 .hero-title {
-    font-size: 3rem;
-    margin-bottom: var(--spacing-md);
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-sm);
     color: var(--text-dark);
+    font-weight: 600;
+    letter-spacing: -0.03em;
 }
 
 .hero-subtitle {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     margin-bottom: var(--spacing-md);
-    color: var(--primary-color);
+    color: var(--text-dark);
+    font-weight: 400;
 }
 
 .hero-description {
-    font-size: 1.125rem;
+    font-size: 1.05rem;
     line-height: 1.8;
-    margin-bottom: var(--spacing-xl);
-    color: var(--text-light);
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-dark);
 }
 
 .hero-buttons {
     display: flex;
     gap: var(--spacing-md);
-    justify-content: center;
     flex-wrap: wrap;
 }
 
 /* About Section */
 .about {
     padding: var(--spacing-2xl) 0;
-    background-color: var(--bg-light);
+    background-color: var(--bg-white);
+    border-top: 2px solid var(--border-color);
 }
 
 .about-content {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: var(--spacing-xl);
-    align-items: center;
+    gap: var(--spacing-2xl);
+    align-items: start;
 }
 
 .about-text h3 {
-    color: var(--primary-color);
-    margin-top: var(--spacing-lg);
-    margin-bottom: var(--spacing-sm);
+    color: var(--text-dark);
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+    font-weight: 600;
 }
 
 .skills-list {
@@ -73,42 +72,37 @@
 
 .skills-list li {
     padding: var(--spacing-xs);
-    background-color: var(--bg-light);
-    border-radius: var(--radius-sm);
-    border-left: 3px solid var(--primary-color);
+    background-color: var(--bg-white);
+    border-radius: 0;
+    border: 2px solid var(--border-color);
     padding-left: var(--spacing-sm);
-}
-
-.skills-list {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-sm);
+    color: var(--text-dark);
+    font-size: 0.95rem;
 }
 
 .about-image {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 .about-image img {
-    max-width: 280px;
+    max-width: 200px;
     width: 100%;
     height: auto;
     border-radius: 50%;
-    border: 3px solid var(--primary-color);
-    transition: border-color var(--transition-fast);
+    border: 2px solid var(--border-color);
+    transition: none;
 }
 
 .about-image img:hover {
-    border-color: var(--primary-dark);
+    border-color: var(--text-dark);
 }
 
 /* Quick Links Section */
 .quick-links {
     padding: var(--spacing-2xl) 0;
     background-color: var(--bg-white);
+    border-top: 2px solid var(--border-color);
 }
 
 .cards-grid {

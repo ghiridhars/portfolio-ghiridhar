@@ -1,78 +1,62 @@
 // ========================================
 // PORTFOLIO PAGE JAVASCRIPT
-// Handles filtering of portfolio items
+// Handles art gallery interactions
 // ========================================
 
 /**
- * Initialize Portfolio Filtering
- * Allows users to filter portfolio items by category
+ * Initialize Portfolio Gallery
+ * Adds image loading and interaction features
  */
-function initPortfolioFilter() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
+function initPortfolioGallery() {
+    const portfolioImages = document.querySelectorAll('.portfolio-item img');
     
-    if (!filterButtons.length || !portfolioItems.length) {
-        console.log('No filter buttons or portfolio items found');
+    if (!portfolioImages.length) {
+        console.log('No portfolio images found');
         return;
     }
     
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remove active class from all buttons
-            filterButtons.forEach(btn => btn.classList.remove('active'));
+    // Add smooth loading behavior to images
+    portfolioImages.forEach(img => {
+        // Only apply fade-in if image hasn't loaded yet
+        if (!img.complete) {
+            img.style.opacity = '0';
+            img.style.transition = 'opacity 0.3s ease-in';
             
-            // Add active class to clicked button
-            button.classList.add('active');
-            
-            // Get the filter category
-            const filterValue = button.getAttribute('data-filter');
-            
-            // Filter portfolio items
-            portfolioItems.forEach(item => {
-                const itemCategory = item.getAttribute('data-category');
-                
-                if (filterValue === 'all' || itemCategory === filterValue) {
-                    // Show item with animation
-                    item.classList.remove('hidden');
-                    item.style.animation = 'fadeInUp 0.5s ease-out';
-                } else {
-                    // Hide item
-                    item.classList.add('hidden');
-                }
+            img.addEventListener('load', () => {
+                img.style.opacity = '1';
             });
             
-            // Log for learning purposes
-            console.log(`Filtered by: ${filterValue}`);
-        });
+            // Fallback: show image after 1 second if load event doesn't fire
+            setTimeout(() => {
+                img.style.opacity = '1';
+            }, 1000);
+        }
     });
+    
+    console.log(`Portfolio gallery initialized with ${portfolioImages.length} images`);
 }
 
 /**
- * Count items in each category
- * Optional: Display count next to filter buttons
+ * Initialize Literature Items
+ * Could add read more functionality in the future
  */
-function countPortfolioItems() {
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
-    const categories = {};
+function initLiteratureSection() {
+    const literatureItems = document.querySelectorAll('.literature-item');
     
-    // Count items in each category
-    portfolioItems.forEach(item => {
-        const category = item.getAttribute('data-category');
-        categories[category] = (categories[category] || 0) + 1;
-    });
+    if (!literatureItems.length) {
+        console.log('No literature items found');
+        return;
+    }
     
-    // Log counts for learning
-    console.log('Portfolio items by category:', categories);
-    
-    return categories;
+    console.log(`Literature section initialized with ${literatureItems.length} items`);
 }
 
 /**
  * Initialize portfolio page functionality
  */
 document.addEventListener('DOMContentLoaded', () => {
-    initPortfolioFilter();
-    countPortfolioItems();
+    initPortfolioGallery();
+    initLiteratureSection();
     
     console.log('Portfolio page initialized! 🎨');
 });
