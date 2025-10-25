@@ -4,20 +4,20 @@
 
 /* CSS Custom Properties for easy theming */
 :root {
-    /* Black & Maroon Theme - Light Mode */
-    --primary-color: #8B0000;        /* Dark Red/Maroon */
+    /* Minimalist Black & Maroon Theme - Light Mode */
+    --primary-color: #8B0000;        /* Dark Maroon */
     --primary-dark: #660000;         /* Darker Maroon */
     --primary-light: #A52A2A;        /* Lighter Maroon */
     --secondary-color: #1a1a1a;      /* Almost Black */
     --accent-color: #DC143C;         /* Crimson accent */
     
     --text-dark: #1a1a1a;            /* Almost black text */
-    --text-light: #4a4a4a;           /* Gray text */
-    --text-muted: #6b6b6b;           /* Muted gray */
+    --text-light: #555555;           /* Medium gray */
+    --text-muted: #777777;           /* Lighter gray */
     
-    --bg-light: #f5f5f5;             /* Light gray background */
-    --bg-white: #ffffff;             /* White background */
-    --bg-hover: #f0f0f0;             /* Hover state */
+    --bg-light: #fafafa;             /* Very light gray */
+    --bg-white: #ffffff;             /* Pure white */
+    --bg-hover: #f5f5f5;             /* Subtle hover */
     
     --border-color: #e0e0e0;         /* Light border */
     --border-maroon: #8B0000;        /* Maroon border */
@@ -26,36 +26,36 @@
     --error-color: #DC143C;
     
     /* Shadow colors */
-    --shadow-color: rgba(0, 0, 0, 0.1);
-    --shadow-color-dark: rgba(0, 0, 0, 0.2);
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --shadow-color-dark: rgba(0, 0, 0, 0.12);
 }
 
 /* Dark Theme Variables */
 [data-theme="dark"] {
-    /* Dark Mode - Black & Maroon */
-    --primary-color: #DC143C;        /* Brighter Crimson for dark mode */
-    --primary-dark: #FF1744;         /* Bright red accent */
+    /* Minimalist Dark Mode - Black & Maroon */
+    --primary-color: #DC143C;        /* Brighter Crimson */
+    --primary-dark: #FF1744;         /* Bright red */
     --primary-light: #8B0000;        /* Dark maroon */
     --secondary-color: #1a1a1a;      /* Dark gray */
-    --accent-color: #FF6B6B;         /* Light red accent */
+    --accent-color: #FF6B6B;         /* Light red */
     
-    --text-dark: #e8e8e8;            /* Light text */
-    --text-light: #b0b0b0;           /* Gray text */
-    --text-muted: #888888;           /* Muted text */
+    --text-dark: #e0e0e0;            /* Light text */
+    --text-light: #a0a0a0;           /* Medium gray text */
+    --text-muted: #808080;           /* Muted text */
     
     --bg-light: #1a1a1a;             /* Dark background */
-    --bg-white: #0a0a0a;             /* Almost black */
-    --bg-hover: #2a2a2a;             /* Hover state */
+    --bg-white: #0f0f0f;             /* Almost black */
+    --bg-hover: #252525;             /* Subtle hover */
     
-    --border-color: #333333;         /* Dark border */
+    --border-color: #2a2a2a;         /* Dark border */
     --border-maroon: #DC143C;        /* Maroon border */
     
     --success-color: #10b981;
     --error-color: #FF6B6B;
     
     /* Shadow colors for dark mode */
-    --shadow-color: rgba(220, 20, 60, 0.1);
-    --shadow-color-dark: rgba(220, 20, 60, 0.2);
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --shadow-color-dark: rgba(0, 0, 0, 0.5);
 }
 
 :root {
@@ -182,7 +182,7 @@ img {
 
 .navbar {
     background-color: var(--bg-white);
-    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -214,22 +214,37 @@ img {
 .nav-menu a {
     color: var(--text-light);
     font-weight: 500;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--radius-sm);
-    transition: all var(--transition-fast);
+    padding: var(--spacing-xs) 0;
+    position: relative;
+    transition: color var(--transition-fast);
 }
 
 .nav-menu a:hover,
 .nav-menu a.active {
     color: var(--primary-color);
-    background-color: var(--bg-light);
+}
+
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width var(--transition-fast);
+}
+
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+    width: 100%;
 }
 
 /* Theme Toggle Button */
 .theme-toggle {
     background: none;
-    border: 2px solid var(--border-color);
-    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
     padding: 0.5rem;
     cursor: pointer;
     display: flex;
@@ -243,8 +258,6 @@ img {
 
 .theme-toggle:hover {
     border-color: var(--primary-color);
-    background-color: var(--bg-hover);
-    transform: rotate(15deg);
 }
 
 .theme-toggle svg {
@@ -336,8 +349,6 @@ img {
 .btn-primary:hover {
     background-color: var(--primary-dark);
     color: var(--bg-white);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
 }
 
 .btn-secondary {
@@ -362,15 +373,14 @@ img {
 
 .card {
     background-color: var(--bg-white);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     padding: var(--spacing-lg);
-    box-shadow: var(--shadow-md);
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    border: 1px solid var(--border-color);
+    transition: border-color var(--transition-fast);
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-color);
 }
 
 .card-icon {
@@ -397,10 +407,15 @@ img {
    ======================================== */
 
 .footer {
-    background-color: var(--text-dark);
-    color: var(--bg-white);
+    background-color: #1a1a1a;
+    color: #ffffff;
     padding: var(--spacing-xl) 0;
     margin-top: var(--spacing-2xl);
+}
+
+[data-theme="dark"] .footer {
+    background-color: #0a0a0a;
+    border-top: 1px solid var(--border-color);
 }
 
 .footer .container {
@@ -413,6 +428,7 @@ img {
 
 .footer p {
     margin: 0;
+    color: #ffffff;
 }
 
 .social-links {
@@ -421,7 +437,7 @@ img {
 }
 
 .social-links a {
-    color: var(--bg-white);
+    color: #ffffff;
     transition: color var(--transition-fast);
 }
 

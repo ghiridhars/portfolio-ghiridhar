@@ -4,16 +4,12 @@
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, #8B0000 0%, #1a1a1a 100%);
-    color: var(--bg-white);
+    background-color: var(--bg-white);
+    border-bottom: 1px solid var(--border-color);
     padding: var(--spacing-2xl) 0;
     min-height: 500px;
     display: flex;
     align-items: center;
-}
-
-[data-theme="dark"] .hero {
-    background: linear-gradient(135deg, #DC143C 0%, #0a0a0a 100%);
 }
 
 .hero-content {
@@ -25,22 +21,20 @@
 .hero-title {
     font-size: 3rem;
     margin-bottom: var(--spacing-md);
-    animation: fadeInUp 0.8s ease-out;
+    color: var(--text-dark);
 }
 
 .hero-subtitle {
     font-size: 1.5rem;
     margin-bottom: var(--spacing-md);
-    opacity: 0.95;
-    animation: fadeInUp 0.8s ease-out 0.2s backwards;
+    color: var(--primary-color);
 }
 
 .hero-description {
     font-size: 1.125rem;
     line-height: 1.8;
     margin-bottom: var(--spacing-xl);
-    opacity: 0.9;
-    animation: fadeInUp 0.8s ease-out 0.4s backwards;
+    color: var(--text-light);
 }
 
 .hero-buttons {
@@ -48,13 +42,12 @@
     gap: var(--spacing-md);
     justify-content: center;
     flex-wrap: wrap;
-    animation: fadeInUp 0.8s ease-out 0.6s backwards;
 }
 
 /* About Section */
 .about {
     padding: var(--spacing-2xl) 0;
-    background-color: var(--bg-white);
+    background-color: var(--bg-light);
 }
 
 .about-content {
@@ -86,33 +79,42 @@
     padding-left: var(--spacing-sm);
 }
 
+.skills-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+}
+
 .about-image {
     display: flex;
     justify-content: center;
 }
 
+.about-image img {
+    max-width: 280px;
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    border: 3px solid var(--primary-color);
+    transition: border-color var(--transition-fast);
+}
+
+.about-image img:hover {
+    border-color: var(--primary-dark);
+}
+
 /* Quick Links Section */
 .quick-links {
     padding: var(--spacing-2xl) 0;
-    background-color: var(--bg-light);
+    background-color: var(--bg-white);
 }
 
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: var(--spacing-lg);
-}
-
-/* Animations */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 /* ========================================
