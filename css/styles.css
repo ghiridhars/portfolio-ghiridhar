@@ -4,18 +4,61 @@
 
 /* CSS Custom Properties for easy theming */
 :root {
-    /* Colors */
-    --primary-color: #2563eb;
-    --primary-dark: #1e40af;
-    --secondary-color: #7c3aed;
-    --text-dark: #1f2937;
-    --text-light: #6b7280;
-    --bg-light: #f9fafb;
-    --bg-white: #ffffff;
-    --border-color: #e5e7eb;
-    --success-color: #10b981;
-    --error-color: #ef4444;
+    /* Black & Maroon Theme - Light Mode */
+    --primary-color: #8B0000;        /* Dark Red/Maroon */
+    --primary-dark: #660000;         /* Darker Maroon */
+    --primary-light: #A52A2A;        /* Lighter Maroon */
+    --secondary-color: #1a1a1a;      /* Almost Black */
+    --accent-color: #DC143C;         /* Crimson accent */
     
+    --text-dark: #1a1a1a;            /* Almost black text */
+    --text-light: #4a4a4a;           /* Gray text */
+    --text-muted: #6b6b6b;           /* Muted gray */
+    
+    --bg-light: #f5f5f5;             /* Light gray background */
+    --bg-white: #ffffff;             /* White background */
+    --bg-hover: #f0f0f0;             /* Hover state */
+    
+    --border-color: #e0e0e0;         /* Light border */
+    --border-maroon: #8B0000;        /* Maroon border */
+    
+    --success-color: #10b981;
+    --error-color: #DC143C;
+    
+    /* Shadow colors */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --shadow-color-dark: rgba(0, 0, 0, 0.2);
+}
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+    /* Dark Mode - Black & Maroon */
+    --primary-color: #DC143C;        /* Brighter Crimson for dark mode */
+    --primary-dark: #FF1744;         /* Bright red accent */
+    --primary-light: #8B0000;        /* Dark maroon */
+    --secondary-color: #1a1a1a;      /* Dark gray */
+    --accent-color: #FF6B6B;         /* Light red accent */
+    
+    --text-dark: #e8e8e8;            /* Light text */
+    --text-light: #b0b0b0;           /* Gray text */
+    --text-muted: #888888;           /* Muted text */
+    
+    --bg-light: #1a1a1a;             /* Dark background */
+    --bg-white: #0a0a0a;             /* Almost black */
+    --bg-hover: #2a2a2a;             /* Hover state */
+    
+    --border-color: #333333;         /* Dark border */
+    --border-maroon: #DC143C;        /* Maroon border */
+    
+    --success-color: #10b981;
+    --error-color: #FF6B6B;
+    
+    /* Shadow colors for dark mode */
+    --shadow-color: rgba(220, 20, 60, 0.1);
+    --shadow-color-dark: rgba(220, 20, 60, 0.2);
+}
+
+:root {
     /* Spacing */
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
@@ -33,15 +76,22 @@
     --radius-md: 0.5rem;
     --radius-lg: 1rem;
     
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    /* Shadows - now using variable colors */
+    --shadow-sm: 0 1px 2px 0 var(--shadow-color);
+    --shadow-md: 0 4px 6px -1px var(--shadow-color);
+    --shadow-lg: 0 10px 15px -3px var(--shadow-color-dark);
+    --shadow-xl: 0 20px 25px -5px var(--shadow-color-dark);
     
     /* Transitions */
     --transition-fast: 150ms ease-in-out;
     --transition-base: 300ms ease-in-out;
+}
+
+/* Smooth theme transitions */
+* {
+    transition: background-color var(--transition-base), 
+                color var(--transition-base), 
+                border-color var(--transition-base);
 }
 
 /* ========================================
@@ -158,6 +208,7 @@ img {
     list-style: none;
     gap: var(--spacing-md);
     margin: 0;
+    align-items: center;
 }
 
 .nav-menu a {
@@ -172,6 +223,58 @@ img {
 .nav-menu a.active {
     color: var(--primary-color);
     background-color: var(--bg-light);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    background: none;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    transition: all var(--transition-fast);
+    margin-left: var(--spacing-sm);
+}
+
+.theme-toggle:hover {
+    border-color: var(--primary-color);
+    background-color: var(--bg-hover);
+    transform: rotate(15deg);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: var(--text-dark);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.theme-icon {
+    display: block;
+}
+
+[data-theme="dark"] .theme-icon.sun {
+    display: none;
+}
+
+[data-theme="dark"] .theme-icon.moon {
+    display: block;
+}
+
+[data-theme="light"] .theme-icon.sun {
+    display: block;
+}
+
+[data-theme="light"] .theme-icon.moon {
+    display: none;
 }
 
 /* Hamburger Menu (Mobile) */
@@ -340,6 +443,7 @@ img {
 .page-header h1 {
     font-size: 2.5rem;
     margin-bottom: var(--spacing-sm);
+    color: var(--bg-white);
 }
 
 .page-header p {
@@ -392,6 +496,12 @@ img {
     
     .nav-menu.active {
         left: 0;
+    }
+    
+    /* Keep theme toggle visible in mobile */
+    .theme-toggle {
+        margin-left: 0;
+        margin-top: var(--spacing-sm);
     }
     
     /* Typography */

@@ -4,12 +4,16 @@
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #8B0000 0%, #1a1a1a 100%);
     color: var(--bg-white);
     padding: var(--spacing-2xl) 0;
     min-height: 500px;
     display: flex;
     align-items: center;
+}
+
+[data-theme="dark"] .hero {
+    background: linear-gradient(135deg, #DC143C 0%, #0a0a0a 100%);
 }
 
 .hero-content {

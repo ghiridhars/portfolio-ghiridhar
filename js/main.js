@@ -4,6 +4,37 @@
 // ========================================
 
 /**
+ * Dark/Light Theme Toggle
+ * Handles theme switching and persistence
+ */
+function initThemeToggle() {
+    const themeToggle = document.querySelector('.theme-toggle');
+    
+    // Get saved theme from localStorage or default to light
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            // Get current theme
+            const theme = document.documentElement.getAttribute('data-theme');
+            
+            // Toggle theme
+            const newTheme = theme === 'light' ? 'dark' : 'light';
+            
+            // Set new theme
+            document.documentElement.setAttribute('data-theme', newTheme);
+            
+            // Save to localStorage
+            localStorage.setItem('theme', newTheme);
+            
+            // Log for learning
+            console.log(`Theme switched to: ${newTheme} 🎨`);
+        });
+    }
+}
+
+/**
  * Mobile Navigation Toggle
  * Handles opening and closing the mobile menu
  */
@@ -163,6 +194,7 @@ function initScrollToTop() {
  * Initialize all functions when DOM is ready
  */
 document.addEventListener('DOMContentLoaded', () => {
+    initThemeToggle();      // Initialize theme first
     initMobileNav();
     initSmoothScroll();
     highlightCurrentPage();
@@ -171,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Log message for learning purposes
     console.log('Portfolio website loaded successfully! 🚀');
+    console.log('Current theme:', document.documentElement.getAttribute('data-theme'));
 });
 
 // Export functions if using modules (optional for learning)
