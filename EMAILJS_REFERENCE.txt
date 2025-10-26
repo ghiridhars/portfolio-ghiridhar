@@ -7,7 +7,7 @@
 // ==================================================
 
 1. PUBLIC KEY (Account → General)
-   Example: 69LxOrKxBmjYwNt--S7L8
+   Example: 2ZeOdZUj2HpDej7dU
    Your key: _________________________
 
 2. SERVICE ID (Email Services)
