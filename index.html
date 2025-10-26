@@ -32,20 +32,12 @@
                 <!-- Theme Toggle Button -->
                 <li>
                     <button class="theme-toggle" aria-label="Toggle dark mode">
-                        <svg class="theme-icon sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="5"/>
-                            <line x1="12" y1="1" x2="12" y2="3"/>
-                            <line x1="12" y1="21" x2="12" y2="23"/>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                            <line x1="1" y1="12" x2="3" y2="12"/>
-                            <line x1="21" y1="12" x2="23" y2="12"/>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                        </svg>
-                        <svg class="theme-icon moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display: none;">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                        </svg>
+                        <span class="material-symbols-sharp theme-icon sun">
+                            light_mode
+                        </span>
+                        <span class="material-symbols-sharp theme-icon moon" style="display: none;">
+                            dark_mode
+                        </span>
                     </button>
                 </li>
             </ul>
@@ -103,7 +95,7 @@
                 </div>
                 <div class="about-image">
                     <!-- Profile image -->
-                    <img src="assets/images/profile.jpg" alt="Ghiridhar S - Java Developer" style="max-width: 300px; border-radius: 50%; box-shadow: var(--shadow-lg); border: 4px solid var(--primary-color);">
+                    <img src="assets/images/profile.png" alt="Ghiridhar S - Java Developer" style="max-width: 300px; border-radius: 50%; box-shadow: var(--shadow-lg); border: 4px solid var(--primary-color);">
                 </div>
             </div>
         </div>
@@ -115,19 +107,25 @@
             <h2 class="section-title">Explore</h2>
             <div class="cards-grid">
                 <div class="card">
-                    <div class="card-icon">■</div>
+                    <div class="card-icon">
+                        <span class="material-symbols-sharp">work</span>
+                    </div>
                     <h3>Work Portfolio</h3>
                     <p>Check out my professional projects and creative work</p>
                     <a href="portfolio.html" class="card-link">View Portfolio →</a>
                 </div>
                 <div class="card">
-                    <div class="card-icon">□</div>
+                    <div class="card-icon">
+                        <span class="material-symbols-sharp">menu_book</span>
+                    </div>
                     <h3>Book Library</h3>
                     <p>Discover the books I've read and my thoughts on them</p>
                     <a href="books.html" class="card-link">Browse Books →</a>
                 </div>
                 <div class="card">
-                    <div class="card-icon">▪</div>
+                    <div class="card-icon">
+                        <span class="material-symbols-sharp">code</span>
+                    </div>
                     <h3>Coding Projects</h3>
                     <p>Explore my coding projects and open-source contributions</p>
                     <a href="coding.html" class="card-link">View Code →</a>
@@ -143,7 +141,7 @@
             <div class="social-links">
                 <a href="https://github.com/ghiridhars" aria-label="GitHub" target="_blank">GitHub</a>
                 <a href="https://linkedin.com/in/ghiridhars" aria-label="LinkedIn" target="_blank">LinkedIn</a>
-                <a href="mailto:ghiridhars@example.com" aria-label="Email">Email</a>
+                <a href="mailto:officialghiridhar@gmail.com" aria-label="Email">Email</a>
             </div>
         </div>
     </footer>
