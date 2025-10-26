@@ -1,7 +1,25 @@
 // ========================================
 // CONTACT PAGE JAVASCRIPT
-// Handles form validation and submission
+// Handles form validation and submission with EmailJS
 // ========================================
+
+// EmailJS Configuration
+// TODO: Replace these with your actual EmailJS credentials after setup
+const EMAILJS_CONFIG = {
+    publicKey: '69LxOrKxBmjYwNt--S7L8',      // Replace with your Public Key from EmailJS
+    serviceID: 'service_pjs4ip8',       // Replace with your Service ID
+    templateID: 'template_hogmok8'      // Replace with your Template ID
+};
+
+// Initialize EmailJS when page loads
+(function() {
+    if (EMAILJS_CONFIG.publicKey !== 'YOUR_PUBLIC_KEY') {
+        emailjs.init(EMAILJS_CONFIG.publicKey);
+        console.log('✅ EmailJS initialized');
+    } else {
+        console.warn('⚠️ EmailJS not configured. Please update EMAILJS_CONFIG in contact.js');
+    }
+})();
 
 /**
  * Form Validation
@@ -53,8 +71,8 @@ function showFormMessage(message, type = 'success') {
 }
 
 /**
- * Handle Form Submission
- * Processes the contact form
+ * Handle Form Submission with EmailJS
+ * Processes the contact form and sends email via EmailJS
  */
 function handleFormSubmit(e) {
     e.preventDefault();
@@ -76,9 +94,12 @@ function handleFormSubmit(e) {
         return;
     }
     
-    // Simulate form submission
-    // In a real application, you would send this data to a server
-    console.log('Form data:', formData);
+    // Check if EmailJS is configured
+    if (EMAILJS_CONFIG.publicKey === 'YOUR_PUBLIC_KEY') {
+        showFormMessage('Email service not configured. Please contact via email directly.', 'error');
+        console.error('❌ EmailJS not configured! Update EMAILJS_CONFIG in contact.js');
+        return;
+    }
     
     // Show loading state
     const submitButton = form.querySelector('button[type="submit"]');
@@ -86,10 +107,26 @@ function handleFormSubmit(e) {
     submitButton.textContent = 'Sending...';
     submitButton.disabled = true;
     
-    // Simulate API call with setTimeout
-    setTimeout(() => {
+    // Prepare template parameters for EmailJS
+    const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+        to_name: 'Ghiridhar' // Your name - customize as needed
+    };
+    
+    // Send email via EmailJS
+    emailjs.send(
+        EMAILJS_CONFIG.serviceID,
+        EMAILJS_CONFIG.templateID,
+        templateParams
+    )
+    .then((response) => {
+        console.log('✅ Email sent successfully!', response.status, response.text);
+        
         // Show success message
-        showFormMessage('Thank you for your message! I will get back to you soon.', 'success');
+        showFormMessage('Thank you for your message! I will get back to you soon. 📧', 'success');
         
         // Reset form
         form.reset();
@@ -97,36 +134,23 @@ function handleFormSubmit(e) {
         // Reset button
         submitButton.textContent = originalButtonText;
         submitButton.disabled = false;
+    })
+    .catch((error) => {
+        console.error('❌ Failed to send email:', error);
         
-        console.log('Form submitted successfully! ✉️');
-    }, 1500);
-    
-    /* 
-     * IMPORTANT: To actually send emails, you'll need to:
-     * 1. Use a service like Formspree, EmailJS, or Netlify Forms
-     * 2. Set up a backend API endpoint
-     * 3. Use a serverless function (e.g., Netlify Functions)
-     * 
-     * Example with Formspree:
-     * - Sign up at formspree.io
-     * - Get your form endpoint
-     * - Replace the setTimeout above with:
-     * 
-     * fetch('https://formspree.io/f/YOUR_FORM_ID', {
-     *     method: 'POST',
-     *     headers: { 'Content-Type': 'application/json' },
-     *     body: JSON.stringify(formData)
-     * })
-     * .then(response => response.json())
-     * .then(data => {
-     *     showFormMessage('Message sent successfully!', 'success');
-     *     form.reset();
-     * })
-     * .catch(error => {
-     *     showFormMessage('Error sending message. Please try again.', 'error');
-     *     console.error('Error:', error);
-     * });
-     */
+        // Show error message with helpful info
+        let errorMessage = 'Sorry, there was an error sending your message. Please try again or email me directly.';
+        
+        if (error.text) {
+            console.error('Error details:', error.text);
+        }
+        
+        showFormMessage(errorMessage, 'error');
+        
+        // Reset button
+        submitButton.textContent = originalButtonText;
+        submitButton.disabled = false;
+    });
 }
 
 /**
