@@ -62,7 +62,7 @@ New Contact from Portfolio - {{subject}}
 ### Settings Section:
 - **From Name:** `{{from_name}}`
 - **Reply To:** `{{from_email}}`
-- **To Email:** Your email (e.g., `ghiridhars@example.com`)
+- **To Email:** Your email (e.g., `officialghiridhar@gmail.com`)
 
 4. Click **"Save"**
 5. **📋 COPY the Template ID** (example: `template_xyz5678`)
