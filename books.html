@@ -66,11 +66,28 @@
     <!-- Book Categories Filter -->
     <section class="book-filters">
         <div class="container">
-            <button class="filter-btn active" data-filter="all">All Books</button>
-            <button class="filter-btn" data-filter="tech">Technology</button>
-            <button class="filter-btn" data-filter="fiction">Fiction</button>
-            <button class="filter-btn" data-filter="business">Business</button>
-            <button class="filter-btn" data-filter="personal">Personal Development</button>
+            <h3 class="filter-heading">Category</h3>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Books</button>
+                <button class="filter-btn" data-filter="tech">Technology</button>
+                <button class="filter-btn" data-filter="fiction">Fiction</button>
+                <button class="filter-btn" data-filter="business">Business</button>
+                <button class="filter-btn" data-filter="personal">Personal Development</button>
+                <button class="filter-btn" data-filter="philosophy">Philosophy</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Status Filter -->
+    <section class="status-filters">
+        <div class="container">
+            <h3 class="filter-heading">Status</h3>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="finished">Finished</button>
+                <button class="filter-btn" data-filter="currently-reading">Currently Reading</button>
+                <button class="filter-btn" data-filter="want-to-read">Want to Read</button>
+            </div>
         </div>
     </section>
 
@@ -78,99 +95,7 @@
     <section class="books-section">
         <div class="container">
             <div class="books-grid">
-                <!-- Book Item 1 -->
-                <article class="book-item" data-category="tech">
-                    <div class="book-cover">
-                        <div class="cover-placeholder">□</div>
-                    </div>
-                    <div class="book-info">
-                        <h3 class="book-title">Book Title</h3>
-                        <p class="book-author">by Author Name</p>
-                        <div class="book-rating">
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star">★</span>
-                        </div>
-                        <p class="book-review">
-                            A brief review or key takeaway from this book. 
-                            What did you learn? Would you recommend it?
-                        </p>
-                        <span class="book-category">Technology</span>
-                    </div>
-                </article>
-
-                <!-- Book Item 2 -->
-                <article class="book-item" data-category="fiction">
-                    <div class="book-cover">
-                        <div class="cover-placeholder">■</div>
-                    </div>
-                    <div class="book-info">
-                        <h3 class="book-title">Another Book Title</h3>
-                        <p class="book-author">by Another Author</p>
-                        <div class="book-rating">
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                        </div>
-                        <p class="book-review">
-                            Share your honest thoughts and key insights.
-                            What made this book memorable?
-                        </p>
-                        <span class="book-category">Fiction</span>
-                    </div>
-                </article>
-
-                <!-- Book Item 3 -->
-                <article class="book-item" data-category="business">
-                    <div class="book-cover">
-                        <div class="cover-placeholder">▪</div>
-                    </div>
-                    <div class="book-info">
-                        <h3 class="book-title">Business Book Title</h3>
-                        <p class="book-author">by Business Author</p>
-                        <div class="book-rating">
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star">★</span>
-                        </div>
-                        <p class="book-review">
-                            Your thoughts on this business or professional development book.
-                            How has it influenced your work or thinking?
-                        </p>
-                        <span class="book-category">Business</span>
-                    </div>
-                </article>
-
-                <!-- Book Item 4 -->
-                <article class="book-item" data-category="personal">
-                    <div class="book-cover">
-                        <div class="cover-placeholder">▫</div>
-                    </div>
-                    <div class="book-info">
-                        <h3 class="book-title">Personal Growth Book</h3>
-                        <p class="book-author">by Inspiring Author</p>
-                        <div class="book-rating">
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                        </div>
-                        <p class="book-review">
-                            Reflection on how this book has impacted your personal 
-                            or professional development journey.
-                        </p>
-                        <span class="book-category">Personal Development</span>
-                    </div>
-                </article>
-
-                <!-- Add more books as needed -->
+                <!-- Books will be dynamically generated from books-data.js -->
             </div>
         </div>
     </section>
@@ -187,6 +112,8 @@
         </div>
     </footer>
 
+    <!-- Load books data first, then main scripts -->
+    <script src="js/books-data.js"></script>
     <script src="js/main.js"></script>
     <script src="js/books.js"></script>
 </body>
