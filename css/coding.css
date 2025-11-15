@@ -80,7 +80,7 @@
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .calendar-day {
@@ -100,7 +100,7 @@
 
 .calendar-day:hover {
     transform: scale(1.1);
-    z-index: 10;
+    z-index: 1000;
     border-color: var(--text-dark);
 }
 
@@ -110,7 +110,7 @@
 }
 
 .calendar-day.level-1 {
-    background-color: rgba(64, 64, 64, 0.45);
+    background-color: rgba(255, 255, 255, 0.45);
 }
 
 .calendar-day.level-2 {
@@ -120,7 +120,7 @@
 /* Tooltip */
 .calendar-tooltip {
     position: absolute;
-    bottom: 100%;
+    bottom: calc(100% + 5px);
     left: 50%;
     transform: translateX(-50%);
     background-color: var(--text-dark);
@@ -132,8 +132,7 @@
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.2s ease;
-    margin-bottom: 0.5rem;
-    z-index: 100;
+    z-index: 10000;
     border: 2px solid var(--text-dark);
 }
 
@@ -169,7 +168,7 @@
 }
 
 .legend-square.level-1 {
-    background-color: rgba(64, 64, 64, 0.45);
+    background-color: rgba(255, 255, 255, 0.45);
 }
 
 .legend-square.level-2 {
