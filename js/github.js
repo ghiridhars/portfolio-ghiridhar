@@ -33,6 +33,27 @@ async function fetchGitHubProfile() {
 }
 
 /**
+ * Fetch GitHub events for contribution calendar
+ * @returns {Promise<Array>} Array of event objects
+ */
+async function fetchGitHubEvents() {
+    try {
+        const response = await fetch(`${GITHUB_CONFIG.apiBase}/users/${GITHUB_CONFIG.username}/events/public`);
+        
+        if (!response.ok) {
+            throw new Error(`GitHub API error: ${response.status}`);
+        }
+        
+        const events = await response.json();
+        console.log('✅ GitHub events fetched:', events.length);
+        return events;
+    } catch (error) {
+        console.error('❌ Error fetching GitHub events:', error);
+        return [];
+    }
+}
+
+/**
  * Fetch GitHub repositories
  * @param {number} limit - Number of repos to fetch (optional)
  * @returns {Promise<Array>} Array of repository objects
@@ -504,6 +525,98 @@ function createTechItem(tech) {
 }
 
 /**
+ * Build contribution calendar from GitHub events
+ * @param {Array} events - Array of GitHub event objects
+ */
+function buildContributionCalendar(events) {
+    const calendarGrid = document.getElementById('contributionGrid');
+    if (!calendarGrid) {
+        console.error('❌ Calendar grid not found');
+        return;
+    }
+    
+    // Calculate last 30 days
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today);
+    thirtyDaysAgo.setDate(today.getDate() - 29); // 30 days including today
+    
+    // Initialize contribution map
+    const contributionMap = new Map();
+    
+    // Count contributions per day from events
+    events.forEach(event => {
+        // Only count certain event types as contributions
+        const contributionTypes = ['PushEvent', 'PullRequestEvent', 'IssuesEvent', 'CreateEvent'];
+        if (!contributionTypes.includes(event.type)) return;
+        
+        const eventDate = new Date(event.created_at);
+        const dateKey = eventDate.toISOString().split('T')[0]; // YYYY-MM-DD
+        
+        // Count multiple commits in a single push event
+        let count = 1;
+        if (event.type === 'PushEvent' && event.payload.commits) {
+            count = event.payload.commits.length;
+        }
+        
+        contributionMap.set(dateKey, (contributionMap.get(dateKey) || 0) + count);
+    });
+    
+    console.log('📊 Contribution map:', contributionMap);
+    
+    // Clear loading state
+    calendarGrid.innerHTML = '';
+    
+    // Generate calendar for last 30 days
+    for (let i = 29; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        const dateKey = date.toISOString().split('T')[0];
+        
+        const contributions = contributionMap.get(dateKey) || 0;
+        const level = getContributionLevel(contributions);
+        
+        const dayElement = document.createElement('div');
+        dayElement.className = `calendar-day level-${level}`;
+        dayElement.setAttribute('data-date', dateKey);
+        dayElement.setAttribute('data-count', contributions);
+        
+        // Create tooltip
+        const tooltip = document.createElement('div');
+        tooltip.className = 'calendar-tooltip';
+        tooltip.textContent = formatTooltip(date, contributions);
+        dayElement.appendChild(tooltip);
+        
+        calendarGrid.appendChild(dayElement);
+    }
+    
+    console.log('✅ Contribution calendar built');
+}
+
+/**
+ * Get contribution level based on count
+ * @param {number} count - Number of contributions
+ * @returns {number} Level from 0-2
+ */
+function getContributionLevel(count) {
+    if (count === 0) return 0;
+    if (count <= 2) return 1;
+    return 2;
+}
+
+/**
+ * Format tooltip text for calendar day
+ * @param {Date} date - Date object
+ * @param {number} count - Number of contributions
+ * @returns {string} Formatted tooltip text
+ */
+function formatTooltip(date, count) {
+    const options = { month: 'short', day: 'numeric', year: 'numeric' };
+    const dateStr = date.toLocaleDateString('en-US', options);
+    const plural = count === 1 ? '' : 's';
+    return `${count} contribution${plural} on ${dateStr}`;
+}
+
+/**
  * Show loading state
  */
 function showLoadingState() {
@@ -549,27 +662,41 @@ async function initGitHub() {
         let profileData = getCachedData('github_profile');
         let reposData = getCachedData('github_repos');
         let allReposData = getCachedData('github_all_repos');
+        let eventsData = getCachedData('github_events');
         
         // If no cache, fetch fresh data
-        if (!profileData || !reposData || !allReposData) {
+        if (!profileData || !reposData || !allReposData || !eventsData) {
             console.log('🔄 Fetching fresh data from GitHub API...');
             
             // Fetch data in parallel
-            [profileData, reposData, allReposData] = await Promise.all([
+            [profileData, reposData, allReposData, eventsData] = await Promise.all([
                 fetchGitHubProfile(),
                 fetchGitHubRepos(GITHUB_CONFIG.maxRepos), // Limited repos for display
-                fetchAllGitHubRepos() // All repos for tech stack
+                fetchAllGitHubRepos(), // All repos for tech stack
+                fetchGitHubEvents() // Events for contribution calendar
             ]);
             
             // Cache the data
             if (profileData) setCachedData('github_profile', profileData);
             if (reposData) setCachedData('github_repos', reposData);
             if (allReposData) setCachedData('github_all_repos', allReposData);
+            if (eventsData) setCachedData('github_events', eventsData);
         }
         
         // Display the data
         if (profileData) {
             displayGitHubStats(profileData);
+        }
+        
+        // Build contribution calendar
+        if (eventsData && eventsData.length > 0) {
+            buildContributionCalendar(eventsData);
+        } else {
+            console.warn('⚠️ No events data for contribution calendar');
+            const calendarGrid = document.getElementById('contributionGrid');
+            if (calendarGrid) {
+                calendarGrid.innerHTML = '<p style="text-align: center; padding: 2rem; opacity: 0.7;">No recent activity data available</p>';
+            }
         }
         
         // Update tech stack based on ALL repositories
