@@ -31,9 +31,30 @@ function initPortfolioGallery() {
                 img.style.opacity = '1';
             }, 1000);
         }
+        
+        // Image protection: Disable right-click context menu
+        img.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Disable drag and drop
+        img.addEventListener('dragstart', (e) => {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Add user-select: none to prevent text/image selection
+        img.style.userSelect = 'none';
+        img.style.webkitUserSelect = 'none';
+        img.style.mozUserSelect = 'none';
+        img.style.msUserSelect = 'none';
+        
+        // Disable pointer events on long press (mobile)
+        img.style.webkitTouchCallout = 'none';
     });
     
-    console.log(`Portfolio gallery initialized with ${portfolioImages.length} images`);
+    console.log(`Portfolio gallery initialized with ${portfolioImages.length} images (protection enabled)`);
 }
 
 /**

@@ -27,10 +27,26 @@ function generateBookCard(book) {
     const statusLabel = STATUS_LABELS[book.status] || book.status;
     const favoriteIcon = book.favorite ? ' ★' : '';
     
-    // Use cover image if available, otherwise use placeholder
-    const coverHTML = book.cover 
-        ? `<img src="${book.cover}" alt="${book.title} cover">`
-        : `<div class="cover-placeholder">□</div>`;
+    // Use Open Library cover if ISBN is available, otherwise use manual cover or placeholder
+    let coverHTML;
+    if (book.isbn && !book.cover) {
+        const coverUrl = getOpenLibraryCover(book.isbn, 'L');
+        coverHTML = `<img src="${coverUrl}" alt="${book.title} cover" onerror="this.parentElement.innerHTML='<div class=\\'cover-placeholder\\'>📖</div>'">`;
+    } else if (book.cover) {
+        coverHTML = `<img src="${book.cover}" alt="${book.title} cover" onerror="this.parentElement.innerHTML='<div class=\\'cover-placeholder\\'>📖</div>'">`;
+    } else {
+        coverHTML = `<div class="cover-placeholder">📖</div>`;
+    }
+    
+    // Add page count if available from Open Library
+    const pageInfo = book.openLibraryData?.numberOfPages 
+        ? `<span class="book-pages">${book.openLibraryData.numberOfPages} pages</span>`
+        : '';
+    
+    // Add link to Open Library if ISBN is available
+    const openLibraryLink = book.isbn 
+        ? `<a href="https://openlibrary.org/isbn/${book.isbn}" target="_blank" rel="noopener noreferrer" class="book-link">View on Open Library →</a>`
+        : '';
     
     return `
         <article class="book-item" data-category="${book.category}" data-status="${book.status}" data-year="${book.year}">
@@ -52,7 +68,9 @@ function generateBookCard(book) {
                     <span class="book-category">${categoryLabel}</span>
                     <span class="book-status">${statusLabel}</span>
                     ${book.month ? `<span class="book-date">${book.month} ${book.year}</span>` : `<span class="book-date">${book.year}</span>`}
+                    ${pageInfo}
                 </div>
+                ${openLibraryLink}
             </div>
         </article>
     `;
@@ -60,9 +78,9 @@ function generateBookCard(book) {
 
 /**
  * Render All Books
- * Generates and displays all books from BOOKS_DATA
+ * Generates and displays all books from BOOKS_DATA with Open Library integration
  */
-function renderBooks() {
+async function renderBooks() {
     const booksGrid = document.querySelector('.books-grid');
     
     if (!booksGrid) {
@@ -70,15 +88,28 @@ function renderBooks() {
         return;
     }
     
-    // Clear existing books
-    booksGrid.innerHTML = '';
+    // Show loading state
+    booksGrid.innerHTML = '<p class="loading-message">Loading books...</p>';
     
-    // Generate and insert book cards
-    BOOKS_DATA.forEach(book => {
-        booksGrid.innerHTML += generateBookCard(book);
-    });
-    
-    console.log(`✅ Rendered ${BOOKS_DATA.length} books`);
+    try {
+        // Enrich books with Open Library data (only if needed)
+        const enrichedBooks = await Promise.all(
+            BOOKS_DATA.map(book => enrichBookWithOpenLibrary(book))
+        );
+        
+        // Clear loading message
+        booksGrid.innerHTML = '';
+        
+        // Generate and insert book cards
+        enrichedBooks.forEach(book => {
+            booksGrid.innerHTML += generateBookCard(book);
+        });
+        
+        console.log(`✅ Rendered ${enrichedBooks.length} books with Open Library integration`);
+    } catch (error) {
+        console.error('Error rendering books:', error);
+        booksGrid.innerHTML = '<p class="error-message">Error loading books. Please refresh the page.</p>';
+    }
 }
 
 /**
