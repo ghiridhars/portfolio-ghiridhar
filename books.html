@@ -24,6 +24,9 @@
     <link rel="stylesheet" href="css/books.css">
 </head>
 <body>
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress-bar" id="readingProgress"></div>
+    
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="container">
@@ -78,6 +81,22 @@
         </div>
     </section>
 
+    <!-- Search and Controls -->
+    <section class="book-controls">
+        <div class="container">
+            <div class="controls-wrapper">
+                <div class="search-box">
+                    <input type="text" id="bookSearch" placeholder="Search books by title or author..." aria-label="Search books">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid" aria-label="Grid view">⊞</button>
+                    <button class="view-btn" data-view="list" aria-label="List view">☰</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Book Categories Filter -->
     <section class="book-filters">
         <div class="container">
@@ -109,8 +128,29 @@
     <!-- Books Grid -->
     <section class="books-section">
         <div class="container">
-            <div class="books-grid">
-                <!-- Books will be dynamically generated from books-data.js -->
+            <div class="books-grid" id="booksGrid">
+                <!-- Skeleton loaders -->
+                <div class="skeleton-card">
+                    <div class="skeleton-cover"></div>
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-author"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-cover"></div>
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-author"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-cover"></div>
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-author"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
             </div>
         </div>
     </section>

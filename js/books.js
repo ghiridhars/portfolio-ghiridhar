@@ -88,16 +88,13 @@ async function renderBooks() {
         return;
     }
     
-    // Show loading state
-    booksGrid.innerHTML = '<p class="loading-message">Loading books...</p>';
-    
     try {
         // Enrich books with Open Library data (only if needed)
         const enrichedBooks = await Promise.all(
             BOOKS_DATA.map(book => enrichBookWithOpenLibrary(book))
         );
         
-        // Clear loading message
+        // Clear skeleton loaders
         booksGrid.innerHTML = '';
         
         // Generate and insert book cards
@@ -106,6 +103,9 @@ async function renderBooks() {
         });
         
         console.log(`✅ Rendered ${enrichedBooks.length} books with Open Library integration`);
+        
+        // Initialize scroll animations after rendering
+        initScrollAnimations();
     } catch (error) {
         console.error('Error rendering books:', error);
         booksGrid.innerHTML = '<p class="error-message">Error loading books. Please refresh the page.</p>';
@@ -143,28 +143,37 @@ function initBooksFilter() {
 
 /**
  * Apply Current Filters
- * Filters books based on active category and status
+ * Filters books based on active category, status, and search term
  */
 function applyFilters() {
     const categoryFilter = document.querySelector('.book-filters .filter-btn.active')?.getAttribute('data-filter') || 'all';
     const statusFilter = document.querySelector('.status-filters .filter-btn.active')?.getAttribute('data-filter') || 'all';
+    const searchInput = document.getElementById('bookSearch');
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const bookItems = document.querySelectorAll('.book-item');
     
     let visibleCount = 0;
     
-    bookItems.forEach(item => {
+    bookItems.forEach((item, index) => {
         const itemCategory = item.getAttribute('data-category');
         const itemStatus = item.getAttribute('data-status');
+        const title = item.querySelector('.book-title')?.textContent.toLowerCase() || '';
+        const author = item.querySelector('.book-author')?.textContent.toLowerCase() || '';
         
         const matchesCategory = categoryFilter === 'all' || itemCategory === categoryFilter;
         const matchesStatus = statusFilter === 'all' || itemStatus === statusFilter;
+        const matchesSearch = !searchTerm || title.includes(searchTerm) || author.includes(searchTerm);
         
-        if (matchesCategory && matchesStatus) {
+        if (matchesCategory && matchesStatus && matchesSearch) {
             item.classList.remove('hidden');
-            item.style.animation = 'fadeInUp 0.5s ease-out';
+            item.classList.add('visible');
+            // Stagger animation
+            item.style.transitionDelay = `${index * 0.05}s`;
             visibleCount++;
         } else {
             item.classList.add('hidden');
+            item.classList.remove('visible');
+            item.style.transitionDelay = '0s';
         }
     });
     
@@ -173,7 +182,7 @@ function applyFilters() {
 
 /**
  * Update Reading Statistics
- * Calculates and displays reading stats from BOOKS_DATA
+ * Calculates and displays reading stats from BOOKS_DATA with animated counting
  */
 function updateReadingStats() {
     const statCards = document.querySelectorAll('.stat-card .stat-number');
@@ -187,22 +196,43 @@ function updateReadingStats() {
     const currentlyReading = BOOKS_DATA.filter(book => book.status === 'currently-reading');
     const wantToRead = BOOKS_DATA.filter(book => book.status === 'want-to-read');
     
-    // Update stat cards
-    if (statCards[0]) {
-        statCards[0].textContent = finishedBooks.length;
-    }
-    if (statCards[1]) {
-        statCards[1].textContent = currentlyReading.length;
-    }
-    if (statCards[2]) {
-        statCards[2].textContent = wantToRead.length;
-    }
+    // Animate counting for each stat
+    animateCount(statCards[0], finishedBooks.length);
+    animateCount(statCards[1], currentlyReading.length);
+    animateCount(statCards[2], wantToRead.length);
     
     console.log('📊 Reading stats updated:', {
         finished: finishedBooks.length,
         reading: currentlyReading.length,
         wantToRead: wantToRead.length
     });
+}
+
+/**
+ * Animate counting up to a number
+ * @param {HTMLElement} element - The element to animate
+ * @param {number} target - Target number to count to
+ */
+function animateCount(element, target) {
+    if (!element) return;
+    
+    const duration = 1000; // 1 second
+    const start = 0;
+    const increment = target / (duration / 16); // 60fps
+    let current = start;
+    
+    element.classList.add('counting');
+    
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            element.textContent = target;
+            clearInterval(timer);
+            element.classList.remove('counting');
+        } else {
+            element.textContent = Math.floor(current);
+        }
+    }, 16);
 }
 
 /**
@@ -242,5 +272,137 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize filtering
     initBooksFilter();
     
+    // Initialize reading progress bar
+    initReadingProgress();
+    
+    // Initialize search functionality
+    initSearch();
+    
+    // Initialize view toggle
+    initViewToggle();
+    
     console.log('✅ Books page initialized!');
 });
+
+/**
+ * Initialize Reading Progress Bar
+ * Shows scroll progress at the top of the page
+ */
+function initReadingProgress() {
+    const progressBar = document.getElementById('readingProgress');
+    
+    if (!progressBar) return;
+    
+    window.addEventListener('scroll', () => {
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight - windowHeight;
+        const scrolled = window.scrollY;
+        const progress = (scrolled / documentHeight) * 100;
+        
+        progressBar.style.width = `${Math.min(progress, 100)}%`;
+    });
+}
+
+/**
+ * Initialize Search Functionality
+ * Real-time search for books by title or author
+ */
+function initSearch() {
+    const searchInput = document.getElementById('bookSearch');
+    
+    if (!searchInput) return;
+    
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase().trim();
+        const bookItems = document.querySelectorAll('.book-item');
+        let visibleCount = 0;
+        
+        bookItems.forEach(item => {
+            const title = item.querySelector('.book-title').textContent.toLowerCase();
+            const author = item.querySelector('.book-author').textContent.toLowerCase();
+            
+            const matches = title.includes(searchTerm) || author.includes(searchTerm);
+            
+            // Also check active filters
+            const categoryFilter = document.querySelector('.book-filters .filter-btn.active')?.getAttribute('data-filter') || 'all';
+            const statusFilter = document.querySelector('.status-filters .filter-btn.active')?.getAttribute('data-filter') || 'all';
+            const itemCategory = item.getAttribute('data-category');
+            const itemStatus = item.getAttribute('data-status');
+            const matchesCategory = categoryFilter === 'all' || itemCategory === categoryFilter;
+            const matchesStatus = statusFilter === 'all' || itemStatus === statusFilter;
+            
+            if (matches && matchesCategory && matchesStatus) {
+                item.classList.remove('hidden');
+                item.classList.add('visible');
+                visibleCount++;
+            } else {
+                item.classList.add('hidden');
+                item.classList.remove('visible');
+            }
+        });
+        
+        console.log(`🔍 Search: "${searchTerm}" - ${visibleCount} results`);
+    });
+}
+
+/**
+ * Initialize View Toggle
+ * Switch between grid and list view
+ */
+function initViewToggle() {
+    const viewButtons = document.querySelectorAll('.view-btn');
+    const booksGrid = document.querySelector('.books-grid');
+    
+    if (!viewButtons.length || !booksGrid) return;
+    
+    viewButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active from all buttons
+            viewButtons.forEach(btn => btn.classList.remove('active'));
+            // Add active to clicked button
+            button.classList.add('active');
+            
+            const view = button.getAttribute('data-view');
+            
+            if (view === 'list') {
+                booksGrid.classList.add('list-view');
+            } else {
+                booksGrid.classList.remove('list-view');
+            }
+            
+            console.log(`📱 View changed to: ${view}`);
+        });
+    });
+}
+
+/**
+ * Initialize Scroll Animations
+ * Animate book cards as they enter viewport using Intersection Observer
+ */
+function initScrollAnimations() {
+    const bookItems = document.querySelectorAll('.book-item');
+    
+    if (!bookItems.length) return;
+    
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    bookItems.forEach(item => {
+        observer.observe(item);
+    });
+    
+    console.log('🎬 Scroll animations initialized for', bookItems.length, 'books');
+}
+
+
