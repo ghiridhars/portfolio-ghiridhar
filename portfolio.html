@@ -61,8 +61,14 @@
     <!-- Art Section -->
     <section class="portfolio-section">
         <div class="container">
-            <h2 class="section-title">Artēs</h2>
-            <div class="portfolio-grid">
+            <div class="section-header">
+                <h2 class="section-title">Artēs</h2>
+                <button class="toggle-artes-btn" id="toggleArtesBtn" aria-label="Toggle art gallery">
+                    <span class="toggle-text">Show Gallery</span>
+                    <span class="material-symbols-sharp">expand_more</span>
+                </button>
+            </div>
+            <div class="portfolio-grid" id="artesGrid" style="display: none;">
                 <!-- Avatar -->
                 <article class="portfolio-item" data-category="art">
                     <div class="portfolio-image">
@@ -169,15 +175,21 @@
     <section class="literature-section">
         <div class="container">
             <h2 class="section-title">Litterae</h2>
-            <div class="literature-grid">
-
-                <article class="literature-item">
-                    <div class="literature-content">
-                        <h3>Coming Soon</h3>
+            
+            <!-- Poetry Section -->
+            <div class="poetry-wrapper">
+                <p class="poetry-caption">My poems are yet to be published, meanwhile enjoy these classics</p>
+                <div class="poetry-card">
+                    <h3 id="poem-title" class="poem-title">Loading poem...</h3>
+                    <div id="poem-lines" class="poem-lines">
+                        <p>Fetching verses...</p>
                     </div>
-                </article>
-
-                <!-- Add more literature items as needed -->
+                    <cite id="poem-author" class="poem-author">— Unknown</cite>
+                    <button id="new-poem-btn" class="new-poem-btn" aria-label="Get new poem">
+                        <span class="material-symbols-sharp">auto_stories</span>
+                        <span>New Poem</span>
+                    </button>
+                </div>
             </div>
         </div>
     </section>

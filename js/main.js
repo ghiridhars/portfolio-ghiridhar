@@ -100,6 +100,103 @@ function initSmoothScroll() {
 }
 
 /**
+ * Poetry API Integration
+ * Fetches and displays random classic poems from PoetryDB
+ */
+function initPoetry() {
+    const poemTitle = document.getElementById('poem-title');
+    const poemLines = document.getElementById('poem-lines');
+    const poemAuthor = document.getElementById('poem-author');
+    const newPoemBtn = document.getElementById('new-poem-btn');
+    
+    // Only run if elements exist (on homepage)
+    if (!poemTitle || !poemLines || !poemAuthor || !newPoemBtn) {
+        console.log('⚠️ Poetry elements not found on this page');
+        return;
+    }
+    
+    console.log('✅ Poetry elements found, initializing...');
+    
+    /**
+     * Fetch a random poem from PoetryDB
+     */
+    async function fetchPoem() {
+        try {
+            console.log('📖 Fetching poem from PoetryDB...');
+            
+            // Add loading state
+            poemTitle.style.opacity = '0.5';
+            poemLines.style.opacity = '0.5';
+            poemAuthor.style.opacity = '0.5';
+            newPoemBtn.disabled = true;
+            
+            // Fetch random poem (PoetryDB returns array of poems)
+            const response = await fetch('https://poetrydb.org/random/1');
+            
+            console.log('📡 Response status:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('✅ Poem received:', data);
+            
+            if (!data || data.length === 0) {
+                throw new Error('No poem data received');
+            }
+            
+            const poem = data[0];
+            
+            // Animate poem change
+            setTimeout(() => {
+                poemTitle.textContent = poem.title;
+                
+                // Format poem lines (limit to first 12 lines for readability)
+                const linesToShow = poem.lines.slice(0, 12);
+                poemLines.innerHTML = `<p>${linesToShow.join('\n')}</p>`;
+                
+                // Add "..." if poem was truncated
+                if (poem.lines.length > 12) {
+                    poemLines.innerHTML += '<p style="text-align: center; margin-top: 1em;">...</p>';
+                }
+                
+                poemAuthor.textContent = `— ${poem.author}`;
+                
+                poemTitle.style.opacity = '1';
+                poemLines.style.opacity = '1';
+                poemAuthor.style.opacity = '1';
+                newPoemBtn.disabled = false;
+            }, 200);
+            
+        } catch (error) {
+            console.error('❌ Error fetching poem:', error);
+            console.error('Error details:', error.message);
+            
+            // Show error in the UI
+            poemTitle.textContent = 'Failed to load poem';
+            poemLines.innerHTML = '<p>Please try again.</p>';
+            poemAuthor.textContent = `— Error: ${error.message}`;
+            
+            poemTitle.style.opacity = '1';
+            poemLines.style.opacity = '1';
+            poemAuthor.style.opacity = '1';
+            newPoemBtn.disabled = false;
+        }
+    }
+    
+    // Fetch poem on page load
+    console.log('🚀 Fetching initial poem...');
+    fetchPoem();
+    
+    // Fetch new poem when button is clicked
+    newPoemBtn.addEventListener('click', () => {
+        console.log('📖 New poem requested by user');
+        fetchPoem();
+    });
+}
+
+/**
  * Stoic Quote API Integration
  * Fetches and displays random Stoic philosophy quotes
  */
@@ -270,6 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initThemeToggle();      // Initialize theme first
     initMobileNav();
     initSmoothScroll();
+    initPoetry();           // Initialize Poetry API
     initStoicQuote();       // Initialize Stoic quote API
     highlightCurrentPage();
     initLazyLoading();

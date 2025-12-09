@@ -26,6 +26,44 @@
     border-top: 2px solid var(--border-color);
 }
 
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.toggle-artes-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border: 2px solid var(--border-color);
+    border-radius: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-primary);
+}
+
+.toggle-artes-btn:hover {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    border-color: var(--text-dark);
+}
+
+.toggle-artes-btn .material-symbols-sharp {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.toggle-artes-btn.expanded .material-symbols-sharp {
+    transform: rotate(180deg);
+}
+
 /* Portfolio Grid */
 .portfolio-grid {
     display: grid;
@@ -200,6 +238,99 @@
     font-size: 0.95rem;
 }
 
+/* Poetry Section within Litterae */
+.poetry-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.poetry-caption {
+    text-align: center;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-lg);
+    letter-spacing: 0.01em;
+}
+
+.poetry-card {
+    padding: var(--spacing-xl);
+    background-color: var(--bg-gray);
+    border: 2px solid var(--border-color);
+    border-radius: 0;
+}
+
+.poem-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0 0 var(--spacing-md) 0;
+    text-align: center;
+    letter-spacing: -0.02em;
+}
+
+.poem-lines {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-md) 0;
+    border-left: 3px solid var(--border-color);
+    padding-left: var(--spacing-lg);
+}
+
+.poem-lines p {
+    font-family: var(--font-primary);
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--text-dark);
+    margin: 0.3em 0;
+    white-space: pre-wrap;
+    font-style: italic;
+}
+
+.poem-author {
+    display: block;
+    text-align: right;
+    font-size: 1rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin: var(--spacing-lg) 0 var(--spacing-md) 0;
+    font-style: normal;
+}
+
+.new-poem-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border: 2px solid var(--border-color);
+    border-radius: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-primary);
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+}
+
+.new-poem-btn:hover:not(:disabled) {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    border-color: var(--text-dark);
+}
+
+.new-poem-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.new-poem-btn .material-symbols-sharp {
+    font-size: 1.2rem;
+}
+
 /* ========================================
    RESPONSIVE DESIGN
    ======================================== */
@@ -212,6 +343,33 @@
     
     .literature-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+    
+    .toggle-artes-btn {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .poetry-card {
+        padding: var(--spacing-lg);
+    }
+    
+    .poem-title {
+        font-size: 1.25rem;
+    }
+    
+    .poem-lines {
+        padding-left: var(--spacing-md);
+    }
+    
+    .poem-lines p {
+        font-size: 0.95rem;
     }
 }
 

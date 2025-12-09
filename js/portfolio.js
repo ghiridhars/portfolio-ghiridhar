@@ -73,11 +73,51 @@ function initLiteratureSection() {
 }
 
 /**
+ * Toggle Artes Gallery
+ * Shows/hides the art gallery on demand to reduce initial page scrolling
+ */
+function initArtesToggle() {
+    const toggleBtn = document.getElementById('toggleArtesBtn');
+    const artesGrid = document.getElementById('artesGrid');
+    
+    if (!toggleBtn || !artesGrid) {
+        console.log('Artes toggle elements not found');
+        return;
+    }
+    
+    toggleBtn.addEventListener('click', () => {
+        const isExpanded = artesGrid.style.display !== 'none';
+        
+        if (isExpanded) {
+            // Collapse
+            artesGrid.style.display = 'none';
+            toggleBtn.querySelector('.toggle-text').textContent = 'Show Gallery';
+            toggleBtn.classList.remove('expanded');
+            toggleBtn.setAttribute('aria-expanded', 'false');
+        } else {
+            // Expand
+            artesGrid.style.display = 'grid';
+            toggleBtn.querySelector('.toggle-text').textContent = 'Hide Gallery';
+            toggleBtn.classList.add('expanded');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+            
+            // Smooth scroll to gallery after expanding
+            setTimeout(() => {
+                artesGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    });
+    
+    console.log('Artes toggle initialized');
+}
+
+/**
  * Initialize portfolio page functionality
  */
 document.addEventListener('DOMContentLoaded', () => {
     initPortfolioGallery();
     initLiteratureSection();
+    initArtesToggle();
     
     console.log('Portfolio page initialized! 🎨');
 });
