@@ -53,7 +53,67 @@
         </div>
     </nav>
 
-    <!-- Page Header -->
+    <!-- Book Trivia Section -->
+    <section class="trivia-section">
+        <div class="container">
+            <h2 class="section-title" style="margin-bottom: var(--spacing-xl);">Test Your Literary Knowledge</h2>
+            
+            <div class="trivia-container" id="triviaContainer">
+                <!-- Start Screen -->
+                <div class="trivia-start" id="triviaStart">
+                    <p class="trivia-description">Test your knowledge of books and literature! Answer 10 multiple-choice questions and see how well you know the literary world.</p>
+                    <button class="trivia-btn-primary" id="startTriviaBtn">
+                        <span class="material-symbols-sharp">quiz</span>
+                        <span>Start Quiz</span>
+                    </button>
+                </div>
+
+                <!-- Quiz Screen -->
+                <div class="trivia-quiz hidden" id="triviaQuiz">
+                    <div class="trivia-header">
+                        <div class="trivia-progress">
+                            <span>Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span></span>
+                        </div>
+                        <div class="trivia-score">
+                            Score: <span id="triviaScore">0</span>
+                        </div>
+                    </div>
+
+                    <div class="trivia-question-card">
+                        <p class="trivia-difficulty" id="triviaDifficulty">Medium</p>
+                        <h3 class="trivia-question" id="triviaQuestion">Loading question...</h3>
+                        
+                        <div class="trivia-answers" id="triviaAnswers">
+                            <!-- Answer buttons will be inserted here -->
+                        </div>
+
+                        <div class="trivia-feedback hidden" id="triviaFeedback">
+                            <p class="feedback-text" id="feedbackText"></p>
+                            <button class="trivia-btn-secondary" id="nextQuestionBtn">Next Question</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Screen -->
+                <div class="trivia-results hidden" id="triviaResults">
+                    <h3 class="results-title">Quiz Complete!</h3>
+                    <div class="results-score">
+                        <span class="score-value" id="finalScore">0</span>
+                        <span class="score-total">/ <span id="totalScore">10</span></span>
+                    </div>
+                    <p class="results-message" id="resultsMessage">Great job!</p>
+                    <div class="results-actions">
+                        <button class="trivia-btn-primary" id="playAgainBtn">
+                            <span class="material-symbols-sharp">refresh</span>
+                            <span>Play Again</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- Page Header -->
     <section class="page-header">
         <div class="container">
             <h1>Librī</h1>
@@ -128,7 +188,14 @@
     <!-- Books Grid -->
     <section class="books-section">
         <div class="container">
-            <div class="books-grid" id="booksGrid">
+            <div class="section-header">
+                <h2 class="section-title">My Books</h2>
+                <button class="toggle-books-btn" id="toggleBooksBtn" aria-label="Toggle books library" aria-expanded="false">
+                    <span class="toggle-text">Show Library</span>
+                    <span class="material-symbols-sharp">expand_more</span>
+                </button>
+            </div>
+            <div class="books-grid" id="booksGrid" style="display: none;">
                 <!-- Skeleton loaders -->
                 <div class="skeleton-card">
                     <div class="skeleton-cover"></div>

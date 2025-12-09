@@ -281,6 +281,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize view toggle
     initViewToggle();
     
+    // Initialize books library toggle
+    initBooksToggle();
+    
+    // Initialize trivia quiz
+    initTrivia();
+    
     console.log('✅ Books page initialized!');
 });
 
@@ -403,6 +409,311 @@ function initScrollAnimations() {
     });
     
     console.log('🎬 Scroll animations initialized for', bookItems.length, 'books');
+}
+
+/**
+ * ========================================
+ * BOOK TRIVIA QUIZ
+ * Uses Open Trivia Database API for book-related questions
+ * ========================================
+ */
+
+let triviaQuestions = [];
+let currentQuestionIndex = 0;
+let triviaScore = 0;
+
+/**
+ * Initialize Books Toggle
+ * Collapse/expand books library similar to Artes gallery
+ */
+function initBooksToggle() {
+    const toggleBtn = document.getElementById('toggleBooksBtn');
+    const booksGrid = document.getElementById('booksGrid');
+    
+    if (!toggleBtn || !booksGrid) {
+        console.log('Books toggle elements not found');
+        return;
+    }
+    
+    toggleBtn.addEventListener('click', () => {
+        const isExpanded = booksGrid.style.display !== 'none';
+        
+        if (isExpanded) {
+            // Collapse
+            booksGrid.style.display = 'none';
+            toggleBtn.querySelector('.toggle-text').textContent = 'Show Library';
+            toggleBtn.classList.remove('expanded');
+            toggleBtn.setAttribute('aria-expanded', 'false');
+        } else {
+            // Expand
+            booksGrid.style.display = 'grid';
+            toggleBtn.querySelector('.toggle-text').textContent = 'Hide Library';
+            toggleBtn.classList.add('expanded');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+            
+            // Smooth scroll to library after expanding
+            setTimeout(() => {
+                booksGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    });
+    
+    console.log('📚 Books toggle initialized');
+}
+
+/**
+ * Initialize Trivia Quiz
+ */
+function initTrivia() {
+    const startBtn = document.getElementById('startTriviaBtn');
+    const playAgainBtn = document.getElementById('playAgainBtn');
+    
+    if (!startBtn || !playAgainBtn) return;
+    
+    startBtn.addEventListener('click', startTrivia);
+    playAgainBtn.addEventListener('click', resetTrivia);
+    
+    console.log('🎯 Trivia quiz initialized');
+}
+
+/**
+ * Start the Trivia Quiz
+ */
+async function startTrivia() {
+    console.log('🚀 Starting trivia quiz...');
+    
+    const loadingText = document.querySelector('.trivia-description');
+    if (loadingText) {
+        loadingText.textContent = 'Loading questions...';
+    }
+    
+    try {
+        // Fetch 10 book-related questions from Open Trivia DB
+        // Category 10 = Books
+        const response = await fetch('https://opentdb.com/api.php?amount=10&category=10&type=multiple');
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch trivia questions');
+        }
+        
+        const data = await response.json();
+        
+        if (data.response_code !== 0) {
+            throw new Error('No questions available');
+        }
+        
+        // Decode HTML entities in questions and answers
+        triviaQuestions = data.results.map(q => ({
+            question: decodeHTML(q.question),
+            correctAnswer: decodeHTML(q.correct_answer),
+            incorrectAnswers: q.incorrect_answers.map(a => decodeHTML(a)),
+            difficulty: q.difficulty,
+            allAnswers: shuffleArray([
+                decodeHTML(q.correct_answer),
+                ...q.incorrect_answers.map(a => decodeHTML(a))
+            ])
+        }));
+        
+        currentQuestionIndex = 0;
+        triviaScore = 0;
+        
+        // Show quiz screen
+        showScreen('quiz');
+        displayQuestion();
+        
+        console.log('✅ Trivia questions loaded:', triviaQuestions.length);
+        
+    } catch (error) {
+        console.error('❌ Error loading trivia:', error);
+        if (loadingText) {
+            loadingText.textContent = 'Failed to load questions. Please try again.';
+        }
+    }
+}
+
+/**
+ * Display Current Question
+ */
+function displayQuestion() {
+    const question = triviaQuestions[currentQuestionIndex];
+    
+    // Update progress
+    document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+    document.getElementById('totalQuestions').textContent = triviaQuestions.length;
+    
+    // Update score
+    document.getElementById('triviaScore').textContent = triviaScore;
+    
+    // Update difficulty
+    const difficultyBadge = document.querySelector('.trivia-difficulty');
+    if (difficultyBadge) {
+        difficultyBadge.textContent = question.difficulty;
+        difficultyBadge.className = `trivia-difficulty difficulty-${question.difficulty}`;
+    }
+    
+    // Update question text
+    document.getElementById('triviaQuestion').textContent = question.question;
+    
+    // Clear and populate answers
+    const answersContainer = document.getElementById('triviaAnswers');
+    answersContainer.innerHTML = '';
+    
+    question.allAnswers.forEach(answer => {
+        const button = document.createElement('button');
+        button.className = 'answer-btn';
+        button.textContent = answer;
+        button.addEventListener('click', () => checkAnswer(answer, button));
+        answersContainer.appendChild(button);
+    });
+    
+    // Hide feedback
+    document.getElementById('triviaFeedback').classList.add('hidden');
+}
+
+/**
+ * Check Answer
+ */
+function checkAnswer(selectedAnswer, button) {
+    const question = triviaQuestions[currentQuestionIndex];
+    const isCorrect = selectedAnswer === question.correctAnswer;
+    
+    // Disable all answer buttons
+    const answerButtons = document.querySelectorAll('.answer-btn');
+    answerButtons.forEach(btn => {
+        btn.disabled = true;
+        
+        // Highlight correct answer
+        if (btn.textContent === question.correctAnswer) {
+            btn.classList.add('correct');
+        }
+    });
+    
+    // Mark selected answer as incorrect if wrong
+    if (!isCorrect) {
+        button.classList.add('incorrect');
+    } else {
+        triviaScore++;
+        document.getElementById('triviaScore').textContent = triviaScore;
+    }
+    
+    // Show feedback
+    const feedbackDiv = document.getElementById('triviaFeedback');
+    const feedbackText = feedbackDiv.querySelector('.feedback-text');
+    const nextBtn = feedbackDiv.querySelector('.trivia-btn-secondary');
+    
+    feedbackText.textContent = isCorrect ? '✓ Correct!' : `✗ Wrong! The answer was: ${question.correctAnswer}`;
+    feedbackText.className = `feedback-text ${isCorrect ? 'correct' : 'incorrect'}`;
+    feedbackDiv.classList.remove('hidden');
+    
+    // Handle next question or finish
+    if (nextBtn) {
+        nextBtn.replaceWith(nextBtn.cloneNode(true)); // Remove old listeners
+    }
+    
+    const newNextBtn = feedbackDiv.querySelector('.trivia-btn-secondary');
+    if (currentQuestionIndex < triviaQuestions.length - 1) {
+        newNextBtn.textContent = 'Next Question →';
+        newNextBtn.addEventListener('click', nextQuestion);
+    } else {
+        newNextBtn.textContent = 'See Results →';
+        newNextBtn.addEventListener('click', showResults);
+    }
+}
+
+/**
+ * Go to Next Question
+ */
+function nextQuestion() {
+    currentQuestionIndex++;
+    displayQuestion();
+}
+
+/**
+ * Show Results Screen
+ */
+function showResults() {
+    const percentage = Math.round((triviaScore / triviaQuestions.length) * 100);
+    let message = '';
+    
+    if (percentage === 100) {
+        message = '🏆 Perfect score! You\'re a literary genius!';
+    } else if (percentage >= 80) {
+        message = '📚 Excellent work! You really know your books!';
+    } else if (percentage >= 60) {
+        message = '👍 Good job! Keep reading!';
+    } else if (percentage >= 40) {
+        message = '📖 Not bad! Time to hit the books!';
+    } else {
+        message = '💪 Keep learning! Every book is a new adventure!';
+    }
+    
+    document.getElementById('finalScore').textContent = triviaScore;
+    document.getElementById('totalScore').textContent = triviaQuestions.length;
+    document.getElementById('resultsMessage').textContent = message;
+    
+    showScreen('results');
+}
+
+/**
+ * Reset Trivia Quiz
+ */
+function resetTrivia() {
+    triviaQuestions = [];
+    currentQuestionIndex = 0;
+    triviaScore = 0;
+    
+    const loadingText = document.querySelector('.trivia-description');
+    if (loadingText) {
+        loadingText.textContent = 'Test your knowledge of books and literature! Answer 10 multiple-choice questions and see how well you know the literary world.';
+    }
+    
+    showScreen('start');
+}
+
+/**
+ * Show Specific Screen
+ */
+function showScreen(screen) {
+    const startScreen = document.getElementById('triviaStart');
+    const quizScreen = document.getElementById('triviaQuiz');
+    const resultsScreen = document.getElementById('triviaResults');
+    
+    // Hide all screens
+    if (startScreen) startScreen.classList.add('hidden');
+    if (quizScreen) quizScreen.classList.add('hidden');
+    if (resultsScreen) resultsScreen.classList.add('hidden');
+    
+    // Show the requested screen
+    if (screen === 'start' && startScreen) {
+        startScreen.classList.remove('hidden');
+    } else if (screen === 'quiz' && quizScreen) {
+        quizScreen.classList.remove('hidden');
+    } else if (screen === 'results' && resultsScreen) {
+        resultsScreen.classList.remove('hidden');
+    }
+    
+    console.log('🎬 Showing screen:', screen);
+}
+
+/**
+ * Decode HTML Entities
+ */
+function decodeHTML(html) {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
+}
+
+/**
+ * Shuffle Array (Fisher-Yates algorithm)
+ */
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
 }
 
 
