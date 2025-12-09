@@ -98,6 +98,100 @@
     border-color: var(--text-dark);
 }
 
+/* Stoic Quote Section */
+.stoic-quote-section {
+    padding: var(--spacing-xl) 0;
+    background-color: var(--bg-gray);
+    border-top: 2px solid var(--border-color);
+}
+
+.stoic-quote-card {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-xl);
+    background-color: var(--bg-white);
+    border: 2px solid var(--border-color);
+    border-radius: 0;
+    position: relative;
+    text-align: center;
+}
+
+.stoic-quote-text {
+    font-size: 1.35rem;
+    line-height: 1.8;
+    font-style: italic;
+    color: var(--text-dark);
+    margin: 0 0 var(--spacing-md) 0;
+    font-weight: 400;
+    transition: opacity 0.3s ease;
+    letter-spacing: -0.01em;
+}
+
+.stoic-quote-text::before {
+    content: '❝';
+    font-size: 2.5rem;
+    opacity: 0.2;
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-family: Georgia, serif;
+}
+
+.stoic-quote-author {
+    display: block;
+    font-size: 1rem;
+    color: var(--text-muted);
+    font-style: normal;
+    font-weight: 500;
+    margin-bottom: var(--spacing-lg);
+    transition: opacity 0.3s ease;
+}
+
+.new-quote-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border: 2px solid var(--border-color);
+    border-radius: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-primary);
+}
+
+.new-quote-btn:hover:not(:disabled) {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    border-color: var(--text-dark);
+}
+
+.new-quote-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.new-quote-btn .material-symbols-sharp {
+    font-size: 1.2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stoic-quote-card {
+        padding: var(--spacing-lg);
+    }
+    
+    .stoic-quote-text {
+        font-size: 1.15rem;
+    }
+    
+    .stoic-quote-author {
+        font-size: 0.9rem;
+    }
+}
+
 /* Quick Links Section */
 .quick-links {
     padding: var(--spacing-2xl) 0;

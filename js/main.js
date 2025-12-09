@@ -100,6 +100,79 @@ function initSmoothScroll() {
 }
 
 /**
+ * Stoic Quote API Integration
+ * Fetches and displays random Stoic philosophy quotes
+ */
+function initStoicQuote() {
+    const quoteText = document.getElementById('stoic-quote-text');
+    const quoteAuthor = document.getElementById('stoic-quote-author');
+    const newQuoteBtn = document.getElementById('new-quote-btn');
+    
+    // Only run if elements exist (on homepage)
+    if (!quoteText || !quoteAuthor || !newQuoteBtn) {
+        console.log('⚠️ Stoic quote elements not found on this page');
+        return;
+    }
+    
+    console.log('✅ Stoic quote elements found, initializing...');
+    
+    /**
+     * Fetch a random Stoic quote from the API
+     */
+    async function fetchStoicQuote() {
+        try {
+            console.log('🔄 Fetching quote from API...');
+            
+            // Add loading state
+            quoteText.style.opacity = '0.5';
+            quoteAuthor.style.opacity = '0.5';
+            newQuoteBtn.disabled = true;
+            
+            const response = await fetch('https://stoic-quotes.com/api/quote');
+            
+            console.log('📡 Response status:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('✅ Quote received:', data);
+            
+            // Animate quote change
+            setTimeout(() => {
+                quoteText.textContent = `"${data.text}"`;
+                quoteAuthor.textContent = `— ${data.author}`;
+                quoteText.style.opacity = '1';
+                quoteAuthor.style.opacity = '1';
+                newQuoteBtn.disabled = false;
+            }, 200);
+            
+        } catch (error) {
+            console.error('❌ Error fetching Stoic quote:', error);
+            console.error('Error details:', error.message);
+            
+            // Show error in the UI
+            quoteText.textContent = 'Failed to load quote. Please try again.';
+            quoteAuthor.textContent = `— Error: ${error.message}`;
+            quoteText.style.opacity = '1';
+            quoteAuthor.style.opacity = '1';
+            newQuoteBtn.disabled = false;
+        }
+    }
+    
+    // Fetch quote on page load
+    console.log('🚀 Fetching initial quote...');
+    fetchStoicQuote();
+    
+    // Fetch new quote when button is clicked
+    newQuoteBtn.addEventListener('click', () => {
+        console.log('🔄 New quote requested by user');
+        fetchStoicQuote();
+    });
+}
+
+/**
  * Add Active Class to Current Page Nav Link
  * Highlights the current page in the navigation
  */
@@ -197,6 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initThemeToggle();      // Initialize theme first
     initMobileNav();
     initSmoothScroll();
+    initStoicQuote();       // Initialize Stoic quote API
     highlightCurrentPage();
     initLazyLoading();
     initScrollToTop();
