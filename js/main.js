@@ -361,6 +361,34 @@ function initScrollToTop() {
 }
 
 /**
+ * Scroll Progress Bar
+ * Shows reading progress at the top of the page
+ */
+function initScrollProgress() {
+    // Create progress bar if it doesn't exist
+    let progressBar = document.querySelector('.scroll-progress');
+    
+    if (!progressBar) {
+        progressBar = document.createElement('div');
+        progressBar.className = 'scroll-progress';
+        document.body.prepend(progressBar);
+    }
+    
+    // Update progress on scroll
+    function updateProgress() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progressBar.style.width = `${progress}%`;
+    }
+    
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress(); // Initial call
+    
+    console.log('📊 Scroll progress bar initialized');
+}
+
+/**
  * Initialize all functions when DOM is ready
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -372,10 +400,12 @@ document.addEventListener('DOMContentLoaded', () => {
     highlightCurrentPage();
     initLazyLoading();
     initScrollToTop();
+    initScrollProgress();   // Initialize scroll progress bar
     
     // Log message for learning purposes
     console.log('Portfolio website loaded successfully! 🚀');
     console.log('Current theme:', document.documentElement.getAttribute('data-theme'));
+    console.log('Press Ctrl+K to open command palette');
 });
 
 // Export functions if using modules (optional for learning)

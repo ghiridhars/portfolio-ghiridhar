@@ -556,3 +556,407 @@ img {
         font-size: 2rem;
     }
 }
+
+/* ========================================
+   SCROLL PROGRESS BAR
+   ======================================== */
+
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background-color: var(--primary-color);
+    z-index: 9999;
+    transition: none;
+}
+
+/* ========================================
+   INVERTED HOVER STATES
+   Brutalist color flip on interaction
+   ======================================== */
+
+/* Buttons - Primary */
+.btn-primary {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border: 2px solid var(--border-color);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+}
+
+/* Buttons - Secondary */
+.btn-secondary {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border: 2px solid var(--border-color);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+}
+
+/* Cards */
+.card {
+    transition: none;
+}
+
+.card:hover {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+}
+
+.card:hover h3,
+.card:hover p,
+.card:hover .card-link {
+    color: var(--bg-white);
+}
+
+/* Navigation links */
+.nav-menu a:hover,
+.nav-menu a.active {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    text-decoration: none;
+    padding: 0.25rem 0.5rem;
+    margin: -0.25rem -0.5rem;
+}
+
+/* Filter buttons */
+.filter-btn {
+    transition: none;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+}
+
+/* Stat cards */
+.stat-card {
+    transition: none;
+}
+
+.stat-card:hover {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+}
+
+.stat-card:hover .stat-number,
+.stat-card:hover .stat-label {
+    color: var(--bg-white);
+}
+
+/* Social links in footer */
+.social-links a:hover {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    padding: 0.25rem 0.5rem;
+    margin: -0.25rem -0.5rem;
+}
+
+/* Portfolio items */
+.portfolio-item {
+    transition: none;
+}
+
+.portfolio-item:hover {
+    background-color: var(--text-dark);
+}
+
+.portfolio-item:hover .portfolio-content {
+    color: var(--bg-white);
+}
+
+.portfolio-item:hover h3,
+.portfolio-item:hover p {
+    color: var(--bg-white);
+}
+
+/* Book items */
+.book-item {
+    transition: none;
+}
+
+.book-item:hover {
+    background-color: var(--text-dark);
+}
+
+.book-item:hover .book-info {
+    color: var(--bg-white);
+}
+
+.book-item:hover .book-title,
+.book-item:hover .book-author,
+.book-item:hover .book-review,
+.book-item:hover .book-link {
+    color: var(--bg-white);
+}
+
+.book-item:hover .book-link {
+    border-bottom-color: var(--bg-white);
+}
+
+.book-item:hover .book-category,
+.book-item:hover .book-status,
+.book-item:hover .book-date,
+.book-item:hover .book-pages {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border-color: var(--bg-white);
+}
+
+.book-item:hover .book-meta span {
+    color: var(--text-dark);
+}
+
+.book-item:hover .star {
+    color: var(--bg-white);
+}
+
+.book-item:hover .cover-placeholder {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border-color: var(--bg-white);
+}
+
+.book-item:hover .book-cover img {
+    border-color: var(--bg-white);
+}
+
+/* Project cards */
+.project-card {
+    transition: none;
+}
+
+.project-card:hover {
+    background-color: var(--text-dark);
+}
+
+.project-card:hover .project-title,
+.project-card:hover .project-description,
+.project-card:hover .project-link,
+.project-card:hover .folder-icon,
+.project-card:hover .project-stats,
+.project-card:hover .project-stats .stat {
+    color: var(--bg-white);
+}
+
+.project-card:hover .tech-tag {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border-color: var(--bg-white);
+}
+
+.project-card:hover .icon-link {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border-color: var(--bg-white);
+}
+
+.project-card:hover .language-dot {
+    background-color: var(--bg-white) !important;
+}
+
+/* ========================================
+   COMMAND PALETTE
+   Brutalist keyboard navigation
+   ======================================== */
+
+.command-palette {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 15vh;
+    opacity: 0;
+    visibility: hidden;
+    transition: none;
+}
+
+.command-palette.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.command-palette-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: var(--text-dark);
+    opacity: 0.8;
+}
+
+.command-palette-modal {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    max-height: 60vh;
+    background-color: var(--bg-white);
+    border: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    margin: 0 var(--spacing-md);
+}
+
+.command-palette-header {
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid var(--border-color);
+    padding: var(--spacing-sm);
+    gap: var(--spacing-sm);
+}
+
+.command-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--text-dark);
+    outline: none;
+    padding: var(--spacing-xs);
+}
+
+.command-input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+.command-hint {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+.command-palette-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-sm) 0;
+}
+
+.command-group {
+    margin-bottom: var(--spacing-sm);
+}
+
+.command-group-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    letter-spacing: 0.1em;
+    opacity: 0.6;
+}
+
+.command-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.command-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    gap: var(--spacing-sm);
+    border-left: 3px solid transparent;
+}
+
+.command-item:hover,
+.command-item.selected {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    border-left-color: var(--bg-white);
+}
+
+.command-item.selected .command-name,
+.command-item.selected .command-description,
+.command-item.selected .command-shortcut,
+.command-item:hover .command-name,
+.command-item:hover .command-description,
+.command-item:hover .command-shortcut {
+    color: var(--bg-white);
+}
+
+.command-name {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.command-name mark {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    padding: 0 2px;
+}
+
+.command-item.selected .command-name mark,
+.command-item:hover .command-name mark {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+}
+
+.command-description {
+    flex: 1;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+.command-shortcut {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0.2rem 0.4rem;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+}
+
+.command-item.selected .command-shortcut,
+.command-item:hover .command-shortcut {
+    border-color: var(--bg-white);
+}
+
+.command-palette-footer {
+    display: flex;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm);
+    border-top: 2px solid var(--border-color);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+}
+
+.footer-hint {
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+.footer-hint kbd {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    padding: 0.1rem 0.3rem;
+    margin-right: 0.25rem;
+    font-family: var(--font-mono);
+}
+
+/* Command palette responsive */
+@media (max-width: 480px) {
+    .command-palette-modal {
+        max-height: 70vh;
+    }
+    
+    .command-palette-footer {
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+    }
+}
