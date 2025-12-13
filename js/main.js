@@ -100,6 +100,39 @@ function initSmoothScroll() {
 }
 
 /**
+ * Glitch Effect on Hover
+ * Auto-applies to headings, nav links, and buttons
+ */
+function initGlitchEffect() {
+    // Selectors for elements that should have glitch effect
+    const selectors = [
+        'h1',
+        'h2', 
+        'h3',
+        '.nav-menu a',
+        '.btn',
+        '.section-title'
+    ];
+    
+    const elements = document.querySelectorAll(selectors.join(', '));
+    
+    elements.forEach(el => {
+        // Skip if already processed or has child elements we shouldn't wrap
+        if (el.classList.contains('glitch-hover')) return;
+        
+        // Get the text content - handle elements with mixed content
+        const text = el.textContent.trim();
+        if (!text) return;
+        
+        // Add glitch class and data attribute
+        el.classList.add('glitch-hover');
+        el.setAttribute('data-text', text);
+    });
+    
+    console.log('✨ Glitch effect initialized on hover');
+}
+
+/**
  * Poetry API Integration
  * Fetches and displays random classic poems from PoetryDB
  */
@@ -395,6 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initThemeToggle();      // Initialize theme first
     initMobileNav();
     initSmoothScroll();
+    initGlitchEffect();     // Initialize glitch effect on hover
     initPoetry();           // Initialize Poetry API
     initStoicQuote();       // Initialize Stoic quote API
     highlightCurrentPage();
