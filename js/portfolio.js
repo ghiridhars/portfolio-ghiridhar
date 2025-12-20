@@ -58,21 +58,6 @@ function initPortfolioGallery() {
 }
 
 /**
- * Initialize Literature Items
- * Could add read more functionality in the future
- */
-function initLiteratureSection() {
-    const literatureItems = document.querySelectorAll('.literature-item');
-    
-    if (!literatureItems.length) {
-        console.log('No literature items found');
-        return;
-    }
-    
-    console.log(`Literature section initialized with ${literatureItems.length} items`);
-}
-
-/**
  * Toggle Artes Gallery
  * Shows/hides the art gallery on demand to reduce initial page scrolling
  */
@@ -116,7 +101,6 @@ function initArtesToggle() {
  */
 document.addEventListener('DOMContentLoaded', () => {
     initPortfolioGallery();
-    initLiteratureSection();
     initArtesToggle();
     
     console.log('Portfolio page initialized! 🎨');

@@ -8,40 +8,7 @@
     background-color: var(--bg-white);
 }
 
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-lg);
-}
-
-.stat-card {
-    text-align: center;
-    padding: var(--spacing-lg);
-    background-color: var(--bg-white);
-    color: var(--text-dark);
-    border-radius: 0;
-    border: 2px solid var(--border-color);
-    transition: none;
-}
-
-.stat-card:hover {
-    border-color: var(--text-dark);
-}
-
-.stat-number {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: var(--spacing-xs);
-    color: var(--text-dark);
-}
-
-.stat-label {
-    font-size: 1rem;
-    opacity: 0.9;
-    color: var(--text-dark);
-}
-
-/* Tech Stack Section */
+/* Tech Stack Section *//
 .tech-stack {
     padding: var(--spacing-xl) 0;
     background-color: var(--bg-white);

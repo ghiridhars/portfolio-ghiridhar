@@ -31,6 +31,12 @@
     --success-color: #000000;
     --error-color: #000000;
     
+    /* Background variations */
+    --bg-gray: #f5f5f5;
+    
+    /* Shadows */
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    
     /* Minimal spacing */
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
@@ -75,6 +81,12 @@
     
     --success-color: #ffffff;
     --error-color: #ffffff;
+    
+    /* Background variations */
+    --bg-gray: #1a1a1a;
+    
+    /* Shadows */
+    --shadow-lg: 0 10px 15px -3px rgba(255, 255, 255, 0.1);
 }
 
 /* Remove smooth theme transitions - plain design */
@@ -250,9 +262,77 @@ img {
     45% { transform: scaleY(0.1); }
 }
 
+/* Dot Face Glitch Effect on Hover (matches nav text glitch) */
+.nav-logo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0.25rem;
+}
+
+.nav-logo::before,
+.nav-logo::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-white);
+    clip-path: inset(0 0 100% 0);
+    pointer-events: none;
+}
+
+/* Clone the dot-face grid for glitch layers */
+.nav-logo::before {
+    left: 2px;
+    box-shadow: -2px 0 0 var(--text-dark);
+}
+
+.nav-logo::after {
+    left: -2px;
+    box-shadow: 2px 0 0 var(--text-dark);
+}
+
+/* Activate glitch on hover */
+.nav-logo:hover::before {
+    animation: glitch-1 0.4s steps(2) infinite;
+}
+
+.nav-logo:hover::after {
+    animation: glitch-2 0.4s steps(2) infinite reverse;
+}
+
+/* Add jitter to the face itself */
+.nav-logo:hover .dot-face {
+    animation: faceJitter 0.4s steps(2) infinite;
+}
+
+@keyframes faceJitter {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(-1px, 0);
+    }
+    50% {
+        transform: translate(1px, 0);
+    }
+    75% {
+        transform: translate(-1px, 1px);
+    }
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
     .dot-face .d.ey {
+        animation: none;
+    }
+    
+    .nav-logo:hover .dot-face,
+    .nav-logo:hover::before,
+    .nav-logo:hover::after {
         animation: none;
     }
 }
@@ -472,6 +552,43 @@ img {
     font-weight: 600;
 }
 
+/* ========================================
+   STATS GRID (Shared across pages)
+   ======================================== */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.stat-card {
+    text-align: center;
+    padding: var(--spacing-lg);
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border-radius: 0;
+    border: 2px solid var(--border-color);
+    transition: none;
+}
+
+.stat-card:hover {
+    border-color: var(--text-dark);
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-dark);
+}
+
+.stat-label {
+    font-size: 1rem;
+    opacity: 0.9;
+    color: var(--text-dark);
+}
+
 /* Accessibility: respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
     .light-dot {
@@ -507,12 +624,6 @@ img {
     gap: 2rem;
     border-bottom: 1px solid var(--border-color);
     padding: 0 var(--spacing-md);
-}
-
-/* Individual light dots */
-.walking-foot,
-.footprint-trail {
-    display: none;
 }
 
 .footer-track::before {
@@ -575,10 +686,6 @@ img {
     gap: var(--spacing-md);
 }
 
-.footer-message {
-    display: none;
-}
-
 /* Footer links - brutalist style */
 .footer-links {
     display: flex;
@@ -602,10 +709,6 @@ img {
     text-decoration: underline;
     background: none;
     transform: none;
-}
-
-.footer-link .link-icon {
-    display: none;
 }
 
 .footer-copyright {
@@ -739,11 +842,6 @@ img {
     
     .footer-link {
         font-size: 0.75rem;
-    }
-    
-    .rotating-head {
-        width: 10px;
-        height: 10px;
     }
 }
 
