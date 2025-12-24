@@ -30,7 +30,143 @@ function initThemeToggle() {
             
             // Log for learning
             console.log(`Theme switched to: ${newTheme} 🎨`);
+            
+            // Update particles background colors when theme changes
+            updateParticlesColors(newTheme);
         });
+    }
+}
+
+/**
+ * tsParticles Animated Background
+ * Creates floating connected particles behind all content
+ */
+let particlesInstance = null;
+
+async function initParticlesBackground() {
+    const particlesEl = document.getElementById('particles-background');
+    
+    // Only initialize if element exists and tsParticles is loaded
+    if (!particlesEl || typeof tsParticles === 'undefined') {
+        console.log('⚠️ tsParticles not available or element not found');
+        return;
+    }
+    
+    // Check for reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        console.log('⚠️ Reduced motion preferred, skipping particles animation');
+        return;
+    }
+    
+    // Get current theme
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const colors = getParticlesColors(currentTheme);
+    
+    try {
+        particlesInstance = await tsParticles.load("particles-background", {
+            fullScreen: false,
+            background: {
+                color: {
+                    value: colors.background
+                }
+            },
+            fpsLimit: 60,
+            interactivity: {
+                events: {
+                    onHover: {
+                        enable: false,
+                        mode: "grab"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        links: {
+                            opacity: 1
+                        }
+                    }
+                }
+            },
+            particles: {
+                color: {
+                    value: colors.particles
+                },
+                links: {
+                    color: colors.particles,
+                    distance: 150,
+                    enable: true,
+                    opacity: 0.3,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    outModes: {
+                        default: "out"
+                    }
+                },
+                number: {
+                    density: {
+                        enable: true,
+                        area: 800
+                    },
+                    value: 60
+                },
+                opacity: {
+                    value: 0.4
+                },
+                shape: {
+                    type: "circle"
+                },
+                size: {
+                    value: { min: 1, max: 3 }
+                }
+            },
+            detectRetina: true
+        });
+        
+        console.log('✨ tsParticles background initialized');
+    } catch (error) {
+        console.error('Error initializing particles:', error);
+    }
+}
+
+/**
+ * Get particles colors based on theme
+ */
+function getParticlesColors(theme) {
+    if (theme === 'dark') {
+        return {
+            background: '#000000',  // Pure black background
+            particles: '#ffffff'     // Pure white particles
+        };
+    } else {
+        return {
+            background: '#ffffff',  // Pure white background
+            particles: '#000000'     // Pure black particles
+        };
+    }
+}
+
+/**
+ * Update particles colors when theme changes
+ */
+async function updateParticlesColors(theme) {
+    if (!particlesInstance) return;
+    
+    const colors = getParticlesColors(theme);
+    
+    try {
+        // Destroy and recreate with new colors
+        particlesInstance.destroy();
+        await initParticlesBackground();
+        console.log('✨ Particles colors updated for', theme, 'theme');
+    } catch (error) {
+        console.error('Error updating particles colors:', error);
     }
 }
 
@@ -425,16 +561,17 @@ function initScrollProgress() {
  * Initialize all functions when DOM is ready
  */
 document.addEventListener('DOMContentLoaded', () => {
-    initThemeToggle();      // Initialize theme first
+    initThemeToggle();           // Initialize theme first
+    initParticlesBackground();   // Initialize particles background
     initMobileNav();
     initSmoothScroll();
-    initGlitchEffect();     // Initialize glitch effect on hover
-    initPoetry();           // Initialize Poetry API
-    initStoicQuote();       // Initialize Stoic quote API
+    initGlitchEffect();          // Initialize glitch effect on hover
+    initPoetry();                // Initialize Poetry API
+    initStoicQuote();            // Initialize Stoic quote API
     highlightCurrentPage();
     initLazyLoading();
     initScrollToTop();
-    initScrollProgress();   // Initialize scroll progress bar
+    initScrollProgress();        // Initialize scroll progress bar
     
     // Log message for learning purposes
     console.log('Portfolio website loaded successfully! 🚀');

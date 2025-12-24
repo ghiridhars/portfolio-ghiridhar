@@ -119,6 +119,95 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
+    position: relative;
+    z-index: 1;
+}
+
+/* ========================================
+   PARTICLES ANIMATED BACKGROUND
+   ======================================== */
+
+#particles-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+#particles-background canvas {
+    pointer-events: none !important;
+}
+
+/* All main content sections should be transparent to show particles */
+.hero,
+.about,
+.quick-links,
+.stoic-quote-section,
+.page-header,
+.portfolio-section,
+.reading-stats,
+.book-library,
+.trivia-section,
+.github-stats,
+.tech-stack,
+.contribution-calendar,
+.coding-section,
+.contact-section,
+.books-section,
+.book-controls,
+.book-filters,
+.status-filters,
+.projects-section {
+    background-color: transparent !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* Cards and interactive elements need solid backgrounds to be visible */
+.card,
+.book-item,
+.portfolio-item,
+.stat-card,
+.stoic-quote-card,
+.poetry-card,
+.trivia-container,
+.contact-form-wrapper,
+.info-item,
+.social-links-vertical,
+.filter-btn,
+.search-box input,
+.view-toggle,
+.controls-wrapper,
+.tech-label,
+.calendar-grid,
+.repo-card,
+.project-card,
+.trivia-start,
+.trivia-quiz,
+.trivia-results {
+    background-color: var(--bg-white);
+    position: relative;
+    z-index: 2;
+}
+
+/* Ensure hover states work properly on cards */
+.card:hover {
+    background-color: var(--text-dark);
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background-color: var(--text-dark);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    #particles-background {
+        display: none;
+    }
 }
 
 /* Typography */
@@ -185,11 +274,18 @@ img {
 
 .navbar {
     background-color: var(--bg-white);
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 1000;
     padding: var(--spacing-md) 0;
+}
+
+[data-theme="dark"] .navbar {
+    background-color: rgba(0, 0, 0, 0.85);
 }
 
 .navbar .container {
