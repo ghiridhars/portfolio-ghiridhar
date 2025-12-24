@@ -79,12 +79,8 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Artēs</h2>
-                <button class="toggle-artes-btn" id="toggleArtesBtn" aria-label="Toggle art gallery">
-                    <span class="toggle-text">Show Gallery</span>
-                    <span class="material-symbols-sharp">expand_more</span>
-                </button>
             </div>
-            <div class="portfolio-grid" id="artesGrid" style="display: none;">
+            <div class="portfolio-grid portfolio-preview" id="artesGrid">
                 <!-- Avatar -->
                 <article class="portfolio-item" data-category="art">
                     <div class="portfolio-image">
@@ -108,7 +104,7 @@
                 </article>
 
                 <!-- Hulk Wall Art -->
-                <article class="portfolio-item" data-category="art">
+                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
                     <div class="portfolio-image">
                         <img src="assets/images/art/Hulk_WallArt.jpg" alt="Hulk Wall Art">
                     </div>
@@ -119,7 +115,7 @@
                 </article>
 
                 <!-- Memento Mori -->
-                <article class="portfolio-item" data-category="art">
+                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
                     <div class="portfolio-image">
                         <img src="assets/images/art/Memento_Mori.jpeg" alt="Memento Mori">
                     </div>
@@ -130,7 +126,7 @@
                 </article>
 
                 <!-- Non Omnis Moriar -->
-                <article class="portfolio-item" data-category="art">
+                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
                     <div class="portfolio-image">
                         <img src="assets/images/art/Non_Omnis_Moriar.jpeg" alt="Non Omnis Moriar">
                     </div>
@@ -141,7 +137,7 @@
                 </article>
 
                 <!-- Pulp Fiction -->
-                <article class="portfolio-item" data-category="art">
+                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
                     <div class="portfolio-image">
                         <img src="assets/images/art/Pulp_Fiction.jpg" alt="Pulp Fiction Art">
                     </div>
@@ -152,7 +148,7 @@
                 </article>
 
                 <!-- Robin Williams -->
-                <article class="portfolio-item" data-category="art">
+                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
                     <div class="portfolio-image">
                         <img src="assets/images/art/Robin_Williams.jpeg" alt="Robin Williams Portrait">
                     </div>
@@ -163,7 +159,7 @@
                 </article>
 
                 <!-- Ronaldo Wall Art -->
-                <article class="portfolio-item" data-category="art">
+                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
                     <div class="portfolio-image">
                         <img src="assets/images/art/Ronaldo_WallArt.jpg" alt="Ronaldo Wall Art">
                     </div>
@@ -174,7 +170,7 @@
                 </article>
 
                 <!-- Walter White -->
-                <article class="portfolio-item" data-category="art">
+                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
                     <div class="portfolio-image">
                         <img src="assets/images/art/Walter_White.jpeg" alt="Walter White Portrait">
                     </div>
@@ -183,6 +179,12 @@
                         <p class="portfolio-category">Portrait</p>
                     </div>
                 </article>
+            </div>
+            <div class="show-more-wrapper" style="text-align: center; margin-top: var(--spacing-lg);">
+                <button class="btn btn-secondary" id="toggleArtesBtn" aria-label="Show full gallery">
+                    <span class="material-symbols-sharp">expand_more</span>
+                    <span class="toggle-text">Show Full Gallery</span>
+                </button>
             </div>
         </div>
     </section>

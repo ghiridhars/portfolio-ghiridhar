@@ -6,7 +6,7 @@
 const GITHUB_CONFIG = {
     username: 'ghiridhars',
     apiBase: 'https://api.github.com',
-    maxRepos: 8, // Number of repositories to display as projects
+    maxRepos: 2, // Number of repositories to display as projects
     cacheTime: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
     // Note: Tech stack is built from ALL repositories, not just the displayed ones
 };

@@ -59,37 +59,38 @@ function initPortfolioGallery() {
 
 /**
  * Toggle Artes Gallery
- * Shows/hides the art gallery on demand to reduce initial page scrolling
+ * Shows/hides the additional art items beyond the first 2
  */
 function initArtesToggle() {
     const toggleBtn = document.getElementById('toggleArtesBtn');
-    const artesGrid = document.getElementById('artesGrid');
+    const hiddenItems = document.querySelectorAll('.portfolio-item-hidden');
     
-    if (!toggleBtn || !artesGrid) {
+    if (!toggleBtn || !hiddenItems.length) {
         console.log('Artes toggle elements not found');
         return;
     }
     
+    let isExpanded = false;
+    
     toggleBtn.addEventListener('click', () => {
-        const isExpanded = artesGrid.style.display !== 'none';
+        isExpanded = !isExpanded;
         
         if (isExpanded) {
-            // Collapse
-            artesGrid.style.display = 'none';
-            toggleBtn.querySelector('.toggle-text').textContent = 'Show Gallery';
-            toggleBtn.classList.remove('expanded');
-            toggleBtn.setAttribute('aria-expanded', 'false');
-        } else {
-            // Expand
-            artesGrid.style.display = 'grid';
-            toggleBtn.querySelector('.toggle-text').textContent = 'Hide Gallery';
-            toggleBtn.classList.add('expanded');
+            // Show all hidden items
+            hiddenItems.forEach(item => {
+                item.style.display = '';
+            });
+            toggleBtn.querySelector('.toggle-text').textContent = 'Show Less';
+            toggleBtn.querySelector('.material-symbols-sharp').textContent = 'expand_less';
             toggleBtn.setAttribute('aria-expanded', 'true');
-            
-            // Smooth scroll to gallery after expanding
-            setTimeout(() => {
-                artesGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
+        } else {
+            // Hide items again
+            hiddenItems.forEach(item => {
+                item.style.display = 'none';
+            });
+            toggleBtn.querySelector('.toggle-text').textContent = 'Show Full Gallery';
+            toggleBtn.querySelector('.material-symbols-sharp').textContent = 'expand_more';
+            toggleBtn.setAttribute('aria-expanded', 'false');
         }
     });
     

@@ -401,10 +401,9 @@
 /* Call to Action Section */
 .cta-section {
     padding: var(--spacing-2xl) 0;
-    background-color: var(--bg-white);
+    background-color: transparent;
     color: var(--text-dark);
     text-align: center;
-    border-top: 2px solid var(--border-color);
 }
 
 .cta-section h2 {

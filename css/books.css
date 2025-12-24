@@ -448,17 +448,13 @@
 /* List View */
 .books-grid.list-view {
     grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
 }
 
 .books-grid.list-view .book-item {
-    perspective: 2000px;
-    height: 250px;
-}
-
-.books-grid.list-view .book-card-front,
-.books-grid.list-view .book-card-back {
     flex-direction: row;
     gap: var(--spacing-lg);
+    padding: var(--spacing-md);
 }
 
 .books-grid.list-view .book-cover {
@@ -475,11 +471,34 @@
     height: 150px;
 }
 
-.books-grid.list-view .book-info,
-.books-grid.list-view .book-back-content {
+.books-grid.list-view .book-info {
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+}
+
+.books-grid.list-view .book-title {
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.books-grid.list-view .book-author {
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.books-grid.list-view .book-review {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.85rem;
+}
+
+.books-grid.list-view .book-meta {
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
 }
 
 /* Loading and Error States */
@@ -508,7 +527,16 @@
     }
     
     .book-item {
-        height: 550px;
+        height: auto;
+    }
+    
+    /* List view on mobile - stack vertically */
+    .books-grid.list-view .book-item {
+        flex-direction: column;
+    }
+    
+    .books-grid.list-view .book-cover {
+        align-self: center;
     }
     
     .controls-wrapper {
