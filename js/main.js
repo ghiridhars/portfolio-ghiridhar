@@ -558,6 +558,79 @@ function initScrollProgress() {
 }
 
 /**
+ * Fetch Site Stats from GoatCounter
+ * Displays visitor count and page views in the footer
+ */
+async function initSiteStats() {
+    const visitorsEl = document.getElementById('footer-visitors');
+    const pageviewsEl = document.getElementById('footer-pageviews');
+    
+    if (!visitorsEl || !pageviewsEl) return;
+    
+    // GoatCounter site code - update this to your actual GoatCounter site code
+    const GOATCOUNTER_SITE = 'ghiridhars'; // Replace with your GoatCounter site code
+    
+    try {
+        // Fetch stats from GoatCounter API
+        // Note: GoatCounter provides a public stats endpoint
+        const response = await fetch(`https://${GOATCOUNTER_SITE}.goatcounter.com/counter/.json`);
+        
+        if (response.ok) {
+            const data = await response.json();
+            
+            // Update the stats display
+            visitorsEl.textContent = formatNumber(data.count_unique || 0);
+            pageviewsEl.textContent = formatNumber(data.count || 0);
+            
+            console.log('📈 Site stats loaded from GoatCounter');
+        } else {
+            // Fallback: Show placeholder or use localStorage estimate
+            showFallbackStats(visitorsEl, pageviewsEl);
+        }
+    } catch (error) {
+        console.log('📈 Using fallback stats (GoatCounter not configured)');
+        showFallbackStats(visitorsEl, pageviewsEl);
+    }
+}
+
+/**
+ * Show fallback stats when GoatCounter is unavailable
+ * Uses localStorage to track basic visit count
+ */
+function showFallbackStats(visitorsEl, pageviewsEl) {
+    // Simple localStorage-based counter as fallback
+    let visits = parseInt(localStorage.getItem('site_visits') || '0');
+    let pageviews = parseInt(localStorage.getItem('site_pageviews') || '0');
+    
+    // Increment on each page load
+    pageviews++;
+    localStorage.setItem('site_pageviews', pageviews.toString());
+    
+    // Check if this is a new session (simplified)
+    if (!sessionStorage.getItem('visited')) {
+        visits++;
+        localStorage.setItem('site_visits', visits.toString());
+        sessionStorage.setItem('visited', 'true');
+    }
+    
+    visitorsEl.textContent = formatNumber(visits);
+    pageviewsEl.textContent = formatNumber(pageviews);
+}
+
+/**
+ * Format large numbers with K/M suffixes
+ */
+function formatNumber(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'M';
+    }
+    if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'K';
+    }
+    return num.toString();
+}
+
+/**
  * Initialize all functions when DOM is ready
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -572,6 +645,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initLazyLoading();
     initScrollToTop();
     initScrollProgress();        // Initialize scroll progress bar
+    initSiteStats();             // Initialize footer site stats
     
     // Log message for learning purposes
     console.log('Portfolio website loaded successfully! 🚀');
@@ -586,6 +660,7 @@ if (typeof module !== 'undefined' && module.exports) {
         initSmoothScroll,
         highlightCurrentPage,
         initLazyLoading,
-        initScrollToTop
+        initScrollToTop,
+        initSiteStats
     };
 }

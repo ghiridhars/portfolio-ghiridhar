@@ -693,12 +693,12 @@ img {
 }
 
 /* ========================================
-   ANIMATED FOOTER - FIELD LIGHTS
+   ANIMATED FOOTER - WAVE ANIMATION
    ======================================== */
 
 .animated-footer {
     background-color: var(--bg-white);
-    border-top: 1px solid var(--border-color);
+    border-top: none;
     padding: 0;
     margin-top: var(--spacing-2xl);
     overflow: hidden;
@@ -707,70 +707,87 @@ img {
 
 [data-theme="dark"] .animated-footer {
     background-color: var(--bg-white);
-    border-top: 1px solid var(--border-color);
 }
 
-/* Light strip - field lights effect */
-.footer-track {
+/* Wave animation container */
+.footer-wave {
     position: relative;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    border-bottom: 1px solid var(--border-color);
-    padding: 0 var(--spacing-md);
+    height: 120px;
+    overflow: hidden;
 }
 
-.footer-track::before {
-    content: '';
+.footer-wave svg {
     position: absolute;
-    top: 50%;
+    bottom: 0;
     left: 0;
-    right: 0;
-    display: flex;
-    justify-content: center;
-    transform: translateY(-50%);
+    width: 200%;
+    height: 100%;
 }
 
-/* Light dots container */
-.light-strip {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
+.wave {
+    fill: var(--text-dark);
 }
 
-.light-dot {
-    width: 8px;
-    height: 8px;
-    background-color: var(--text-dark);
-    border-radius: 50%;
-    animation: flicker 3s ease-in-out infinite;
+/* Back wave - slowest, most transparent, creates depth */
+.wave-back {
+    opacity: 0.15;
+    animation: wave-drift 12s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
 }
 
-.light-dot:nth-child(1) { animation-delay: 0s; }
-.light-dot:nth-child(2) { animation-delay: 0.2s; }
-.light-dot:nth-child(3) { animation-delay: 0.4s; }
-.light-dot:nth-child(4) { animation-delay: 0.6s; }
-.light-dot:nth-child(5) { animation-delay: 0.8s; }
-.light-dot:nth-child(6) { animation-delay: 1s; }
-.light-dot:nth-child(7) { animation-delay: 1.2s; }
-.light-dot:nth-child(8) { animation-delay: 1.4s; }
-.light-dot:nth-child(9) { animation-delay: 1.6s; }
-.light-dot:nth-child(10) { animation-delay: 1.8s; }
-.light-dot:nth-child(11) { animation-delay: 2s; }
-.light-dot:nth-child(12) { animation-delay: 2.2s; }
+/* Middle wave - medium speed */
+.wave-mid {
+    opacity: 0.25;
+    animation: wave-drift 8s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+    animation-delay: -2s;
+}
 
-@keyframes flicker {
-    0%, 100% {
-        opacity: 0.2;
-        transform: scale(0.8);
+/* Front wave - fastest, most visible */
+.wave-front {
+    opacity: 0.4;
+    animation: wave-drift 5s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+    animation-delay: -1s;
+}
+
+@keyframes wave-drift {
+    0% {
+        transform: translateX(0) translateZ(0);
     }
     50% {
-        opacity: 1;
-        transform: scale(1);
-        box-shadow: 0 0 8px var(--text-dark);
+        transform: translateX(-25%) translateZ(0);
     }
+    100% {
+        transform: translateX(-50%) translateZ(0);
+    }
+}
+
+/* Footer stats section */
+.footer-stats {
+    display: flex;
+    gap: var(--spacing-xl);
+    justify-content: center;
+    margin-bottom: var(--spacing-md);
+    padding-top: var(--spacing-sm);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    font-family: var(--font-mono);
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
 }
 
 /* Footer content */
@@ -919,17 +936,16 @@ img {
     }
     
     /* Animated Footer Responsive */
-    .footer-track {
-        height: 35px;
+    .footer-wave {
+        height: 40px;
     }
     
-    .light-strip {
-        gap: 0.8rem;
+    .footer-stats {
+        gap: var(--spacing-lg);
     }
     
-    .light-dot {
-        width: 6px;
-        height: 6px;
+    .stat-value {
+        font-size: 1rem;
     }
     
     .footer-links {
