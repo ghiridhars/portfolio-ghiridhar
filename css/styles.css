@@ -309,13 +309,13 @@ img {
 }
 
 /* ========================================
-   DOT MATRIX HALF-FACE (Peeping)
+   DOT MATRIX HALF-FACE (Peeping with Glasses)
    ======================================== */
 
 .dot-face {
     display: grid;
-    grid-template-columns: repeat(11, 4px);
-    grid-template-rows: repeat(7, 4px);
+    grid-template-columns: repeat(17, 4px);
+    grid-template-rows: repeat(9, 4px);
     gap: 2px;
 }
 
@@ -337,28 +337,36 @@ img {
     background-color: var(--text-dark);
 }
 
-/* Eyebrow dots */
-.dot-face .d.eb {
+/* Glasses frame - thin rectangular dots */
+.dot-face .d.gl {
+    width: 4px;
+    height: 4px;
     background-color: var(--text-dark);
-    width: 5px;
-    height: 2px;
-    border-radius: 1px;
+    border-radius: 0;
+    opacity: 0.4;
 }
 
 /* Eye dots */
 .dot-face .d.ey {
-    width: 5px;
-    height: 5px;
+    width: 4px;
+    height: 4px;
     background-color: var(--text-dark);
-    animation: eyeBlink 4s ease-in-out infinite;
+    border-radius: 50%;
+    position: relative;
+    transition: transform 0.15s ease-out;
+}
+
+/* Eye blink animation */
+.dot-face .d.ey.blink {
+    animation: eyeBlink 0.15s ease-in-out;
 }
 
 @keyframes eyeBlink {
-    0%, 42%, 48%, 100% { transform: scaleY(1); }
-    45% { transform: scaleY(0.1); }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 
-/* Dot Face Glitch Effect on Hover (matches nav text glitch) */
+/* Nav logo - simple, no glitch */
 .nav-logo {
     position: relative;
     display: flex;
@@ -367,69 +375,21 @@ img {
     padding: 0.25rem;
 }
 
-.nav-logo::before,
-.nav-logo::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--bg-white);
-    clip-path: inset(0 0 100% 0);
-    pointer-events: none;
-}
-
-/* Clone the dot-face grid for glitch layers */
-.nav-logo::before {
-    left: 2px;
-    box-shadow: -2px 0 0 var(--text-dark);
-}
-
-.nav-logo::after {
-    left: -2px;
-    box-shadow: 2px 0 0 var(--text-dark);
-}
-
-/* Activate glitch on hover */
-.nav-logo:hover::before {
-    animation: glitch-1 0.4s steps(2) infinite;
-}
-
-.nav-logo:hover::after {
-    animation: glitch-2 0.4s steps(2) infinite reverse;
-}
-
-/* Add jitter to the face itself */
+/* Subtle scale on hover instead of glitch */
 .nav-logo:hover .dot-face {
-    animation: faceJitter 0.4s steps(2) infinite;
-}
-
-@keyframes faceJitter {
-    0%, 100% {
-        transform: translate(0, 0);
-    }
-    25% {
-        transform: translate(-1px, 0);
-    }
-    50% {
-        transform: translate(1px, 0);
-    }
-    75% {
-        transform: translate(-1px, 1px);
-    }
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
     .dot-face .d.ey {
         animation: none;
+        transition: none;
     }
     
-    .nav-logo:hover .dot-face,
-    .nav-logo:hover::before,
-    .nav-logo:hover::after {
-        animation: none;
+    .nav-logo:hover .dot-face {
+        transform: none;
     }
 }
 

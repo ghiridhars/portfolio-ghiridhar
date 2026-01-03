@@ -4,6 +4,68 @@
 // ========================================
 
 /**
+ * Dot Matrix Face - Eye Tracking & Blink
+ * Makes the face logo interactive and lively
+ */
+function initDotFace() {
+    const dotFace = document.querySelector('.dot-face');
+    const eyes = document.querySelectorAll('.dot-face .d.ey');
+    
+    if (!dotFace || eyes.length === 0) return;
+    
+    // Check for reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        console.log('👁️ Face animations disabled (reduced motion)');
+        return;
+    }
+    
+    // Eye tracking - follow mouse cursor
+    document.addEventListener('mousemove', (e) => {
+        const faceRect = dotFace.getBoundingClientRect();
+        const faceCenterX = faceRect.left + faceRect.width / 2;
+        const faceCenterY = faceRect.top + faceRect.height / 2;
+        
+        // Calculate direction from face to mouse
+        const deltaX = e.clientX - faceCenterX;
+        const deltaY = e.clientY - faceCenterY;
+        
+        // Normalize and limit movement (max 1.5px in any direction)
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        const maxMove = 1.5;
+        
+        let moveX = 0;
+        let moveY = 0;
+        
+        if (distance > 10) { // Only move if mouse is far enough
+            moveX = (deltaX / distance) * maxMove;
+            moveY = (deltaY / distance) * maxMove;
+        }
+        
+        // Apply to both eyes
+        eyes.forEach(eye => {
+            eye.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+    });
+    
+    // Random blink
+    function triggerBlink() {
+        eyes.forEach(eye => {
+            eye.classList.add('blink');
+            setTimeout(() => eye.classList.remove('blink'), 150);
+        });
+        
+        // Schedule next blink (random 2-6 seconds)
+        const nextBlink = 2000 + Math.random() * 4000;
+        setTimeout(triggerBlink, nextBlink);
+    }
+    
+    // Start blinking after initial delay
+    setTimeout(triggerBlink, 1500);
+    
+    console.log('👓 Dot face initialized with eye tracking & blink');
+}
+
+/**
  * Dark/Light Theme Toggle
  * Handles theme switching and persistence
  */
@@ -636,6 +698,7 @@ function formatNumber(num) {
 document.addEventListener('DOMContentLoaded', () => {
     initThemeToggle();           // Initialize theme first
     initParticlesBackground();   // Initialize particles background
+    initDotFace();               // Initialize dot face eye tracking & expressions
     initMobileNav();
     initSmoothScroll();
     initGlitchEffect();          // Initialize glitch effect on hover
@@ -661,6 +724,7 @@ if (typeof module !== 'undefined' && module.exports) {
         highlightCurrentPage,
         initLazyLoading,
         initScrollToTop,
-        initSiteStats
+        initSiteStats,
+        initDotFace
     };
 }
