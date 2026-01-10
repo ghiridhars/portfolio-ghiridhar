@@ -13,6 +13,7 @@ const COMMAND_PALETTE_CONFIG = {
     ],
     actions: [
         { name: 'Toggle Theme', action: 'toggleTheme', shortcut: 'T', description: 'Switch dark/light mode' },
+        { name: '3D Gallery', action: 'open3DGallery', shortcut: '3', description: 'Enter immersive 3D art gallery' },
         { name: 'GitHub Profile', action: 'openGitHub', shortcut: 'G', description: 'Open GitHub in new tab' },
         { name: 'LinkedIn', action: 'openLinkedIn', shortcut: 'L', description: 'Open LinkedIn in new tab' },
         { name: 'Email', action: 'openEmail', shortcut: 'E', description: 'Send an email' },
@@ -224,6 +225,15 @@ function executeCommand(item) {
                 const themeToggle = document.querySelector('.theme-toggle');
                 if (themeToggle) themeToggle.click();
                 closeCommandPalette();
+                break;
+            case 'open3DGallery':
+                closeCommandPalette();
+                if (typeof initGallery3D === 'function') {
+                    initGallery3D();
+                } else {
+                    // Navigate to portfolio page if not there
+                    window.location.href = 'portfolio.html#gallery3d';
+                }
                 break;
             case 'openGitHub':
                 window.open('https://github.com/ghiridhars', '_blank');
