@@ -1,6 +1,7 @@
 // ========================================
 // 3D GALLERY - THREE.JS VIRTUAL MUSEUM
 // Immersive 3D art gallery experience
+// Requires: utils.js (for logger)
 // ========================================
 
 /**
@@ -80,7 +81,7 @@ class Gallery3D {
         this.bindEvents();
         this.start();
         
-        console.log('🖼️ 3D Gallery initialized');
+        logger.log('🖼️ 3D Gallery initialized');
     }
     
     createScene() {
@@ -98,7 +99,7 @@ class Gallery3D {
         // Start in the middle of the room, facing the back wall
         this.camera.position.set(0, 2, 10);
         this.camera.lookAt(0, 2, -10);
-        console.log('📷 Camera initialized at', this.camera.position);
+        logger.log('📷 Camera initialized at', this.camera.position);
     }
     
     createRenderer() {
@@ -384,7 +385,7 @@ class Gallery3D {
             });
         }
         
-        console.log('🖼️ Creating', Math.min(this.artworks.length, wallPositions.length), 'frames');
+        logger.log('🖼️ Creating', Math.min(this.artworks.length, wallPositions.length), 'frames');
         
         // Create frames for each artwork
         this.artworks.forEach((artwork, index) => {
@@ -423,11 +424,11 @@ class Gallery3D {
             this.addArtworkSpotlight(frameGroup, position, wall);
             
             // Load texture asynchronously
-            console.log(`🖼️ Loading texture ${index}: ${artwork.image}`);
+            logger.log(`🖼️ Loading texture ${index}: ${artwork.image}`);
             textureLoader.load(
                 artwork.image,
                 (texture) => {
-                    console.log(`✅ Texture loaded: ${artwork.title}`);
+                    logger.log(`✅ Texture loaded: ${artwork.title}`);
                     texture.colorSpace = THREE.SRGBColorSpace;
                     
                     // Calculate aspect ratio
@@ -457,7 +458,7 @@ class Gallery3D {
                     // Loading progress
                 },
                 (error) => {
-                    console.warn(`❌ Failed to load: ${artwork.image}`, error);
+                    logger.warn(`❌ Failed to load: ${artwork.image}`, error);
                 }
             );
         });
@@ -1005,7 +1006,7 @@ class Gallery3D {
         
         document.exitPointerLock();
         
-        console.log('🖼️ 3D Gallery destroyed');
+        logger.log('🖼️ 3D Gallery destroyed');
     }
 }
 
@@ -1020,7 +1021,7 @@ function initGallery3D() {
     const artworkElements = document.querySelectorAll('.portfolio-item');
     const artworks = [];
     
-    console.log('🖼️ Found', artworkElements.length, 'portfolio items');
+    logger.log('🖼️ Found', artworkElements.length, 'portfolio items');
     
     artworkElements.forEach((el, idx) => {
         const img = el.querySelector('img');
@@ -1028,7 +1029,7 @@ function initGallery3D() {
         const category = el.querySelector('.portfolio-category')?.textContent || 'Artwork';
         
         if (img && img.src) {
-            console.log(`  [${idx}] ${title}: ${img.src}`);
+            logger.log(`  [${idx}] ${title}: ${img.src}`);
             artworks.push({
                 image: img.src,
                 title: title,
@@ -1039,7 +1040,7 @@ function initGallery3D() {
     
     // If no artworks found from DOM, use hardcoded fallback
     if (artworks.length === 0) {
-        console.warn('No artworks found in DOM, using fallback images');
+        logger.warn('No artworks found in DOM, using fallback images');
         const fallbackArtworks = [
             { image: 'assets/images/art/Avatar.jpg', title: 'Avatar', category: 'Tattoo Sketch' },
             { image: 'assets/images/art/Blood_Rose.jpeg', title: 'Blood Rose', category: 'Sketch' },
@@ -1054,7 +1055,7 @@ function initGallery3D() {
         artworks.push(...fallbackArtworks);
     }
     
-    console.log('🖼️ Loading', artworks.length, 'artworks into 3D gallery');
+    logger.log('🖼️ Loading', artworks.length, 'artworks into 3D gallery');
     
     // Create gallery container
     const galleryContainer = document.createElement('div');
@@ -1084,7 +1085,7 @@ function initGallery3D() {
         galleryContainer.classList.add('active');
     });
     
-    console.log('🖼️ 3D Gallery opened with', artworks.length, 'artworks');
+    logger.log('🖼️ 3D Gallery opened with', artworks.length, 'artworks');
 }
 
 function closeGallery3D() {

@@ -2,10 +2,13 @@
    GLOBAL STYLES & CSS VARIABLES
    ======================================== */
 
-/* Import Material Symbols Outlined */
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap');
-
-/* Fallback: Use Doto from CDN with system font fallback */
+/* 
+ * Font Loading Strategy:
+ * Fonts are preloaded in HTML <head> for better performance.
+ * These @import statements are kept as fallbacks for older browsers
+ * or if preload fails. They are non-blocking when fonts are already cached.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Doto:wght@400;500;600;700&display=swap');
 
 /* CSS Custom Properties for easy theming */
@@ -89,9 +92,26 @@
     --shadow-lg: 0 10px 15px -3px rgba(255, 255, 255, 0.1);
 }
 
-/* Remove smooth theme transitions - plain design */
-* {
+/* 
+ * Transition Strategy:
+ * - Disable transitions by default for plain design
+ * - Enable specific transitions where needed via classes
+ */
+*:not(.transition-enabled):not(.theme-toggle):not(.nav-toggle):not(.btn) {
     transition: none;
+}
+
+/* Elements that should have transitions */
+.transition-enabled,
+.theme-toggle,
+.nav-toggle,
+.btn,
+.card,
+.book-item,
+.portfolio-item,
+.nav-menu a,
+.scroll-progress {
+    transition: var(--transition-base);
 }
 
 /* ========================================
@@ -141,7 +161,11 @@ body {
     pointer-events: none !important;
 }
 
-/* All main content sections should be transparent to show particles */
+/* 
+ * Transparent Sections - Consolidated
+ * All main content sections are transparent to show particles behind them
+ */
+.transparent-section,
 .hero,
 .about,
 .quick-links,
@@ -166,7 +190,11 @@ body {
     z-index: 1;
 }
 
-/* Cards and interactive elements need solid backgrounds to be visible */
+/* 
+ * Solid Background Elements - Consolidated
+ * Cards and interactive elements need solid backgrounds for visibility
+ */
+.solid-bg,
 .card,
 .book-item,
 .portfolio-item,
@@ -443,7 +471,7 @@ img {
 
 /* Material Icons SHARP Styling */
 .material-symbols-sharp {
-    font-family: 'Material Symbols Outlined';
+    font-family: 'Material Symbols Sharp';
     font-weight: normal;
     font-style: normal;
     font-size: 24px;

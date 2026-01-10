@@ -1,6 +1,7 @@
 // ========================================
 // BOOKS PAGE JAVASCRIPT
 // Dynamically generates and filters books from data
+// Requires: utils.js (for throttle, logger, animateCount)
 // ========================================
 
 /**
@@ -84,7 +85,7 @@ async function renderBooks() {
     const booksGrid = document.querySelector('.books-grid');
     
     if (!booksGrid) {
-        console.error('Books grid container not found');
+        logger.error('Books grid container not found');
         return;
     }
     
@@ -102,12 +103,12 @@ async function renderBooks() {
             booksGrid.innerHTML += generateBookCard(book);
         });
         
-        console.log(`✅ Rendered ${enrichedBooks.length} books with Open Library integration`);
+        logger.log(`✅ Rendered ${enrichedBooks.length} books with Open Library integration`);
         
         // Initialize scroll animations after rendering
         initScrollAnimations();
     } catch (error) {
-        console.error('Error rendering books:', error);
+        logger.error('Error rendering books:', error);
         booksGrid.innerHTML = '<p class="error-message">Error loading books. Please refresh the page.</p>';
     }
 }
@@ -120,7 +121,7 @@ function initBooksFilter() {
     const filterButtons = document.querySelectorAll('.filter-btn');
     
     if (!filterButtons.length) {
-        console.log('No filter buttons found');
+        logger.log('No filter buttons found');
         return;
     }
     
@@ -177,7 +178,7 @@ function applyFilters() {
         }
     });
     
-    console.log(`Filtered: ${visibleCount} books visible`);
+    logger.log(`Filtered: ${visibleCount} books visible`);
 }
 
 /**
@@ -196,44 +197,19 @@ function updateReadingStats() {
     const currentlyReading = BOOKS_DATA.filter(book => book.status === 'currently-reading');
     const wantToRead = BOOKS_DATA.filter(book => book.status === 'want-to-read');
     
-    // Animate counting for each stat
+    // Animate counting for each stat (using shared animateCount from utils.js)
     animateCount(statCards[0], finishedBooks.length);
     animateCount(statCards[1], currentlyReading.length);
     animateCount(statCards[2], wantToRead.length);
     
-    console.log('📊 Reading stats updated:', {
+    logger.log('📊 Reading stats updated:', {
         finished: finishedBooks.length,
         reading: currentlyReading.length,
         wantToRead: wantToRead.length
     });
 }
 
-/**
- * Animate counting up to a number
- * @param {HTMLElement} element - The element to animate
- * @param {number} target - Target number to count to
- */
-function animateCount(element, target) {
-    if (!element) return;
-    
-    const duration = 1000; // 1 second
-    const start = 0;
-    const increment = target / (duration / 16); // 60fps
-    let current = start;
-    
-    element.classList.add('counting');
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            element.textContent = target;
-            clearInterval(timer);
-            element.classList.remove('counting');
-        } else {
-            element.textContent = Math.floor(current);
-        }
-    }, 16);
-}
+// Note: animateCount is now imported from utils.js
 
 /**
  * Calculate Average Rating
@@ -249,7 +225,7 @@ function calculateAverageRating() {
     const totalRating = ratedBooks.reduce((sum, book) => sum + book.rating, 0);
     const averageRating = (totalRating / ratedBooks.length).toFixed(1);
     
-    console.log(`⭐ Average rating: ${averageRating} (from ${ratedBooks.length} books)`);
+    logger.log(`⭐ Average rating: ${averageRating} (from ${ratedBooks.length} books)`);
     return averageRating;
 }
 
@@ -258,7 +234,7 @@ function calculateAverageRating() {
  * Main initialization function
  */
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('📚 Initializing Books page...');
+    logger.log('📚 Initializing Books page...');
     
     // Render books from data
     renderBooks();
@@ -287,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize trivia quiz
     initTrivia();
     
-    console.log('✅ Books page initialized!');
+    logger.log('✅ Books page initialized!');
 });
 
 /**
@@ -299,14 +275,17 @@ function initReadingProgress() {
     
     if (!progressBar) return;
     
-    window.addEventListener('scroll', () => {
+    // Throttled scroll handler for better performance
+    const updateProgress = throttle(() => {
         const windowHeight = window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight - windowHeight;
         const scrolled = window.scrollY;
         const progress = (scrolled / documentHeight) * 100;
         
         progressBar.style.width = `${Math.min(progress, 100)}%`;
-    });
+    }, 16); // ~60fps
+    
+    window.addEventListener('scroll', updateProgress, { passive: true });
 }
 
 /**
@@ -318,8 +297,8 @@ function initSearch() {
     
     if (!searchInput) return;
     
-    searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase().trim();
+    // Debounced search for better performance
+    const handleSearch = debounce((searchTerm) => {
         const bookItems = document.querySelectorAll('.book-item');
         let visibleCount = 0;
         
@@ -347,7 +326,11 @@ function initSearch() {
             }
         });
         
-        console.log(`🔍 Search: "${searchTerm}" - ${visibleCount} results`);
+        logger.log(`🔍 Search: "${searchTerm}" - ${visibleCount} results`);
+    }, 150); // 150ms debounce
+    
+    searchInput.addEventListener('input', (e) => {
+        handleSearch(e.target.value.toLowerCase().trim());
     });
 }
 
@@ -376,7 +359,7 @@ function initViewToggle() {
                 booksGrid.classList.remove('list-view');
             }
             
-            console.log(`📱 View changed to: ${view}`);
+            logger.log(`📱 View changed to: ${view}`);
         });
     });
 }
@@ -408,7 +391,7 @@ function initScrollAnimations() {
         observer.observe(item);
     });
     
-    console.log('🎬 Scroll animations initialized for', bookItems.length, 'books');
+    logger.log('🎬 Scroll animations initialized for', bookItems.length, 'books');
 }
 
 /**
@@ -431,7 +414,7 @@ function initBooksToggle() {
     const booksGrid = document.getElementById('booksGrid');
     
     if (!toggleBtn || !booksGrid) {
-        console.log('Books toggle elements not found');
+        logger.log('Books toggle elements not found');
         return;
     }
     
@@ -458,7 +441,7 @@ function initBooksToggle() {
         }
     });
     
-    console.log('📚 Books toggle initialized');
+    logger.log('📚 Books toggle initialized');
 }
 
 /**
@@ -473,14 +456,14 @@ function initTrivia() {
     startBtn.addEventListener('click', startTrivia);
     playAgainBtn.addEventListener('click', resetTrivia);
     
-    console.log('🎯 Trivia quiz initialized');
+    logger.log('🎯 Trivia quiz initialized');
 }
 
 /**
  * Start the Trivia Quiz
  */
 async function startTrivia() {
-    console.log('🚀 Starting trivia quiz...');
+    logger.log('🚀 Starting trivia quiz...');
     
     const loadingText = document.querySelector('.trivia-description');
     if (loadingText) {
@@ -521,10 +504,10 @@ async function startTrivia() {
         showScreen('quiz');
         displayQuestion();
         
-        console.log('✅ Trivia questions loaded:', triviaQuestions.length);
+        logger.log('✅ Trivia questions loaded:', triviaQuestions.length);
         
     } catch (error) {
-        console.error('❌ Error loading trivia:', error);
+        logger.error('❌ Error loading trivia:', error);
         if (loadingText) {
             loadingText.textContent = 'Failed to load questions. Please try again.';
         }
@@ -692,7 +675,7 @@ function showScreen(screen) {
         resultsScreen.classList.remove('hidden');
     }
     
-    console.log('🎬 Showing screen:', screen);
+    logger.log('🎬 Showing screen:', screen);
 }
 
 /**

@@ -1,6 +1,7 @@
 // ========================================
 // MAIN JAVASCRIPT FILE
 // This file contains common functionality used across all pages
+// Requires: utils.js (for throttle, logger, prefersReducedMotion)
 // ========================================
 
 /**
@@ -14,13 +15,13 @@ function initDotFace() {
     if (!dotFace || eyes.length === 0) return;
     
     // Check for reduced motion preference
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        console.log('👁️ Face animations disabled (reduced motion)');
+    if (prefersReducedMotion()) {
+        logger.log('👁️ Face animations disabled (reduced motion)');
         return;
     }
     
-    // Eye tracking - follow mouse cursor
-    document.addEventListener('mousemove', (e) => {
+    // Eye tracking - follow mouse cursor (throttled to 60fps for performance)
+    const handleMouseMove = throttle((e) => {
         const faceRect = dotFace.getBoundingClientRect();
         const faceCenterX = faceRect.left + faceRect.width / 2;
         const faceCenterY = faceRect.top + faceRect.height / 2;
@@ -45,7 +46,9 @@ function initDotFace() {
         eyes.forEach(eye => {
             eye.style.transform = `translate(${moveX}px, ${moveY}px)`;
         });
-    });
+    }, 16); // ~60fps
+    
+    document.addEventListener('mousemove', handleMouseMove);
     
     // Random blink
     function triggerBlink() {
@@ -62,7 +65,7 @@ function initDotFace() {
     // Start blinking after initial delay
     setTimeout(triggerBlink, 1500);
     
-    console.log('👓 Dot face initialized with eye tracking & blink');
+    logger.log('👓 Dot face initialized with eye tracking & blink');
 }
 
 /**
@@ -91,7 +94,7 @@ function initThemeToggle() {
             localStorage.setItem('theme', newTheme);
             
             // Log for learning
-            console.log(`Theme switched to: ${newTheme} 🎨`);
+            logger.log(`Theme switched to: ${newTheme} 🎨`);
             
             // Update particles background colors when theme changes
             updateParticlesColors(newTheme);
@@ -110,13 +113,13 @@ async function initParticlesBackground() {
     
     // Only initialize if element exists and tsParticles is loaded
     if (!particlesEl || typeof tsParticles === 'undefined') {
-        console.log('⚠️ tsParticles not available or element not found');
+        logger.log('⚠️ tsParticles not available or element not found');
         return;
     }
     
     // Check for reduced motion preference
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        console.log('⚠️ Reduced motion preferred, skipping particles animation');
+    if (prefersReducedMotion()) {
+        logger.log('⚠️ Reduced motion preferred, skipping particles animation');
         return;
     }
     
@@ -191,9 +194,9 @@ async function initParticlesBackground() {
             detectRetina: true
         });
         
-        console.log('✨ tsParticles background initialized');
+        logger.log('✨ tsParticles background initialized');
     } catch (error) {
-        console.error('Error initializing particles:', error);
+        logger.error('Error initializing particles:', error);
     }
 }
 
@@ -226,9 +229,9 @@ async function updateParticlesColors(theme) {
         // Destroy and recreate with new colors
         particlesInstance.destroy();
         await initParticlesBackground();
-        console.log('✨ Particles colors updated for', theme, 'theme');
+        logger.log('✨ Particles colors updated for', theme, 'theme');
     } catch (error) {
-        console.error('Error updating particles colors:', error);
+        logger.error('Error updating particles colors:', error);
     }
 }
 
@@ -327,7 +330,7 @@ function initGlitchEffect() {
         el.setAttribute('data-text', text);
     });
     
-    console.log('✨ Glitch effect initialized on hover');
+    logger.log('✨ Glitch effect initialized on hover');
 }
 
 /**
@@ -342,18 +345,18 @@ function initPoetry() {
     
     // Only run if elements exist (on homepage)
     if (!poemTitle || !poemLines || !poemAuthor || !newPoemBtn) {
-        console.log('⚠️ Poetry elements not found on this page');
+        logger.log('⚠️ Poetry elements not found on this page');
         return;
     }
     
-    console.log('✅ Poetry elements found, initializing...');
+    logger.log('✅ Poetry elements found, initializing...');
     
     /**
      * Fetch a random poem from PoetryDB
      */
     async function fetchPoem() {
         try {
-            console.log('📖 Fetching poem from PoetryDB...');
+            logger.log('📖 Fetching poem from PoetryDB...');
             
             // Add loading state
             poemTitle.style.opacity = '0.5';
@@ -364,14 +367,14 @@ function initPoetry() {
             // Fetch random poem (PoetryDB returns array of poems)
             const response = await fetch('https://poetrydb.org/random/1');
             
-            console.log('📡 Response status:', response.status);
+            logger.log('📡 Response status:', response.status);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             
             const data = await response.json();
-            console.log('✅ Poem received:', data);
+            logger.log('✅ Poem received:', data);
             
             if (!data || data.length === 0) {
                 throw new Error('No poem data received');
@@ -401,8 +404,8 @@ function initPoetry() {
             }, 200);
             
         } catch (error) {
-            console.error('❌ Error fetching poem:', error);
-            console.error('Error details:', error.message);
+            logger.error('❌ Error fetching poem:', error);
+            logger.error('Error details:', error.message);
             
             // Show error in the UI
             poemTitle.textContent = 'Failed to load poem';
@@ -417,12 +420,12 @@ function initPoetry() {
     }
     
     // Fetch poem on page load
-    console.log('🚀 Fetching initial poem...');
+    logger.log('🚀 Fetching initial poem...');
     fetchPoem();
     
     // Fetch new poem when button is clicked
     newPoemBtn.addEventListener('click', () => {
-        console.log('📖 New poem requested by user');
+        logger.log('📖 New poem requested by user');
         fetchPoem();
     });
 }
@@ -438,18 +441,18 @@ function initStoicQuote() {
     
     // Only run if elements exist (on homepage)
     if (!quoteText || !quoteAuthor || !newQuoteBtn) {
-        console.log('⚠️ Stoic quote elements not found on this page');
+        logger.log('⚠️ Stoic quote elements not found on this page');
         return;
     }
     
-    console.log('✅ Stoic quote elements found, initializing...');
+    logger.log('✅ Stoic quote elements found, initializing...');
     
     /**
      * Fetch a random Stoic quote from the API
      */
     async function fetchStoicQuote() {
         try {
-            console.log('🔄 Fetching quote from API...');
+            logger.log('🔄 Fetching quote from API...');
             
             // Add loading state
             quoteText.style.opacity = '0.5';
@@ -458,14 +461,14 @@ function initStoicQuote() {
             
             const response = await fetch('https://stoic-quotes.com/api/quote');
             
-            console.log('📡 Response status:', response.status);
+            logger.log('📡 Response status:', response.status);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             
             const data = await response.json();
-            console.log('✅ Quote received:', data);
+            logger.log('✅ Quote received:', data);
             
             // Animate quote change
             setTimeout(() => {
@@ -477,8 +480,8 @@ function initStoicQuote() {
             }, 200);
             
         } catch (error) {
-            console.error('❌ Error fetching Stoic quote:', error);
-            console.error('Error details:', error.message);
+            logger.error('❌ Error fetching Stoic quote:', error);
+            logger.error('Error details:', error.message);
             
             // Show error in the UI
             quoteText.textContent = 'Failed to load quote. Please try again.';
@@ -490,12 +493,12 @@ function initStoicQuote() {
     }
     
     // Fetch quote on page load
-    console.log('🚀 Fetching initial quote...');
+    logger.log('🚀 Fetching initial quote...');
     fetchStoicQuote();
     
     // Fetch new quote when button is clicked
     newQuoteBtn.addEventListener('click', () => {
-        console.log('🔄 New quote requested by user');
+        logger.log('🔄 New quote requested by user');
         fetchStoicQuote();
     });
 }
@@ -579,8 +582,8 @@ function initScrollToTop() {
         });
     }
     
-    // Show/hide button based on scroll position
-    window.addEventListener('scroll', () => {
+    // Show/hide button based on scroll position (throttled)
+    const handleScroll = throttle(() => {
         if (window.pageYOffset > 300) {
             scrollBtn.style.opacity = '1';
             scrollBtn.style.visibility = 'visible';
@@ -588,7 +591,9 @@ function initScrollToTop() {
             scrollBtn.style.opacity = '0';
             scrollBtn.style.visibility = 'hidden';
         }
-    });
+    }, 100);
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
 }
 
 /**
@@ -605,18 +610,18 @@ function initScrollProgress() {
         document.body.prepend(progressBar);
     }
     
-    // Update progress on scroll
-    function updateProgress() {
+    // Update progress on scroll (throttled for performance)
+    const updateProgress = throttle(() => {
         const scrollTop = window.scrollY;
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
         const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
         progressBar.style.width = `${progress}%`;
-    }
+    }, 16); // ~60fps
     
     window.addEventListener('scroll', updateProgress, { passive: true });
     updateProgress(); // Initial call
     
-    console.log('📊 Scroll progress bar initialized');
+    logger.log('📊 Scroll progress bar initialized');
 }
 
 /**
@@ -640,17 +645,17 @@ async function initSiteStats() {
         if (response.ok) {
             const data = await response.json();
             
-            // Update the stats display
+            // Update the stats display (using shared formatNumber from utils.js)
             visitorsEl.textContent = formatNumber(data.count_unique || 0);
             pageviewsEl.textContent = formatNumber(data.count || 0);
             
-            console.log('📈 Site stats loaded from GoatCounter');
+            logger.log('📈 Site stats loaded from GoatCounter');
         } else {
             // Fallback: Show placeholder or use localStorage estimate
             showFallbackStats(visitorsEl, pageviewsEl);
         }
     } catch (error) {
-        console.log('📈 Using fallback stats (GoatCounter not configured)');
+        logger.log('📈 Using fallback stats (GoatCounter not configured)');
         showFallbackStats(visitorsEl, pageviewsEl);
     }
 }
@@ -679,18 +684,7 @@ function showFallbackStats(visitorsEl, pageviewsEl) {
     pageviewsEl.textContent = formatNumber(pageviews);
 }
 
-/**
- * Format large numbers with K/M suffixes
- */
-function formatNumber(num) {
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + 'M';
-    }
-    if (num >= 1000) {
-        return (num / 1000).toFixed(1) + 'K';
-    }
-    return num.toString();
-}
+// Note: formatNumber is now imported from utils.js
 
 /**
  * Initialize all functions when DOM is ready
@@ -711,9 +705,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initSiteStats();             // Initialize footer site stats
     
     // Log message for learning purposes
-    console.log('Portfolio website loaded successfully! 🚀');
-    console.log('Current theme:', document.documentElement.getAttribute('data-theme'));
-    console.log('Press Ctrl+K to open command palette');
+    logger.log('Portfolio website loaded successfully! 🚀');
+    logger.log('Current theme:', document.documentElement.getAttribute('data-theme'));
+    logger.log('Press Ctrl+K to open command palette');
 });
 
 // Export functions if using modules (optional for learning)

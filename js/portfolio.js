@@ -1,6 +1,7 @@
 // ========================================
 // PORTFOLIO PAGE JAVASCRIPT
 // Handles art gallery interactions
+// Requires: utils.js (for logger)
 // ========================================
 
 /**
@@ -11,7 +12,7 @@ function initPortfolioGallery() {
     const portfolioImages = document.querySelectorAll('.portfolio-item img');
     
     if (!portfolioImages.length) {
-        console.log('No portfolio images found');
+        logger.log('No portfolio images found');
         return;
     }
     
@@ -54,7 +55,7 @@ function initPortfolioGallery() {
         img.style.webkitTouchCallout = 'none';
     });
     
-    console.log(`Portfolio gallery initialized with ${portfolioImages.length} images (protection enabled)`);
+    logger.log(`Portfolio gallery initialized with ${portfolioImages.length} images (protection enabled)`);
 }
 
 /**
@@ -66,7 +67,7 @@ function initArtesToggle() {
     const hiddenItems = document.querySelectorAll('.portfolio-item-hidden');
     
     if (!toggleBtn || !hiddenItems.length) {
-        console.log('Artes toggle elements not found');
+        logger.log('Artes toggle elements not found');
         return;
     }
     
@@ -94,7 +95,7 @@ function initArtesToggle() {
         }
     });
     
-    console.log('Artes toggle initialized');
+    logger.log('Artes toggle initialized');
 }
 
 /**
@@ -104,5 +105,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initPortfolioGallery();
     initArtesToggle();
     
-    console.log('Portfolio page initialized! 🎨');
+    logger.log('Portfolio page initialized! 🎨');
 });

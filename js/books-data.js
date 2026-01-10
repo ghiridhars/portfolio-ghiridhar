@@ -1,6 +1,7 @@
 // ========================================
 // BOOKS DATA
 // Centralized book library data
+// Requires: utils.js (for logger)
 // ========================================
 
 /**
@@ -193,7 +194,7 @@ async function fetchBookFromOpenLibrary(isbn) {
         if (!response.ok) return null;
         return await response.json();
     } catch (error) {
-        console.warn(`Failed to fetch book data for ISBN ${isbn}:`, error);
+        logger.warn(`Failed to fetch book data for ISBN ${isbn}:`, error);
         return null;
     }
 }

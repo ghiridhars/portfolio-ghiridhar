@@ -1,6 +1,7 @@
 // ========================================
 // PHYSICS ENGINE FOR UI INTERACTIONS
 // Custom spring physics, magnetic effects, momentum
+// Requires: utils.js (for logger)
 // ========================================
 
 /**
@@ -714,12 +715,12 @@ class PhysicsWorld {
         this.isRunning = true;
         this.lastTime = performance.now();
         this.loop();
-        console.log('🎱 Physics engine started');
+        logger.log('🎱 Physics engine started');
     }
 
     stop() {
         this.isRunning = false;
-        console.log('🎱 Physics engine stopped');
+        logger.log('🎱 Physics engine stopped');
     }
 
     loop() {
@@ -755,7 +756,7 @@ let physicsWorld = null;
 function initPhysics() {
     // Check for reduced motion preference
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        console.log('🎱 Physics disabled (reduced motion preference)');
+        logger.log('🎱 Physics disabled (reduced motion preference)');
         return;
     }
 
@@ -812,7 +813,7 @@ function initPhysics() {
     // Start the physics loop
     physicsWorld.start();
 
-    console.log('🎱 Physics UI initialized');
+    logger.log('🎱 Physics UI initialized');
 }
 
 // Initialize when DOM is ready

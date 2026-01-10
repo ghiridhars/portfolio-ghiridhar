@@ -1,6 +1,7 @@
 // ========================================
 // COMMAND PALETTE (Ctrl+K)
 // Brutalist keyboard-first navigation
+// Requires: utils.js (for logger)
 // ========================================
 
 const COMMAND_PALETTE_CONFIG = {
@@ -336,7 +337,7 @@ function initCommandPalette() {
         }
     });
 
-    console.log('⌨️ Command Palette initialized (Ctrl+K to open)');
+    logger.log('⌨️ Command Palette initialized (Ctrl+K to open)');
 }
 
 // Auto-initialize when DOM is ready

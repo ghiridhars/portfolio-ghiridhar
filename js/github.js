@@ -1,6 +1,7 @@
 // ========================================
 // GITHUB API INTEGRATION
 // Fetches and displays GitHub profile and repository data
+// Requires: utils.js (for logger, animateCount)
 // ========================================
 
 const GITHUB_CONFIG = {
@@ -24,10 +25,10 @@ async function fetchGitHubProfile() {
         }
         
         const data = await response.json();
-        console.log('✅ GitHub profile data fetched:', data);
+        logger.log('✅ GitHub profile data fetched:', data);
         return data;
     } catch (error) {
-        console.error('❌ Error fetching GitHub profile:', error);
+        logger.error('❌ Error fetching GitHub profile:', error);
         return null;
     }
 }
@@ -45,10 +46,10 @@ async function fetchGitHubEvents() {
         }
         
         const events = await response.json();
-        console.log('✅ GitHub events fetched:', events.length);
+        logger.log('✅ GitHub events fetched:', events.length);
         return events;
     } catch (error) {
-        console.error('❌ Error fetching GitHub events:', error);
+        logger.error('❌ Error fetching GitHub events:', error);
         return [];
     }
 }
@@ -70,11 +71,11 @@ async function fetchGitHubRepos(limit = GITHUB_CONFIG.maxRepos) {
         }
         
         const repos = await response.json();
-        console.log(`✅ GitHub repositories fetched: ${repos.length}`);
-        console.log('📦 Repository data:', repos);
+        logger.log(`✅ GitHub repositories fetched: ${repos.length}`);
+        logger.log('📦 Repository data:', repos);
         return repos;
     } catch (error) {
-        console.error('❌ Error fetching GitHub repos:', error);
+        logger.error('❌ Error fetching GitHub repos:', error);
         return [];
     }
 }
@@ -95,10 +96,10 @@ async function fetchAllGitHubRepos() {
         }
         
         const repos = await response.json();
-        console.log(`✅ All repositories fetched for tech stack: ${repos.length}`);
+        logger.log(`✅ All repositories fetched for tech stack: ${repos.length}`);
         return repos;
     } catch (error) {
-        console.error('❌ Error fetching all GitHub repos:', error);
+        logger.error('❌ Error fetching all GitHub repos:', error);
         return [];
     }
 }
@@ -121,10 +122,10 @@ function getCachedData(key) {
             return null;
         }
         
-        console.log(`📦 Using cached data for: ${key}`);
+        logger.log(`📦 Using cached data for: ${key}`);
         return data;
     } catch (error) {
-        console.error('❌ Error reading cache:', error);
+        logger.error('❌ Error reading cache:', error);
         return null;
     }
 }
@@ -141,9 +142,9 @@ function setCachedData(key, data) {
             timestamp: Date.now()
         };
         localStorage.setItem(key, JSON.stringify(cacheObject));
-        console.log(`💾 Data cached for: ${key}`);
+        logger.log(`💾 Data cached for: ${key}`);
     } catch (error) {
-        console.error('❌ Error saving to cache:', error);
+        logger.error('❌ Error saving to cache:', error);
     }
 }
 
@@ -153,20 +154,20 @@ function setCachedData(key, data) {
  */
 function displayGitHubStats(profileData) {
     if (!profileData) {
-        console.warn('⚠️ No profile data to display');
+        logger.warn('⚠️ No profile data to display');
         return;
     }
     
-    // Update repository count
+    // Update repository count (using shared animateCount from utils.js)
     const reposElement = document.querySelector('.stat-card:nth-child(1) .stat-number');
     if (reposElement) {
-        animateNumber(reposElement, profileData.public_repos || 0);
+        animateCount(reposElement, profileData.public_repos || 0);
     }
     
     // Update followers count (using as "Contributions This Year" placeholder)
     const followersElement = document.querySelector('.stat-card:nth-child(2) .stat-number');
     if (followersElement) {
-        animateNumber(followersElement, profileData.followers || 0);
+        animateCount(followersElement, profileData.followers || 0);
         // Update label to reflect actual data
         const labelElement = document.querySelector('.stat-card:nth-child(2) .stat-label');
         if (labelElement) {
@@ -184,30 +185,10 @@ function displayGitHubStats(profileData) {
         }
     }
     
-    console.log('📊 GitHub stats updated');
+    logger.log('📊 GitHub stats updated');
 }
 
-/**
- * Animate number counting up
- * @param {HTMLElement} element - Element to animate
- * @param {number} target - Target number
- */
-function animateNumber(element, target) {
-    const duration = 1000; // 1 second
-    const steps = 30;
-    const increment = target / steps;
-    let current = 0;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            element.textContent = target;
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(current);
-        }
-    }, duration / steps);
-}
+// Note: animateNumber replaced with shared animateCount from utils.js
 
 /**
  * Display GitHub repositories as project cards
@@ -215,13 +196,13 @@ function animateNumber(element, target) {
  */
 function displayGitHubProjects(repos) {
     if (!repos || repos.length === 0) {
-        console.warn('⚠️ No repositories to display');
+        logger.warn('⚠️ No repositories to display');
         return;
     }
     
     const projectsList = document.querySelector('.projects-list');
     if (!projectsList) {
-        console.error('❌ Projects list container not found');
+        logger.error('❌ Projects list container not found');
         return;
     }
     
@@ -229,7 +210,7 @@ function displayGitHubProjects(repos) {
     const totalStars = repos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
     const starsElement = document.querySelector('.stat-card:nth-child(3) .stat-number');
     if (starsElement) {
-        animateNumber(starsElement, totalStars);
+        animateCount(starsElement, totalStars);
     }
     
     // Clear existing placeholder projects
@@ -241,7 +222,7 @@ function displayGitHubProjects(repos) {
         projectsList.appendChild(projectCard);
     });
     
-    console.log(`✅ ${repos.length} projects displayed`);
+    logger.log(`✅ ${repos.length} projects displayed`);
 }
 
 /**
@@ -393,7 +374,7 @@ function getTechIcon(tech) {
 function updateTechStack(repos) {
     const techGrid = document.querySelector('.tech-grid');
     if (!techGrid) {
-        console.warn('⚠️ Tech grid not found');
+        logger.warn('⚠️ Tech grid not found');
         return;
     }
     
@@ -404,12 +385,12 @@ function updateTechStack(repos) {
         // Add primary language
         if (repo.language) {
             techSet.add(repo.language);
-            console.log(`📌 Language from ${repo.name}:`, repo.language);
+            logger.log(`📌 Language from ${repo.name}:`, repo.language);
         }
         
         // Add topics (GitHub tags)
         if (repo.topics && Array.isArray(repo.topics)) {
-            console.log(`📌 Topics from ${repo.name}:`, repo.topics);
+            logger.log(`📌 Topics from ${repo.name}:`, repo.topics);
             repo.topics.forEach(topic => {
                 // Capitalize first letter and convert to readable format
                 const formattedTopic = formatTechName(topic);
@@ -421,11 +402,11 @@ function updateTechStack(repos) {
     // Convert to array and sort alphabetically
     const technologies = Array.from(techSet).sort();
     
-    console.log(`🔧 Total unique technologies found:`, technologies.length);
-    console.log(`🔧 Technologies:`, technologies);
+    logger.log(`🔧 Total unique technologies found:`, technologies.length);
+    logger.log(`🔧 Technologies:`, technologies);
     
     if (technologies.length === 0) {
-        console.warn('⚠️ No technologies found in repositories');
+        logger.warn('⚠️ No technologies found in repositories');
         return;
     }
     
@@ -438,7 +419,7 @@ function updateTechStack(repos) {
         techGrid.appendChild(techItem);
     });
     
-    console.log(`✅ ${technologies.length} technologies displayed in tech grid`);
+    logger.log(`✅ ${technologies.length} technologies displayed in tech grid`);
 }
 
 /**
@@ -513,7 +494,7 @@ function createTechItem(tech) {
 function buildContributionCalendar(events) {
     const calendarGrid = document.getElementById('contributionGrid');
     if (!calendarGrid) {
-        console.error('❌ Calendar grid not found');
+        logger.error('❌ Calendar grid not found');
         return;
     }
     
@@ -543,7 +524,7 @@ function buildContributionCalendar(events) {
         contributionMap.set(dateKey, (contributionMap.get(dateKey) || 0) + count);
     });
     
-    console.log('📊 Contribution map:', contributionMap);
+    logger.log('📊 Contribution map:', contributionMap);
     
     // Clear loading state
     calendarGrid.innerHTML = '';
@@ -571,7 +552,7 @@ function buildContributionCalendar(events) {
         calendarGrid.appendChild(dayElement);
     }
     
-    console.log('✅ Contribution calendar built');
+    logger.log('✅ Contribution calendar built');
 }
 
 /**
@@ -634,7 +615,7 @@ function showErrorState(message) {
  * Initialize GitHub integration
  */
 async function initGitHub() {
-    console.log('🚀 Initializing GitHub integration...');
+    logger.log('🚀 Initializing GitHub integration...');
     
     // Show loading state
     showLoadingState();
@@ -648,7 +629,7 @@ async function initGitHub() {
         
         // If no cache, fetch fresh data
         if (!profileData || !reposData || !allReposData || !eventsData) {
-            console.log('🔄 Fetching fresh data from GitHub API...');
+            logger.log('🔄 Fetching fresh data from GitHub API...');
             
             // Fetch data in parallel
             [profileData, reposData, allReposData, eventsData] = await Promise.all([
@@ -674,7 +655,7 @@ async function initGitHub() {
         if (eventsData && eventsData.length > 0) {
             buildContributionCalendar(eventsData);
         } else {
-            console.warn('⚠️ No events data for contribution calendar');
+            logger.warn('⚠️ No events data for contribution calendar');
             const calendarGrid = document.getElementById('contributionGrid');
             if (calendarGrid) {
                 calendarGrid.innerHTML = '<p style="text-align: center; padding: 2rem; opacity: 0.7;">No recent activity data available</p>';
@@ -700,7 +681,7 @@ async function initGitHub() {
         }
         
     } catch (error) {
-        console.error('❌ Error initializing GitHub:', error);
+        logger.error('❌ Error initializing GitHub:', error);
         showErrorState('Failed to load GitHub data');
     }
 }

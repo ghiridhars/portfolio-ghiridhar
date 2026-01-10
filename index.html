@@ -13,18 +13,13 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="assets/images/favicon.svg">
     
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F97RE0Y9J2"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-F97RE0Y9J2'); 
-    </script>
+    <!-- Preload fonts for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Doto:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
     
-    <!-- GoatCounter Analytics -->
-    <script data-goatcounter="https://your-site.goatcounter.com/count"
-            async src="//gc.zgo.at/count.js"></script>
+    <!-- Analytics loaded via components.js -->
     
     <!-- Link to external CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -136,7 +131,7 @@
                 </div>
                 <div class="about-image">
                     <!-- Profile image -->
-                    <img src="assets/images/profile.png" alt="Le Sisyphus" style="max-width: 300px; border-radius: 50%; box-shadow: var(--shadow-lg); border: 4px solid var(--primary-color);">
+                    <img src="assets/images/profile.png" alt="Le Sisyphus" loading="lazy" decoding="async" style="max-width: 300px; border-radius: 50%; box-shadow: var(--shadow-lg); border: 4px solid var(--primary-color);">
                 </div>
             </div>
         </div>
@@ -208,6 +203,8 @@
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     
     <!-- Link to JavaScript files -->
+    <script src="js/utils.js"></script>
+    <script src="js/components.js"></script>
     <script src="js/main.js"></script>
     <script src="js/physics.js"></script>
     <script src="js/command-palette.js"></script>

@@ -1,6 +1,7 @@
 // ========================================
 // CONTACT PAGE JAVASCRIPT
 // Handles form validation and submission with EmailJS
+// Requires: utils.js (for logger)
 // ========================================
 
 // EmailJS Configuration
@@ -15,9 +16,9 @@ const EMAILJS_CONFIG = {
 (function() {
     if (EMAILJS_CONFIG.publicKey !== 'YOUR_PUBLIC_KEY') {
         emailjs.init(EMAILJS_CONFIG.publicKey);
-        console.log('✅ EmailJS initialized');
+        logger.log('✅ EmailJS initialized');
     } else {
-        console.warn('⚠️ EmailJS not configured. Please update EMAILJS_CONFIG in contact.js');
+        logger.warn('⚠️ EmailJS not configured. Please update EMAILJS_CONFIG in contact.js');
     }
 })();
 
@@ -90,14 +91,14 @@ function handleFormSubmit(e) {
     
     if (errors.length > 0) {
         showFormMessage(errors.join('. '), 'error');
-        console.log('Form validation errors:', errors);
+        logger.log('Form validation errors:', errors);
         return;
     }
     
     // Check if EmailJS is configured
     if (EMAILJS_CONFIG.publicKey === 'YOUR_PUBLIC_KEY') {
         showFormMessage('Email service not configured. Please contact via email directly.', 'error');
-        console.error('❌ EmailJS not configured! Update EMAILJS_CONFIG in contact.js');
+        logger.error('❌ EmailJS not configured! Update EMAILJS_CONFIG in contact.js');
         return;
     }
     
@@ -123,7 +124,7 @@ function handleFormSubmit(e) {
         templateParams
     )
     .then((response) => {
-        console.log('✅ Email sent successfully!', response.status, response.text);
+        logger.log('✅ Email sent successfully!', response.status, response.text);
         
         // Show success message
         showFormMessage('Thank you for your message! I will get back to you soon. 📧', 'success');
@@ -136,13 +137,13 @@ function handleFormSubmit(e) {
         submitButton.disabled = false;
     })
     .catch((error) => {
-        console.error('❌ Failed to send email:', error);
+        logger.error('❌ Failed to send email:', error);
         
         // Show error message with helpful info
         let errorMessage = 'Sorry, there was an error sending your message. Please try again or email me directly.';
         
         if (error.text) {
-            console.error('Error details:', error.text);
+            logger.error('Error details:', error.text);
         }
         
         showFormMessage(errorMessage, 'error');
@@ -197,6 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contactForm) {
         contactForm.addEventListener('submit', handleFormSubmit);
         initRealtimeValidation();
-        console.log('Contact form initialized! 📧');
+        logger.log('Contact form initialized! 📧');
     }
 });
