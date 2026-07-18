@@ -215,7 +215,8 @@ body {
 .project-card,
 .trivia-start,
 .trivia-quiz,
-.trivia-results {
+.trivia-results,
+#sisyphus-container {
     background-color: var(--bg-white);
     position: relative;
     z-index: 2;
@@ -1430,6 +1431,7 @@ img {
     font-family: var(--font-mono);
 }
 
+
 /* Command palette responsive */
 @media (max-width: 480px) {
     .command-palette-modal {
@@ -1439,5 +1441,40 @@ img {
     .command-palette-footer {
         flex-wrap: wrap;
         gap: var(--spacing-sm);
+    }
+}
+
+/* Recent command badge */
+.recent-badge {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    opacity: 0.6;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* ========================================
+   SCROLL ENTRANCE ANIMATIONS
+   ======================================== */
+
+/* Elements animated by initScrollAnimations will have inline styles applied by JS */
+/* This ensures the transition is honoured even without JS-set inline styles */
+@media (prefers-reduced-motion: no-preference) {
+    .section-title,
+    .card,
+    .stat-card,
+    .repo-card,
+    .project-card,
+    .book-item,
+    .portfolio-item,
+    .stoic-quote-card,
+    .poetry-card,
+    .about-content,
+    .info-item,
+    .tech-item {
+        will-change: opacity, transform;
     }
 }

@@ -551,9 +551,87 @@ function buildContributionCalendar(events) {
         
         calendarGrid.appendChild(dayElement);
     }
+
+    // Add musical notes interaction to contribution grid
+    initCalendarMusicNotes(calendarGrid);
     
     logger.log('✅ Contribution calendar built');
 }
+
+/**
+ * Contribution Graph Piano - hover cells to play musical notes
+ * Pitch is mapped by contribution level (more commits = higher note)
+ */
+function initCalendarMusicNotes(calendarGrid) {
+    let audioCtx = null;
+
+    // Note frequencies (pentatonic scale - sounds pleasant no matter what order)
+    const NOTE_FREQUENCIES = [
+        130.81, // C3
+        146.83, // D3
+        164.81, // E3
+        196.00, // G3
+        220.00, // A3
+        261.63, // C4
+        293.66, // D4
+        329.63, // E4
+        392.00, // G4
+        440.00, // A4
+        523.25, // C5
+    ];
+
+    function getAudioContext() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        // Resume if suspended (browsers require user gesture)
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        return audioCtx;
+    }
+
+    function playNote(freq, count) {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+        // Volume scales softly with contribution count (max ~0.18)
+        const vol = 0.05 + Math.min(count * 0.02, 0.13);
+        gainNode.gain.setValueAtTime(vol, ctx.currentTime);
+        // Quick fade-out for a pluck-like sound
+        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.65);
+    }
+
+    // Attach hover listeners to all day cells
+    const days = calendarGrid.querySelectorAll('.calendar-day');
+    days.forEach((day, i) => {
+        const count = parseInt(day.getAttribute('data-count') || '0');
+        // Map index 0-29 to pentatonic scale
+        const noteIndex = Math.floor((i / 29) * (NOTE_FREQUENCIES.length - 1));
+        const freq = NOTE_FREQUENCIES[noteIndex];
+
+        // Shift pitch up for cells with more activity
+        const pitchMultiplier = count === 0 ? 1 : (1 + count * 0.04);
+        const finalFreq = Math.min(freq * pitchMultiplier, NOTE_FREQUENCIES[NOTE_FREQUENCIES.length - 1] * 1.2);
+
+        day.addEventListener('mouseenter', () => {
+            playNote(finalFreq, count);
+        });
+    });
+
+    logger.log('🎵 Calendar musical notes initialized');
+}
+
 
 /**
  * Get contribution level based on count

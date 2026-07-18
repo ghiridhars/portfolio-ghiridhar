@@ -25,6 +25,29 @@ let commandPaletteOpen = false;
 let selectedIndex = 0;
 let filteredItems = [];
 
+// Recent commands - persisted to localStorage
+const RECENT_COMMANDS_KEY = 'cmd_palette_recent';
+const MAX_RECENT = 3;
+
+function getRecentCommands() {
+    try {
+        return JSON.parse(localStorage.getItem(RECENT_COMMANDS_KEY) || '[]');
+    } catch {
+        return [];
+    }
+}
+
+function saveRecentCommand(item) {
+    let recents = getRecentCommands();
+    // Remove duplicate by name
+    recents = recents.filter(r => r.name !== item.name);
+    // Prepend
+    recents.unshift({ name: item.name, url: item.url, action: item.action, type: item.type, description: item.description, shortcut: item.shortcut });
+    // Keep only MAX_RECENT
+    recents = recents.slice(0, MAX_RECENT);
+    localStorage.setItem(RECENT_COMMANDS_KEY, JSON.stringify(recents));
+}
+
 /**
  * Create Command Palette HTML structure
  */
@@ -52,6 +75,10 @@ function createCommandPalette() {
                 <span class="command-hint">ESC to close</span>
             </div>
             <div class="command-palette-body">
+                <div class="command-group" id="recentGroup" style="display:none">
+                    <div class="command-group-title">RECENT</div>
+                    <ul class="command-list" id="commandListRecent"></ul>
+                </div>
                 <div class="command-group">
                     <div class="command-group-title">PAGES</div>
                     <ul class="command-list" id="commandListPages"></ul>
@@ -89,11 +116,39 @@ function createCommandPalette() {
 function populateCommandList(filter = '') {
     const pagesContainer = document.getElementById('commandListPages');
     const actionsContainer = document.getElementById('commandListActions');
+    const recentContainer = document.getElementById('commandListRecent');
+    const recentGroup = document.getElementById('recentGroup');
     
     if (!pagesContainer || !actionsContainer) return;
 
     const filterLower = filter.toLowerCase();
     filteredItems = [];
+
+    // Render RECENT section (only when no filter is active)
+    if (!filter && recentContainer && recentGroup) {
+        const recents = getRecentCommands();
+        if (recents.length > 0) {
+            recentGroup.style.display = 'block';
+            recentContainer.innerHTML = recents.map((item, index) => {
+                filteredItems.push({ ...item });
+                return `
+                    <li class="command-item ${index === selectedIndex ? 'selected' : ''}" data-index="${filteredItems.length - 1}">
+                        <span class="command-name">${item.name}</span>
+                        <span class="command-description">${item.description || ''}</span>
+                        <kbd class="command-shortcut recent-badge">recent</kbd>
+                    </li>
+                `;
+            }).join('');
+        } else {
+            recentGroup.style.display = 'none';
+            recentContainer.innerHTML = '';
+        }
+    } else if (recentGroup) {
+        recentGroup.style.display = 'none';
+        recentContainer.innerHTML = '';
+    }
+
+    const recentCount = filteredItems.length;
 
     // Filter and render pages
     const filteredPages = COMMAND_PALETTE_CONFIG.pages.filter(item => 
@@ -103,8 +158,9 @@ function populateCommandList(filter = '') {
 
     pagesContainer.innerHTML = filteredPages.map((item, index) => {
         filteredItems.push({ ...item, type: 'page' });
+        const globalIndex = recentCount + index;
         return `
-            <li class="command-item ${index === selectedIndex ? 'selected' : ''}" data-index="${filteredItems.length - 1}">
+            <li class="command-item ${globalIndex === selectedIndex ? 'selected' : ''}" data-index="${filteredItems.length - 1}">
                 <span class="command-name">${highlightMatch(item.name, filter)}</span>
                 <span class="command-description">${item.description}</span>
                 <kbd class="command-shortcut">${item.shortcut}</kbd>
@@ -118,7 +174,7 @@ function populateCommandList(filter = '') {
         item.description.toLowerCase().includes(filterLower)
     );
 
-    const pagesCount = filteredPages.length;
+    const pagesCount = recentCount + filteredPages.length;
     actionsContainer.innerHTML = filteredActions.map((item, index) => {
         filteredItems.push({ ...item, type: 'action' });
         const globalIndex = pagesCount + index;
@@ -218,6 +274,10 @@ function updateSelection() {
  * Execute selected command
  */
 function executeCommand(item) {
+    if (!item) return;
+    // Save to recent commands
+    saveRecentCommand(item);
+
     if (item.type === 'page') {
         window.location.href = item.url;
     } else if (item.type === 'action') {

@@ -471,6 +471,28 @@ function initStoicQuote() {
     logger.log('✅ Stoic quote elements found, initializing...');
 
     let lastIndex = -1;
+    let typewriterTimeout = null;
+
+    /**
+     * Typewriter effect — types characters one by one
+     */
+    function typewriterReveal(element, text, speed = 28, onDone = null) {
+        // Cancel any ongoing typewriter
+        if (typewriterTimeout) clearTimeout(typewriterTimeout);
+        element.textContent = '';
+        let i = 0;
+        function tick() {
+            if (i < text.length) {
+                element.textContent += text[i];
+                i++;
+                typewriterTimeout = setTimeout(tick, speed);
+            } else {
+                typewriterTimeout = null;
+                if (onDone) onDone();
+            }
+        }
+        tick();
+    }
 
     function showRandomQuote() {
         let index;
@@ -481,15 +503,21 @@ function initStoicQuote() {
 
         const data = STOIC_QUOTES[index];
 
-        quoteText.style.opacity = '0.5';
-        quoteAuthor.style.opacity = '0.5';
+        // Fade out
+        quoteText.style.opacity = '0';
+        quoteAuthor.style.opacity = '0';
+        newQuoteBtn.disabled = true;
 
         setTimeout(() => {
-            quoteText.textContent = `"${data.text}"`;
-            quoteAuthor.textContent = `— ${data.author}`;
             quoteText.style.opacity = '1';
-            quoteAuthor.style.opacity = '1';
-        }, 200);
+            // Typewriter the quote text
+            typewriterReveal(quoteText, `"${data.text}"`, 22, () => {
+                // After quote is done, fade in the author
+                quoteAuthor.textContent = `— ${data.author}`;
+                quoteAuthor.style.opacity = '1';
+                newQuoteBtn.disabled = false;
+            });
+        }, 180);
     }
     
     // Show quote on page load
@@ -686,6 +714,65 @@ function showFallbackStats(visitorsEl, pageviewsEl) {
 // Note: formatNumber is now imported from utils.js
 
 /**
+ * Scroll-Triggered Section Entrance Animations
+ * Staggered translateY + opacity reveal as sections enter the viewport
+ */
+function initScrollAnimations() {
+    if (prefersReducedMotion()) return;
+
+    // Targets: section titles, cards, stat-cards, repo-cards, book items
+    const animatableSelectors = [
+        '.section-title',
+        '.card',
+        '.stat-card',
+        '.repo-card',
+        '.project-card',
+        '.book-item',
+        '.portfolio-item',
+        '.stoic-quote-card',
+        '.poetry-card',
+        '.about-content',
+        '.info-item',
+        '.tech-item',
+    ];
+
+    const elements = document.querySelectorAll(animatableSelectors.join(', '));
+
+    // Set initial hidden state
+    elements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(28px)';
+        el.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const el = entry.target;
+                // Stagger siblings within the same parent
+                const siblings = Array.from(el.parentElement.children).filter(
+                    c => c.style.opacity === '0'
+                );
+                const myIndex = siblings.indexOf(el);
+                const delay = Math.min(myIndex * 70, 350); // cap stagger at 350ms
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, delay);
+                observer.unobserve(el);
+            }
+        });
+    }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -30px 0px'
+    });
+
+    elements.forEach(el => observer.observe(el));
+
+    logger.log('🎬 Scroll entrance animations initialized');
+}
+
+/**
  * Initialize all functions when DOM is ready
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -702,6 +789,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollToTop();
     initScrollProgress();        // Initialize scroll progress bar
     initSiteStats();             // Initialize footer site stats
+    initScrollAnimations();      // Scroll-triggered entrance animations
     
     // Log message for learning purposes
     logger.log('Portfolio website loaded successfully! 🚀');
@@ -718,6 +806,7 @@ if (typeof module !== 'undefined' && module.exports) {
         initLazyLoading,
         initScrollToTop,
         initSiteStats,
-        initDotFace
+        initDotFace,
+        initScrollAnimations
     };
 }

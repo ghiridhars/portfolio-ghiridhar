@@ -9,8 +9,65 @@
     min-height: auto;
 }
 
+/* Two-column layout: text left, Sisyphus right */
+.hero-layout {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--spacing-xl);
+    align-items: center;
+}
+
 .hero-content {
-    max-width: 700px;
+    max-width: 600px;
+}
+
+/* ─── Sisyphus Animation Container ─────────────────────────────────────── */
+.sisyphus-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+#sisyphus-container {
+    width: 240px;
+    height: 150px;
+    border: 2px solid var(--border-color);
+    background-color: var(--bg-white);
+    cursor: crosshair;
+    position: relative;
+    overflow: hidden;
+}
+
+#sisyphus-container canvas {
+    display: block;
+}
+
+.sisyphus-hint {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    opacity: 0.5;
+    font-family: var(--font-mono);
+    user-select: none;
+}
+
+/* Responsive: stack vertically on mobile */
+@media (max-width: 768px) {
+    .hero-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sisyphus-wrapper {
+        order: -1; /* Show animation above text on mobile */
+    }
+
+    #sisyphus-container {
+        width: 100%;
+        height: 130px;
+    }
 }
 
 .hero-title {
