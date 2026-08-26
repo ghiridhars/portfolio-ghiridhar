@@ -172,9 +172,10 @@ body {
 }
 
 /* ========================================
-   PARTICLES ANIMATED BACKGROUND
+   3D CELESTIAL SPACE ANIMATED BACKGROUND
    ======================================== */
 
+#space-background,
 #particles-background {
     position: fixed;
     top: 0;
@@ -183,10 +184,13 @@ body {
     height: 100%;
     z-index: -1;
     pointer-events: none;
+    overflow: hidden;
 }
 
+#space-background canvas,
 #particles-background canvas {
     pointer-events: none !important;
+    display: block;
 }
 
 /* 
