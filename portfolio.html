@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="My professional work portfolio and projects">
     <title>Work</title>
 
@@ -27,6 +27,9 @@
 </head>
 
 <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- Particles Animated Background -->
     <div id="particles-background"></div>
     
@@ -62,7 +65,7 @@
                         <span class="material-symbols-sharp theme-icon sun">
                             light_mode
                         </span>
-                        <span class="material-symbols-sharp theme-icon moon" style="display: none;">
+                        <span class="material-symbols-sharp theme-icon moon">
                             dark_mode
                         </span>
                     </button>
@@ -71,150 +74,153 @@
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <section class="page-header">
-        <div class="container">
-            <h1>Consequences of Boredom</h1>
-        </div>
-    </section>
-
-    <!-- Art Section -->
-    <section class="portfolio-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Artēs</h2>
+    <!-- Main Landmark -->
+    <main id="main-content">
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <h1>Consequences of Boredom</h1>
             </div>
-            <div class="portfolio-grid portfolio-preview" id="artesGrid">
-                <!-- Avatar -->
-                <article class="portfolio-item" data-category="art">
-                    <div class="portfolio-image">
-                        <img src="assets/images/art/Avatar.jpg" alt="Avatar Tattoo Sketch" loading="lazy" decoding="async">
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Avatar</h3>
-                        <p class="portfolio-category">Tattoo Sketch</p>
-                    </div>
-                </article>
+        </section>
 
-                <!-- Blood Rose -->
-                <article class="portfolio-item" data-category="art">
-                    <div class="portfolio-image">
-                        <img src="assets/images/art/Blood_Rose.jpeg" alt="Blood Rose Artwork" loading="lazy" decoding="async">
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Blood Rose</h3>
-                        <p class="portfolio-category">Sketch</p>
-                    </div>
-                </article>
+        <!-- Art Section -->
+        <section class="portfolio-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Artēs</h2>
+                </div>
+                <div class="portfolio-grid portfolio-preview" id="artesGrid">
+                    <!-- Avatar -->
+                    <article class="portfolio-item" data-category="art">
+                        <div class="portfolio-image">
+                            <img src="assets/images/art/Avatar.jpg" alt="Avatar Tattoo Sketch" loading="lazy" decoding="async">
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Avatar</h3>
+                            <p class="portfolio-category">Tattoo Sketch</p>
+                        </div>
+                    </article>
 
-                <!-- Hulk Wall Art -->
-                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
-                    <div class="portfolio-image">
-                        <img src="assets/images/art/Hulk_WallArt.jpg" alt="Hulk Wall Art" loading="lazy" decoding="async">
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Hulk</h3>
-                        <p class="portfolio-category">Wall Art</p>
-                    </div>
-                </article>
+                    <!-- Blood Rose -->
+                    <article class="portfolio-item" data-category="art">
+                        <div class="portfolio-image">
+                            <img src="assets/images/art/Blood_Rose.jpeg" alt="Blood Rose Artwork" loading="lazy" decoding="async">
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Blood Rose</h3>
+                            <p class="portfolio-category">Sketch</p>
+                        </div>
+                    </article>
 
-                <!-- Memento Mori -->
-                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
-                    <div class="portfolio-image">
-                        <img src="assets/images/art/Memento_Mori.jpeg" alt="Memento Mori" loading="lazy" decoding="async">
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Memento Mori</h3>
-                        <p class="portfolio-category">Sketch</p>
-                    </div>
-                </article>
+                    <!-- Hulk Wall Art -->
+                    <article class="portfolio-item portfolio-item-hidden" data-category="art">
+                        <div class="portfolio-image">
+                            <img src="assets/images/art/Hulk_WallArt.jpg" alt="Hulk Wall Art" loading="lazy" decoding="async">
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Hulk</h3>
+                            <p class="portfolio-category">Wall Art</p>
+                        </div>
+                    </article>
 
-                <!-- Non Omnis Moriar -->
-                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
-                    <div class="portfolio-image">
-                        <img src="assets/images/art/Non_Omnis_Moriar.jpeg" alt="Non Omnis Moriar" loading="lazy" decoding="async">
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Non Omnis Moriar</h3>
-                        <p class="portfolio-category">Sketch</p>
-                    </div>
-                </article>
+                    <!-- Memento Mori -->
+                    <article class="portfolio-item portfolio-item-hidden" data-category="art">
+                        <div class="portfolio-image">
+                            <img src="assets/images/art/Memento_Mori.jpeg" alt="Memento Mori" loading="lazy" decoding="async">
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Memento Mori</h3>
+                            <p class="portfolio-category">Sketch</p>
+                        </div>
+                    </article>
 
-                <!-- Pulp Fiction -->
-                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
-                    <div class="portfolio-image">
-                        <img src="assets/images/art/Pulp_Fiction.jpg" alt="Pulp Fiction Art" loading="lazy" decoding="async">
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Pulp Fiction</h3>
-                        <p class="portfolio-category">Wall Art</p>
-                    </div>
-                </article>
+                    <!-- Non Omnis Moriar -->
+                    <article class="portfolio-item portfolio-item-hidden" data-category="art">
+                        <div class="portfolio-image">
+                            <img src="assets/images/art/Non_Omnis_Moriar.jpeg" alt="Non Omnis Moriar" loading="lazy" decoding="async">
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Non Omnis Moriar</h3>
+                            <p class="portfolio-category">Sketch</p>
+                        </div>
+                    </article>
 
-                <!-- Robin Williams -->
-                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
-                    <div class="portfolio-image">
-                        <img src="assets/images/art/Robin_Williams.jpeg" alt="Robin Williams Portrait" loading="lazy" decoding="async">
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Robin Williams</h3>
-                        <p class="portfolio-category">Portrait</p>
-                    </div>
-                </article>
+                    <!-- Pulp Fiction -->
+                    <article class="portfolio-item portfolio-item-hidden" data-category="art">
+                        <div class="portfolio-image">
+                            <img src="assets/images/art/Pulp_Fiction.jpg" alt="Pulp Fiction Art" loading="lazy" decoding="async">
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Pulp Fiction</h3>
+                            <p class="portfolio-category">Wall Art</p>
+                        </div>
+                    </article>
 
-                <!-- Ronaldo Wall Art -->
-                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
-                    <div class="portfolio-image">
-                        <img src="assets/images/art/Ronaldo_WallArt.jpg" alt="Ronaldo Wall Art" loading="lazy" decoding="async">
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Cristiano Ronaldo</h3>
-                        <p class="portfolio-category">Wall Art</p>
-                    </div>
-                </article>
+                    <!-- Robin Williams -->
+                    <article class="portfolio-item portfolio-item-hidden" data-category="art">
+                        <div class="portfolio-image">
+                            <img src="assets/images/art/Robin_Williams.jpeg" alt="Robin Williams Portrait" loading="lazy" decoding="async">
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Robin Williams</h3>
+                            <p class="portfolio-category">Portrait</p>
+                        </div>
+                    </article>
 
-                <!-- Walter White -->
-                <article class="portfolio-item portfolio-item-hidden" data-category="art" style="display: none;">
-                    <div class="portfolio-image">
-                        <img src="assets/images/art/Walter_White.jpeg" alt="Walter White Portrait" loading="lazy" decoding="async">
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Walter White</h3>
-                        <p class="portfolio-category">Portrait</p>
-                    </div>
-                </article>
-            </div>
-            <div class="show-more-wrapper" style="text-align: center; margin-top: var(--spacing-lg);">
-                <button class="btn btn-secondary" id="toggleArtesBtn" aria-label="Show full gallery">
-                    <span class="material-symbols-sharp">expand_more</span>
-                    <span class="toggle-text">Show Full Gallery</span>
-                </button>
-            </div>
-        </div>
-    </section>
+                    <!-- Ronaldo Wall Art -->
+                    <article class="portfolio-item portfolio-item-hidden" data-category="art">
+                        <div class="portfolio-image">
+                            <img src="assets/images/art/Ronaldo_WallArt.jpg" alt="Ronaldo Wall Art" loading="lazy" decoding="async">
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Cristiano Ronaldo</h3>
+                            <p class="portfolio-category">Wall Art</p>
+                        </div>
+                    </article>
 
-    <!-- Literature Section -->
-    <section class="literature-section">
-        <div class="container">
-            <h2 class="section-title">Litterae</h2>
-            
-            <!-- Poetry Section -->
-            <div class="poetry-wrapper">
-                <p class="poetry-caption">My poems are yet to be published, meanwhile enjoy these classics</p>
-                <div class="poetry-card">
-                    <h3 id="poem-title" class="poem-title">Loading poem...</h3>
-                    <div id="poem-lines" class="poem-lines">
-                        <p>Fetching verses...</p>
-                    </div>
-                    <cite id="poem-author" class="poem-author">— Unknown</cite>
-                    <button id="new-poem-btn" class="new-poem-btn" aria-label="Get new poem">
-                        <span class="material-symbols-sharp">auto_stories</span>
-                        <span>New Poem</span>
+                    <!-- Walter White -->
+                    <article class="portfolio-item portfolio-item-hidden" data-category="art">
+                        <div class="portfolio-image">
+                            <img src="assets/images/art/Walter_White.jpeg" alt="Walter White Portrait" loading="lazy" decoding="async">
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Walter White</h3>
+                            <p class="portfolio-category">Portrait</p>
+                        </div>
+                    </article>
+                </div>
+                <div class="show-more-wrapper">
+                    <button class="btn btn-secondary" id="toggleArtesBtn" aria-label="Show full gallery" aria-expanded="false">
+                        <span class="material-symbols-sharp">expand_more</span>
+                        <span class="toggle-text">Show Full Gallery</span>
                     </button>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Literature Section -->
+        <section class="literature-section">
+            <div class="container">
+                <h2 class="section-title">Litterae</h2>
+                
+                <!-- Poetry Section -->
+                <div class="poetry-wrapper">
+                    <p class="poetry-caption">My poems are yet to be published, meanwhile enjoy these classics</p>
+                    <div class="poetry-card">
+                        <h3 id="poem-title" class="poem-title">Loading poem...</h3>
+                        <div id="poem-lines" class="poem-lines">
+                            <p>Fetching verses...</p>
+                        </div>
+                        <cite id="poem-author" class="poem-author">— Unknown</cite>
+                        <button id="new-poem-btn" class="new-poem-btn" aria-label="Get new poem">
+                            <span class="material-symbols-sharp">auto_stories</span>
+                            <span>New Poem</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Animated Footer -->
     <footer class="footer animated-footer">

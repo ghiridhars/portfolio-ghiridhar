@@ -157,6 +157,7 @@
     align-items: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-sm);
+    min-height: 44px;
     color: var(--text-dark);
     border-radius: 0;
     transition: none;

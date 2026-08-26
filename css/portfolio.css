@@ -23,7 +23,6 @@
 .portfolio-section {
     padding: var(--spacing-xl) 0;
     background-color: var(--bg-white);
-    border-top: 2px solid var(--border-color);
 }
 
 .section-header {
@@ -84,8 +83,14 @@
     border-color: var(--text-dark);
 }
 
-.portfolio-item.hidden {
+.portfolio-item.hidden,
+.portfolio-item-hidden {
     display: none;
+}
+
+.show-more-wrapper {
+    text-align: center;
+    margin-top: var(--spacing-lg);
 }
 
 .portfolio-image {

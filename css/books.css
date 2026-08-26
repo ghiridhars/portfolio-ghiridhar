@@ -69,10 +69,6 @@
 .book-controls {
     padding: var(--spacing-lg) 0;
     background-color: var(--bg-white);
-    border-bottom: 2px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 100;
 }
 
 .controls-wrapper {
@@ -153,7 +149,6 @@
 .status-filters {
     padding: var(--spacing-lg) 0;
     background-color: var(--bg-white);
-    border-bottom: 2px solid var(--border-color);
 }
 
 .filter-heading {
@@ -516,11 +511,6 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-md);
-    }
-    
     .books-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: var(--spacing-lg);
@@ -569,7 +559,8 @@
     }
     
     .book-item {
-        height: 580px;
+        height: auto;
+        min-height: auto;
     }
     
     .book-filters .container {
@@ -651,7 +642,14 @@
 .trivia-section {
     padding: var(--spacing-xl) 0 var(--spacing-2xl) 0;
     background-color: var(--bg-white);
-    border-top: 2px solid var(--border-color);
+}
+
+.trivia-section .section-title {
+    margin-bottom: var(--spacing-xl);
+}
+
+.books-grid.is-hidden {
+    display: none;
 }
 
 .trivia-container {

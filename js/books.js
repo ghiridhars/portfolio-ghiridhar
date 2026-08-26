@@ -106,7 +106,7 @@ async function renderBooks() {
         logger.log(`✅ Rendered ${enrichedBooks.length} books with Open Library integration`);
         
         // Initialize scroll animations after rendering
-        initScrollAnimations();
+        initBookScrollAnimations();
     } catch (error) {
         logger.error('Error rendering books:', error);
         booksGrid.innerHTML = '<p class="error-message">Error loading books. Please refresh the page.</p>';
@@ -365,10 +365,10 @@ function initViewToggle() {
 }
 
 /**
- * Initialize Scroll Animations
+ * Initialize Book Scroll Animations
  * Animate book cards as they enter viewport using Intersection Observer
  */
-function initScrollAnimations() {
+function initBookScrollAnimations() {
     const bookItems = document.querySelectorAll('.book-item');
     
     if (!bookItems.length) return;
@@ -419,16 +419,18 @@ function initBooksToggle() {
     }
     
     toggleBtn.addEventListener('click', () => {
-        const isExpanded = booksGrid.style.display !== 'none';
+        const isHidden = booksGrid.classList.contains('is-hidden') || booksGrid.style.display === 'none';
         
-        if (isExpanded) {
+        if (!isHidden) {
             // Collapse
+            booksGrid.classList.add('is-hidden');
             booksGrid.style.display = 'none';
             toggleBtn.querySelector('.toggle-text').textContent = 'Show Library';
             toggleBtn.classList.remove('expanded');
             toggleBtn.setAttribute('aria-expanded', 'false');
         } else {
             // Expand
+            booksGrid.classList.remove('is-hidden');
             booksGrid.style.display = 'grid';
             toggleBtn.querySelector('.toggle-text').textContent = 'Hide Library';
             toggleBtn.classList.add('expanded');

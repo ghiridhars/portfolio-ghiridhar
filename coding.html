@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="My coding projects and programming portfolio">
     <title>Coding Passtime</title>
     
@@ -24,6 +24,9 @@
     <link rel="stylesheet" href="css/physics.css">
 </head>
 <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- Particles Animated Background -->
     <div id="particles-background"></div>
     
@@ -59,7 +62,7 @@
                         <span class="material-symbols-sharp theme-icon sun">
                             light_mode
                         </span>
-                        <span class="material-symbols-sharp theme-icon moon" style="display: none;">
+                        <span class="material-symbols-sharp theme-icon moon">
                             dark_mode
                         </span>
                     </button>
@@ -68,8 +71,10 @@
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <section class="page-header">
+    <!-- Main Landmark -->
+    <main id="main-content">
+        <!-- Page Header -->
+        <section class="page-header">
         <div class="container">
             <h1>Coding Portfolio</h1>
             <p>Projects, experiments, and code samples</p>
@@ -237,6 +242,7 @@
             <a href="https://github.com/ghiridhars" class="btn btn-primary" target="_blank">Visit My GitHub</a>
         </div>
     </section>
+    </main>
 
     <!-- Animated Footer -->
     <footer class="footer animated-footer">

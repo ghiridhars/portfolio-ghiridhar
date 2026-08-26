@@ -79,7 +79,7 @@ function initArtesToggle() {
         if (isExpanded) {
             // Show all hidden items
             hiddenItems.forEach(item => {
-                item.style.display = '';
+                item.style.display = 'block';
             });
             toggleBtn.querySelector('.toggle-text').textContent = 'Show Less';
             toggleBtn.querySelector('.material-symbols-sharp').textContent = 'expand_less';

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="My personal book library and reading list">
     <title>Librī</title>
     
@@ -24,6 +24,9 @@
     <link rel="stylesheet" href="css/physics.css">
 </head>
 <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- Particles Animated Background -->
     <div id="particles-background"></div>
     
@@ -44,8 +47,8 @@
                     <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
                     <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d gl"></span><span class="d"></span><span class="d ey" data-eye="left"></span><span class="d"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d"></span><span class="d ey" data-eye="right"></span><span class="d"></span><span class="d gl"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
                     <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
-                    <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
-                    <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
+                    <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
+                    <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
                     </div>
                 </a>
             </div>
@@ -62,7 +65,7 @@
                         <span class="material-symbols-sharp theme-icon sun">
                             light_mode
                         </span>
-                        <span class="material-symbols-sharp theme-icon moon" style="display: none;">
+                        <span class="material-symbols-sharp theme-icon moon">
                             dark_mode
                         </span>
                     </button>
@@ -71,10 +74,12 @@
         </div>
     </nav>
 
-    <!-- Book Trivia Section -->
-    <section class="trivia-section">
-        <div class="container">
-            <h2 class="section-title" style="margin-bottom: var(--spacing-xl);">Test Your Literary Knowledge</h2>
+    <!-- Main Landmark -->
+    <main id="main-content">
+        <!-- Book Trivia Section -->
+        <section class="trivia-section">
+            <div class="container">
+                <h2 class="section-title">Test Your Literary Knowledge</h2>2>
             
             <div class="trivia-container" id="triviaContainer">
                 <!-- Start Screen -->
@@ -213,7 +218,7 @@
                     <span class="material-symbols-sharp">expand_more</span>
                 </button>
             </div>
-            <div class="books-grid" id="booksGrid" style="display: none;">
+            <div class="books-grid is-hidden" id="booksGrid">
                 <!-- Skeleton loaders -->
                 <div class="skeleton-card">
                     <div class="skeleton-cover"></div>
@@ -239,6 +244,7 @@
             </div>
         </div>
     </section>
+    </main>
 
     <!-- Animated Footer -->
     <footer class="footer animated-footer">

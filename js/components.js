@@ -17,6 +17,7 @@ const NAV_CONFIG = {
     social: {
         github: 'https://github.com/ghiridhars',
         linkedin: 'https://linkedin.com/in/ghiridhars',
+        twitter: 'https://x.com/SGhiridhar',
         email: 'mailto:officialghiridhar@gmail.com'
     }
 };
@@ -76,7 +77,7 @@ function generateNavigation(activePage = '') {
                 <li>
                     <button class="theme-toggle" aria-label="Toggle dark mode">
                         <span class="material-symbols-sharp theme-icon sun">light_mode</span>
-                        <span class="material-symbols-sharp theme-icon moon" style="display: none;">dark_mode</span>
+                        <span class="material-symbols-sharp theme-icon moon">dark_mode</span>
                     </button>
                 </li>
             </ul>
@@ -114,6 +115,7 @@ function generateFooter() {
             <div class="footer-links">
                 <a href="${NAV_CONFIG.social.github}" aria-label="GitHub" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>
                 <a href="${NAV_CONFIG.social.linkedin}" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn</a>
+                <a href="${NAV_CONFIG.social.twitter}" aria-label="Twitter" target="_blank" rel="noopener noreferrer" class="footer-link">Twitter</a>
                 <a href="${NAV_CONFIG.social.email}" aria-label="Email" class="footer-link">Email</a>
             </div>
             <p class="footer-copyright">&copy; ${currentYear} Ghiridhar S</p>
