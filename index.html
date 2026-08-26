@@ -104,6 +104,22 @@
         </div>
     </section>
 
+    <!-- Weather Strip -->
+    <div class="weather-strip" id="weather-strip">
+        <div class="container">
+            <div class="weather-inner">
+                <span class="weather-location">
+                    <span class="material-symbols-sharp" aria-hidden="true">location_on</span>
+                    <span id="weather-city">—</span>
+                </span>
+                <span class="weather-sep" aria-hidden="true">·</span>
+                <span id="weather-temp">—</span>
+                <span class="weather-sep" aria-hidden="true">·</span>
+                <span id="weather-condition">—</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Daily Stoic Quote Section -->
     <section class="stoic-quote-section">
         <div class="container">
@@ -177,6 +193,16 @@
         </div>
     </section>
 
+    <!-- NASA APOD Section -->
+    <section class="apod-section" id="apod-section">
+        <div class="container">
+            <h2 class="section-title">Today's Cosmic Perspective</h2>
+            <div id="apod-container" class="apod-card">
+                <div class="apod-loading">Loading from the cosmos…</div>
+            </div>
+        </div>
+    </section>
+
     <!-- Animated Footer -->
     <footer class="footer animated-footer">
         <div class="footer-wave">
@@ -216,5 +242,6 @@
     <script src="js/physics.js"></script>
     <script src="js/command-palette.js"></script>
     <script src="js/sisyphus.js"></script>
+    <script src="js/ambient.js"></script>
 </body>
 </html>
