@@ -1,6 +1,6 @@
 // ========================================
-// AMBIENT DATA — Weather + NASA APOD
-// Open-Meteo (no key) · NASA APOD (DEMO_KEY)
+// AMBIENT DATA — Weather & Lunar Engine + NASA APOD
+// Open-Meteo (no key) · Astronomical Lunar Calc · NASA APOD (DEMO_KEY)
 // ========================================
 
 // WMO weather interpretation codes → label
@@ -16,8 +16,9 @@ const WMO_CONDITIONS = {
     95: 'Thunderstorm', 96: 'Thunderstorm with hail', 99: 'Severe thunderstorm'
 };
 
-const WMO_ICONS = {
-    0: '☀', 1: '🌤', 2: '⛅', 3: '☁',
+// Day vs Night WMO icons
+const WMO_ICONS_DAY = {
+    0: '☼', 1: '🌤', 2: '⛅', 3: '☁',
     45: '🌫', 48: '🌫',
     51: '🌦', 53: '🌦', 55: '🌧',
     61: '🌧', 63: '🌧', 65: '🌧',
@@ -27,9 +28,21 @@ const WMO_ICONS = {
     95: '⛈', 96: '⛈', 99: '⛈'
 };
 
+const WMO_ICONS_NIGHT = {
+    0: '☾', 1: '☾', 2: '☁', 3: '☁',
+    45: '🌫', 48: '🌫',
+    51: '🌧', 53: '🌧', 55: '🌧',
+    61: '🌧', 63: '🌧', 65: '🌧',
+    71: '❄', 73: '❄', 75: '❄', 77: '❄',
+    80: '🌧', 81: '🌧', 82: '⛈',
+    85: '❄', 86: '❄',
+    95: '⛈', 96: '⛈', 99: '⛈'
+};
+
 const WEATHER_CONFIG = {
-    cacheKey: 'weather_cache',
-    cacheTTL: 60 * 60 * 1000
+    cacheKey: 'weather_cache_v2',
+    unitKey: 'weather_temp_unit',
+    cacheTTL: 30 * 60 * 1000 // 30 minutes
 };
 
 // Replace DEMO_KEY with your free key from api.nasa.gov
@@ -38,7 +51,76 @@ const APOD_CONFIG = {
     cacheKey: 'apod_cache'
 };
 
-// ─── Weather ──────────────────────────────────────────────────────────────
+// ─── Astronomical Lunar Engine ─────────────────────────────────────────────
+
+/**
+ * Calculate Lunar Phase & Illumination
+ * Standard astronomical synodic algorithm (period ~29.53058867 days)
+ */
+function getLunarPhase(date = new Date()) {
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth() + 1;
+    const day = date.getUTCDate() + (date.getUTCHours() + date.getUTCMinutes() / 60) / 24;
+
+    let y = year;
+    let m = month;
+    if (m <= 2) {
+        y -= 1;
+        m += 12;
+    }
+    const a = Math.floor(y / 100);
+    const b = 2 - a + Math.floor(a / 4);
+    const jd = Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + day + b - 1524.5;
+
+    // Reference new moon: Jan 6, 2000, 18:14 UTC (JD 2451549.26)
+    const synodicMonth = 29.53058867;
+    const daysSinceNewMoon = (jd - 2451549.26) % synodicMonth;
+    const age = daysSinceNewMoon < 0 ? daysSinceNewMoon + synodicMonth : daysSinceNewMoon;
+    const phaseFraction = age / synodicMonth;
+    const illumination = Math.round((1 - Math.cos(2 * Math.PI * phaseFraction)) / 2 * 100);
+
+    const PHASES = [
+        { name: 'New Moon', icon: '🌑', min: 0, max: 0.033 },
+        { name: 'Waxing Crescent', icon: '🌒', min: 0.033, max: 0.216 },
+        { name: 'First Quarter', icon: '🌓', min: 0.216, max: 0.283 },
+        { name: 'Waxing Gibbous', icon: '🌔', min: 0.283, max: 0.466 },
+        { name: 'Full Moon', icon: '🌕', min: 0.466, max: 0.533 },
+        { name: 'Waning Gibbous', icon: '🌖', min: 0.533, max: 0.716 },
+        { name: 'Last Quarter', icon: '🌗', min: 0.716, max: 0.783 },
+        { name: 'Waning Crescent', icon: '🌘', min: 0.783, max: 0.966 },
+        { name: 'New Moon', icon: '🌑', min: 0.966, max: 1.0 }
+    ];
+
+    const currentPhase = PHASES.find(p => phaseFraction >= p.min && phaseFraction < p.max) || PHASES[0];
+
+    return {
+        name: currentPhase.name,
+        icon: currentPhase.icon,
+        illumination: illumination,
+        age: Math.round(age * 10) / 10,
+        fraction: phaseFraction
+    };
+}
+
+// ─── Weather & Telemetry Engine ───────────────────────────────────────────
+
+let currentWeatherState = null;
+
+function getPreferredUnit() {
+    return localStorage.getItem(WEATHER_CONFIG.unitKey) || 'C';
+}
+
+function setPreferredUnit(unit) {
+    localStorage.setItem(WEATHER_CONFIG.unitKey, unit);
+}
+
+function formatTemperature(celsius, unit) {
+    if (unit === 'F') {
+        const fahrenheit = Math.round(celsius * 9 / 5 + 32);
+        return `${fahrenheit}°F`;
+    }
+    return `${Math.round(celsius)}°C`;
+}
 
 // 1. Silent browser geolocation (only if already granted, no prompt)
 // 2. IP geolocation via ipwho.is (no key, no rate limit)
@@ -85,43 +167,121 @@ async function fetchWeather() {
 
     const loc = await resolveLocation();
 
-    // Show city immediately while temp/condition still loads
+    // Show city immediately while temp/condition loads
     const cityEl = document.getElementById('weather-city');
     if (cityEl) cityEl.textContent = loc.city;
 
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current=temperature_2m,weather_code&temperature_unit=celsius&timezone=auto`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m&temperature_unit=celsius&timezone=auto`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Weather API ${res.status}`);
     const raw = await res.json();
 
     const data = {
-        temp: Math.round(raw.current.temperature_2m),
+        temp: raw.current.temperature_2m,
+        apparentTemp: raw.current.apparent_temperature,
+        humidity: raw.current.relative_humidity_2m,
+        windSpeed: Math.round(raw.current.wind_speed_10m),
+        isDay: raw.current.is_day === 1,
         code: raw.current.weather_code,
-        city: loc.city // stored so cache hits can also render the city
+        city: loc.city
     };
+
     localStorage.setItem(WEATHER_CONFIG.cacheKey, JSON.stringify({ data, ts: Date.now() }));
     return data;
 }
 
 function renderWeather(data) {
+    currentWeatherState = data;
+    const unit = getPreferredUnit();
+
     const tempEl = document.getElementById('weather-temp');
     const condEl = document.getElementById('weather-condition');
     const cityEl = document.getElementById('weather-city');
-    if (!tempEl || !condEl) return;
+    const lunarEl = document.getElementById('weather-lunar');
+    const apparentEl = document.getElementById('weather-apparent');
+    const humidityEl = document.getElementById('weather-humidity');
+    const windEl = document.getElementById('weather-wind');
+    const lunarAgeEl = document.getElementById('weather-lunar-age');
 
     if (cityEl) cityEl.textContent = data.city;
-    tempEl.textContent = `${data.temp}°C`;
-    condEl.textContent = `${WMO_ICONS[data.code] ?? '◌'} ${WMO_CONDITIONS[data.code] ?? 'Unknown'}`;
+    if (tempEl) tempEl.textContent = formatTemperature(data.temp, unit);
+
+    const iconsMap = data.isDay ? WMO_ICONS_DAY : WMO_ICONS_NIGHT;
+    const icon = iconsMap[data.code] ?? (data.isDay ? '☼' : '☾');
+    const conditionText = WMO_CONDITIONS[data.code] ?? 'Atmospheric';
+    if (condEl) {
+        condEl.textContent = `${icon} ${conditionText}`;
+        condEl.title = `Sky: ${conditionText} · Feels like: ${formatTemperature(data.apparentTemp, unit)} · Humidity: ${data.humidity}% · Wind: ${data.windSpeed} km/h`;
+    }
+
+    // Render Lunar Phase
+    const lunar = getLunarPhase();
+    if (lunarEl) {
+        lunarEl.textContent = `${lunar.icon} ${lunar.illumination}%`;
+        lunarEl.title = `Moon: ${lunar.name} (${lunar.illumination}% illuminated · Day ${lunar.age}/29.5)`;
+    }
+
+    // Render Cockpit Panel Stats
+    if (apparentEl) apparentEl.textContent = formatTemperature(data.apparentTemp, unit);
+    if (humidityEl) humidityEl.textContent = `${data.humidity}%`;
+    if (windEl) windEl.textContent = `${data.windSpeed} km/h`;
+    if (lunarAgeEl) lunarAgeEl.textContent = `${lunar.name} (Day ${lunar.age} / 29.5)`;
+}
+
+function initWeatherInteractions() {
+    const tempBtn = document.getElementById('weather-temp-btn');
+    const expandBtn = document.getElementById('hudExpandBtn');
+    const hudPanel = document.getElementById('hudPanel');
+
+    if (tempBtn) {
+        tempBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const currentUnit = getPreferredUnit();
+            const nextUnit = currentUnit === 'C' ? 'F' : 'C';
+            setPreferredUnit(nextUnit);
+            if (currentWeatherState) {
+                renderWeather(currentWeatherState);
+            }
+        });
+    }
+
+    if (expandBtn && hudPanel) {
+        expandBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const isOpen = hudPanel.classList.toggle('open');
+            expandBtn.classList.toggle('active', isOpen);
+            expandBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            const hud = document.getElementById('ambientHud');
+            if (hud && !hud.contains(e.target) && hudPanel.classList.contains('open')) {
+                hudPanel.classList.remove('open');
+                expandBtn.classList.remove('active');
+                expandBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
 }
 
 async function initWeather() {
+    initWeatherInteractions();
     try {
         const data = await fetchWeather();
         renderWeather(data);
-        logger.log('✅ Weather loaded');
+        logger.log('✅ Ambient Cockpit HUD loaded');
     } catch (err) {
         logger.error('❌ Weather failed:', err);
-        document.getElementById('weather-strip')?.style.setProperty('display', 'none');
+        // Even if network weather fails, lunar engine calculation works offline
+        const lunar = getLunarPhase();
+        const lunarEl = document.getElementById('weather-lunar');
+        if (lunarEl) {
+            lunarEl.textContent = `${lunar.icon} ${lunar.illumination}%`;
+            lunarEl.title = `Moon: ${lunar.name} (${lunar.illumination}% illuminated)`;
+        }
     }
 }
 
@@ -176,6 +336,9 @@ function renderAPOD(data) {
 }
 
 async function initAPOD() {
+    const container = document.getElementById('apod-container');
+    if (!container) return; // Only execute on pages with APOD container (homepage)
+
     try {
         const data = await fetchAPOD();
         renderAPOD(data);

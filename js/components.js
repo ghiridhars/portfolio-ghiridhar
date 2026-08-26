@@ -23,31 +23,46 @@ const NAV_CONFIG = {
 };
 
 /**
- * Generate the dot-face logo HTML
- * The 17x9 pixel art face grid
+ * Generate the brand logo HTML
+ * Kinetic Sisyphus Monogram emblem: GS character physically pushing the boulder up the slope
  */
-function generateDotFaceLogo() {
+function generateBrandLogo() {
     return `
-        <a href="index.html" class="nav-logo" aria-label="Go to homepage">
-            <div class="dot-face" aria-hidden="true">
-                <!-- Row 1: Hair top -->
-                <span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d h"></span><span class="d h"></span><span class="d h"></span><span class="d h"></span><span class="d h"></span><span class="d h"></span><span class="d h"></span><span class="d h"></span><span class="d h"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span>
-                <!-- Row 2: Hair -->
-                <span class="d"></span><span class="d"></span><span class="d"></span><span class="d h"></span><span class="d h"></span><span class="d h"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d h"></span><span class="d h"></span><span class="d h"></span><span class="d"></span><span class="d"></span><span class="d"></span>
-                <!-- Row 3: Forehead top -->
-                <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d h"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d h"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
-                <!-- Row 4: Forehead -->
-                <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
-                <!-- Row 5: Glasses top -->
-                <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
-                <!-- Row 6: Eyes with glasses -->
-                <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d gl"></span><span class="d"></span><span class="d ey" data-eye="left"></span><span class="d"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d"></span><span class="d ey" data-eye="right"></span><span class="d"></span><span class="d gl"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
-                <!-- Row 7: Glasses bottom -->
-                <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d gl"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
-                <!-- Row 8: Nose -->
-                <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
-                <!-- Row 9: Nose bottom -->
-                <span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d o"></span><span class="d"></span><span class="d"></span>
+        <a href="index.html" class="nav-brand-link" id="navBrandLink" aria-label="Ghiridhar S - Home" title="Ghiridhar S · Click to reveal GS">
+            <div class="sisyphus-logo" id="sisyphusLogo" aria-hidden="true">
+                <svg class="sisyphus-svg" id="sisyphusSvg" viewBox="0 0 114 40" width="114" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Mountain Slope Incline & Base -->
+                    <polygon class="slope-fill" points="8,35 90,8 90,35" />
+                    <line class="slope-incline" x1="8" y1="35" x2="90" y2="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <line class="slope-base" x1="4" y1="35" x2="108" y2="35" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <line class="slope-cliff" x1="90" y1="8" x2="90" y2="35" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 2" opacity="0.35" />
+                    
+                    <!-- Kinetic Sisyphus & Boulder Group -->
+                    <g class="sisyphus-kinetic-group" id="sisyphusKineticGroup">
+                        <!-- Sisyphus Character -->
+                        <g class="sisyphus-pusher" id="sisyphusPusher">
+                            <circle class="sisyphus-head" cx="21" cy="18" r="3.2" fill="currentColor" />
+                            <path class="sisyphus-torso" d="M22 21 L27 27" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                            <path class="sisyphus-back-leg" d="M22 27 L16 33.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                            <path class="sisyphus-front-leg" d="M22 27 L24 31 L28 31.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                            <path class="sisyphus-arms" id="sisyphusArms" d="M23.5 22 L31 18.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </g>
+                        
+                        <!-- Rolling Boulder -->
+                        <g class="boulder-group" id="sisyphusBoulderGroup">
+                            <circle class="boulder-body" cx="37.5" cy="18" r="7" fill="currentColor" />
+                            <circle class="boulder-core" cx="37.5" cy="18" r="4.8" stroke="var(--bg-white)" stroke-width="1" stroke-dasharray="3 2" fill="none" opacity="0.7" />
+                            <line class="boulder-axis" x1="33" y1="18" x2="42" y2="18" stroke="var(--bg-white)" stroke-width="1" opacity="0.6" />
+                        </g>
+                    </g>
+                </svg>
+
+                <!-- Revealed GS Monogram Badge -->
+                <div class="revealed-monogram" id="revealedMonogram" style="display: none;">
+                    <span class="monogram-bracket">[</span>
+                    <span class="monogram-text">GS</span>
+                    <span class="monogram-bracket">]</span>
+                </div>
             </div>
         </a>
     `;
@@ -67,7 +82,7 @@ function generateNavigation(activePage = '') {
     <nav class="navbar">
         <div class="container">
             <div class="nav-brand">
-                ${generateDotFaceLogo()}
+                ${generateBrandLogo()}
             </div>
             <button class="nav-toggle" aria-label="Toggle navigation">
                 <span class="hamburger"></span>
@@ -83,6 +98,57 @@ function generateNavigation(activePage = '') {
             </ul>
         </div>
     </nav>
+    `;
+}
+
+/**
+ * Generate Ambient Cockpit HUD HTML (Floating Corner Dock)
+ */
+function generateAmbientHUD() {
+    return `
+    <aside class="ambient-hud" id="ambientHud" aria-label="Ambient weather and lunar telemetry">
+        <div class="hud-pill" id="hudPill">
+            <span class="hud-item hud-location" title="Detected Location">
+                <span class="material-symbols-sharp" aria-hidden="true">location_on</span>
+                <span id="weather-city">—</span>
+            </span>
+            <span class="hud-sep" aria-hidden="true">·</span>
+            <button class="hud-item hud-temp-btn" id="weather-temp-btn" aria-label="Toggle temperature unit" title="Click to toggle °C / °F">
+                <span id="weather-temp">—</span>
+            </button>
+            <span class="hud-sep" aria-hidden="true">·</span>
+            <span class="hud-item hud-cond" id="weather-condition" title="Sky condition">—</span>
+            <span class="hud-sep" aria-hidden="true">·</span>
+            <span class="hud-item hud-lunar" id="weather-lunar" title="Lunar phase & illumination">—</span>
+            <button class="hud-expand-btn" id="hudExpandBtn" aria-expanded="false" aria-label="Toggle telemetry details" title="Open Cockpit Telemetry">
+                <span class="material-symbols-sharp" aria-hidden="true">keyboard_arrow_up</span>
+            </button>
+        </div>
+        <div class="hud-panel" id="hudPanel">
+            <div class="hud-panel-header">
+                <span>Telemetry Status</span>
+                <span id="hudStatusDot">● LIVE</span>
+            </div>
+            <div class="hud-panel-grid">
+                <div class="hud-stat-row">
+                    <span class="hud-stat-label">Feels Like:</span>
+                    <span class="hud-stat-val" id="weather-apparent">—</span>
+                </div>
+                <div class="hud-stat-row">
+                    <span class="hud-stat-label">Humidity:</span>
+                    <span class="hud-stat-val" id="weather-humidity">—</span>
+                </div>
+                <div class="hud-stat-row">
+                    <span class="hud-stat-label">Wind Velocity:</span>
+                    <span class="hud-stat-val" id="weather-wind">—</span>
+                </div>
+                <div class="hud-stat-row">
+                    <span class="hud-stat-label">Lunar Cycle:</span>
+                    <span class="hud-stat-val" id="weather-lunar-age">—</span>
+                </div>
+            </div>
+        </div>
+    </aside>
     `;
 }
 

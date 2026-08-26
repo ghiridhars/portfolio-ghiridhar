@@ -5,67 +5,165 @@
 // ========================================
 
 /**
- * Dot Matrix Face - Eye Tracking & Blink
- * Makes the face logo interactive and lively
+ * Kinetic Sisyphus Logo - Micro-Physics & Slope Motion
+ * Makes the mountain boulder reactive to cursor movement, hover, and clicks
  */
-function initDotFace() {
-    const dotFace = document.querySelector('.dot-face');
-    const eyes = document.querySelectorAll('.dot-face .d.ey');
+function initSisyphusLogo() {
+    const logo = document.getElementById('sisyphusLogo');
+    const svg = document.getElementById('sisyphusSvg');
+    const pusher = document.getElementById('sisyphusPusher');
+    const boulder = document.getElementById('sisyphusBoulderGroup');
+    const arms = document.getElementById('sisyphusArms');
+    const monogram = document.getElementById('revealedMonogram');
+    const brandLink = document.getElementById('navBrandLink');
     
-    if (!dotFace || eyes.length === 0) return;
+    if (!logo || !boulder || !pusher) return;
     
     // Check for reduced motion preference
     if (prefersReducedMotion()) {
-        logger.log('👁️ Face animations disabled (reduced motion)');
+        logger.log('🏔️ Sisyphus logo animations disabled (reduced motion)');
         return;
     }
+
+    // Unit vector along the incline (dx = 82, dy = -27, L ≈ 86.33)
+    const ux = 0.950;
+    const uy = -0.313;
+    const boulderRadius = 7;
     
-    // Eye tracking - follow mouse cursor (throttled to 60fps for performance)
-    const handleMouseMove = throttle((e) => {
-        const faceRect = dotFace.getBoundingClientRect();
-        const faceCenterX = faceRect.left + faceRect.width / 2;
-        const faceCenterY = faceRect.top + faceRect.height / 2;
+    let currentS = 0;
+    let targetS = 0;
+    let isRolling = false;
+    let isRevealed = false;
+    let animFrame = null;
+
+    function applyPosition(s, boulderExtraAngle = 0, pusherExtraLean = 0) {
+        const tx = s * ux;
+        const ty = s * uy;
+        // Rotation of the boulder as it moves along the slope
+        const rot = ((s / boulderRadius) * (180 / Math.PI)) + boulderExtraAngle;
         
-        // Calculate direction from face to mouse
-        const deltaX = e.clientX - faceCenterX;
-        const deltaY = e.clientY - faceCenterY;
-        
-        // Normalize and limit movement (max 1.5px in any direction)
-        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        const maxMove = 1.5;
-        
-        let moveX = 0;
-        let moveY = 0;
-        
-        if (distance > 10) { // Only move if mouse is far enough
-            moveX = (deltaX / distance) * maxMove;
-            moveY = (deltaY / distance) * maxMove;
-        }
-        
-        // Apply to both eyes
-        eyes.forEach(eye => {
-            eye.style.transform = `translate(${moveX}px, ${moveY}px)`;
-        });
-    }, 16); // ~60fps
-    
-    document.addEventListener('mousemove', handleMouseMove);
-    
-    // Random blink
-    function triggerBlink() {
-        eyes.forEach(eye => {
-            eye.classList.add('blink');
-            setTimeout(() => eye.classList.remove('blink'), 150);
-        });
-        
-        // Schedule next blink (random 2-6 seconds)
-        const nextBlink = 2000 + Math.random() * 4000;
-        setTimeout(triggerBlink, nextBlink);
+        boulder.style.transform = `translate(${tx}px, ${ty}px) rotate(${rot}deg)`;
+        pusher.style.transform = `translate(${tx}px, ${ty}px) skewX(${pusherExtraLean}deg)`;
     }
-    
-    // Start blinking after initial delay
-    setTimeout(triggerBlink, 1500);
-    
-    logger.log('👓 Dot face initialized with eye tracking & blink');
+
+    // Cursor tracking - subtle slope ascent/descent based on mouse position
+    const handleMouseMove = throttle((e) => {
+        if (isRolling || isRevealed) return;
+        const normX = (e.clientX / window.innerWidth) - 0.5;
+        const normY = (e.clientY / window.innerHeight) - 0.5;
+        targetS = (normX * 22) - (normY * 12);
+        targetS = Math.max(-6, Math.min(26, targetS));
+    }, 20);
+
+    document.addEventListener('mousemove', handleMouseMove);
+
+    // Smooth interpolation loop (lerp)
+    function renderLoop() {
+        if (!isRolling && !isRevealed) {
+            currentS += (targetS - currentS) * 0.12;
+            const lean = (currentS > 0) ? -Math.min(8, currentS * 0.35) : 0;
+            applyPosition(currentS, 0, lean);
+        }
+        animFrame = requestAnimationFrame(renderLoop);
+    }
+    animFrame = requestAnimationFrame(renderLoop);
+
+    // Hover effect: GS pushes the boulder near the summit peak
+    logo.addEventListener('mouseenter', () => {
+        if (isRolling || isRevealed) return;
+        targetS = 32;
+    });
+
+    logo.addEventListener('mouseleave', () => {
+        if (isRolling || isRevealed) return;
+        targetS = 0;
+    });
+
+    function resetToSisyphus() {
+        if (!isRevealed) return;
+        if (monogram && svg) {
+            monogram.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+            monogram.style.opacity = '0';
+            monogram.style.transform = 'scale(0.8)';
+            setTimeout(() => {
+                monogram.style.display = 'none';
+                monogram.classList.remove('monogram-reveal-anim');
+                svg.style.display = 'block';
+                svg.style.opacity = '1';
+                svg.style.transform = 'none';
+                boulder.style.opacity = '1';
+                boulder.style.transition = 'none';
+                pusher.style.transition = 'none';
+                applyPosition(0, 0, 0);
+                currentS = 0;
+                targetS = 0;
+                isRolling = false;
+                isRevealed = false;
+            }, 200);
+        }
+    }
+
+    // Click Handling:
+    // First Click: Sisyphus pushes boulder to peak -> Boulder falls off cliff -> Reveals [ GS ] monogram (NO REDIRECT)
+    // Second Click (on revealed GS): Redirects to home page (index.html) or scrolls to top
+    if (brandLink) {
+        brandLink.addEventListener('click', (e) => {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const isHomePage = (currentPage === 'index.html' || currentPage === '');
+
+            // Second Click: When [ GS ] monogram is revealed, perform navigation
+            if (isRevealed) {
+                if (isHomePage) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                // If on another page, let normal href="index.html" execute
+                return;
+            }
+
+            // First Click: Trigger summit push, cliff drop, and monogram reveal only
+            e.preventDefault();
+            if (isRolling) return;
+            isRolling = true;
+
+            // Stage 1: Sisyphus pushes boulder up to summit peak (s = 44)
+            pusher.style.transition = 'transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1)';
+            boulder.style.transition = 'transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1)';
+            applyPosition(44, 0, -14);
+
+            // Stage 2: Boulder falls off the cliff
+            setTimeout(() => {
+                if (arms) arms.style.transform = 'rotate(-10deg)';
+                boulder.style.transition = 'transform 0.38s cubic-bezier(0.55, 0.055, 0.675, 0.19), opacity 0.25s ease 0.15s';
+                const tumbleTx = 44 * ux + 6;
+                const tumbleTy = 44 * uy + 30; // Plummets down past the cliff base
+                boulder.style.transform = `translate(${tumbleTx}px, ${tumbleTy}px) rotate(420deg)`;
+                boulder.style.opacity = '0';
+
+                // Stage 3: Reveal the [ GS ] monogram badge (stays visible until clicked)
+                setTimeout(() => {
+                    isRevealed = true;
+                    isRolling = false;
+                    brandLink.setAttribute('title', 'Go to Home (index.html)');
+
+                    if (svg && monogram) {
+                        svg.style.transition = 'opacity 0.18s ease, transform 0.18s ease';
+                        svg.style.opacity = '0';
+                        svg.style.transform = 'scale(0.85)';
+                        setTimeout(() => {
+                            svg.style.display = 'none';
+                            monogram.style.display = 'inline-flex';
+                            monogram.style.opacity = '1';
+                            monogram.style.transform = 'none';
+                            monogram.classList.add('monogram-reveal-anim');
+                        }, 160);
+                    }
+                }, 260);
+            }, 320);
+        });
+    }
+
+    logger.log('🏔️ Kinetic Sisyphus GS logo with Summit Drop & Home Landing initialized');
 }
 
 /**
@@ -778,7 +876,7 @@ function initScrollAnimations() {
 document.addEventListener('DOMContentLoaded', () => {
     initThemeToggle();           // Initialize theme first
     initParticlesBackground();   // Initialize particles background
-    initDotFace();               // Initialize dot face eye tracking & expressions
+    initSisyphusLogo();          // Initialize kinetic Sisyphus logo microphysics
     initMobileNav();
     initSmoothScroll();
     initGlitchEffect();          // Initialize glitch effect on hover
@@ -806,7 +904,7 @@ if (typeof module !== 'undefined' && module.exports) {
         initLazyLoading,
         initScrollToTop,
         initSiteStats,
-        initDotFace,
+        initSisyphusLogo,
         initScrollAnimations
     };
 }

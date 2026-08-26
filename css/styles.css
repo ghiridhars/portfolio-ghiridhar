@@ -354,6 +354,8 @@ img {
 }
 
 .navbar .container {
+    max-width: 100%;
+    padding: 0 clamp(1.5rem, 4vw, 3.5rem);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -374,87 +376,322 @@ img {
 }
 
 /* ========================================
-   DOT MATRIX HALF-FACE (Peeping with Glasses)
+   AMBIENT COCKPIT HUD (Floating Corner Dock)
    ======================================== */
 
-.dot-face {
-    display: grid;
-    grid-template-columns: repeat(17, 4px);
-    grid-template-rows: repeat(9, 4px);
-    gap: 2px;
-}
-
-/* Base dot - invisible */
-.dot-face .d {
-    width: 4px;
-    height: 4px;
-    background-color: transparent;
-    border-radius: 50%;
-}
-
-/* Hair dots */
-.dot-face .d.h {
-    background-color: var(--text-dark);
-}
-
-/* Forehead/face edge */
-.dot-face .d.o {
-    background-color: var(--text-dark);
-}
-
-/* Glasses frame - thin rectangular dots */
-.dot-face .d.gl {
-    width: 4px;
-    height: 4px;
-    background-color: var(--text-dark);
-    border-radius: 0;
-    opacity: 0.4;
-}
-
-/* Eye dots */
-.dot-face .d.ey {
-    width: 4px;
-    height: 4px;
-    background-color: var(--text-dark);
-    border-radius: 50%;
-    position: relative;
-    transition: transform 0.15s ease-out;
-}
-
-/* Eye blink animation */
-.dot-face .d.ey.blink {
-    animation: eyeBlink 0.15s ease-in-out;
-}
-
-@keyframes eyeBlink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
-
-/* Nav logo - simple, no glitch */
-.nav-logo {
-    position: relative;
+.ambient-hud {
+    position: fixed;
+    bottom: 1.5rem;
+    left: clamp(1rem, 3vw, 2.5rem);
+    z-index: 999;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    user-select: none;
     display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.hud-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: var(--bg-white);
+    background-color: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--text-dark);
+    border: 1.5px solid var(--border-color);
+    padding: 0.35rem 0.65rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+[data-theme="dark"] .hud-pill {
+    background-color: rgba(0, 0, 0, 0.92);
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.05);
+}
+
+.hud-pill:hover {
+    border-color: var(--text-dark);
+    transform: translateY(-1px);
+}
+
+.hud-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.hud-location {
+    font-weight: 600;
+}
+
+.hud-location .material-symbols-sharp {
+    font-size: 0.9rem;
+}
+
+.hud-temp-btn {
+    background: none;
+    border: 1px dashed var(--border-color);
+    padding: 0.05rem 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    cursor: pointer;
+    border-radius: 0;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.hud-temp-btn:hover {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    border-style: solid;
+}
+
+.hud-sep {
+    opacity: 0.3;
+}
+
+.hud-cond,
+.hud-lunar {
+    color: var(--text-dark);
+}
+
+.hud-expand-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    margin-left: 0.2rem;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.hud-expand-btn .material-symbols-sharp {
+    font-size: 1.1rem;
+}
+
+.hud-expand-btn:hover,
+.hud-expand-btn.active {
+    color: var(--text-dark);
+}
+
+.hud-expand-btn.active {
+    transform: rotate(180deg);
+}
+
+/* Expanded Cockpit Panel */
+.hud-panel {
+    background-color: var(--bg-white);
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 2px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    min-width: 260px;
+    max-width: 320px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-dark);
+}
+
+[data-theme="dark"] .hud-panel {
+    background-color: rgba(0, 0, 0, 0.95);
+}
+
+.hud-panel.open {
+    display: flex;
+    animation: hudSlideUp 0.18s ease-out;
+}
+
+@keyframes hudSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hud-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.35rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+
+.hud-panel-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+}
+
+.hud-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hud-stat-label {
+    opacity: 0.65;
+}
+
+.hud-stat-val {
+    font-weight: 600;
+}
+
+/* ========================================
+   KINETIC SISYPHUS MONOGRAM LOGO
+   ======================================== */
+
+.nav-brand-link {
+    display: inline-flex;
     align-items: center;
     text-decoration: none;
-    padding: 0.25rem;
+    color: var(--text-dark);
+    padding: 0.15rem 0;
+    transition: opacity var(--transition-fast);
 }
 
-/* Subtle scale on hover instead of glitch */
-.nav-logo:hover .dot-face {
-    transform: scale(1.05);
-    transition: transform 0.2s ease;
+.nav-brand-link:hover {
+    opacity: 0.9;
+}
+
+.sisyphus-logo {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.sisyphus-svg {
+    display: block;
+    overflow: visible;
+    color: var(--text-dark);
+    height: 38px;
+    width: auto;
+}
+
+.slope-incline,
+.slope-base {
+    stroke: var(--text-dark);
+    stroke-width: 2.2px;
+    stroke-linecap: round;
+    transition: stroke var(--transition-base);
+}
+
+.slope-cliff {
+    stroke: var(--text-dark);
+}
+
+.slope-fill {
+    fill: var(--text-dark);
+    opacity: 0.07;
+    transition: fill var(--transition-base), opacity var(--transition-fast);
+}
+
+.sisyphus-logo:hover .slope-fill {
+    opacity: 0.12;
+}
+
+.sisyphus-tag {
+    font-family: var(--font-mono);
+    font-size: 8.5px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+}
+
+.sisyphus-pusher,
+.boulder-group,
+.sisyphus-kinetic-group {
+    transition: transform 0.14s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform-origin: 37.5px 18px;
+}
+
+.boulder-body {
+    fill: var(--text-dark);
+}
+
+/* Revealed GS Monogram Badge (Post-Drop State) */
+.revealed-monogram {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: var(--text-dark);
+    padding: 0.25rem 0.65rem;
+    border: 2px solid var(--text-dark);
+    background-color: var(--bg-white);
+    box-shadow: 3px 3px 0px var(--border-color);
+    cursor: pointer;
+    user-select: none;
+    line-height: 1;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+[data-theme="dark"] .revealed-monogram {
+    background-color: rgba(0, 0, 0, 0.9);
+    box-shadow: 3px 3px 0px rgba(255, 255, 255, 0.15);
+}
+
+.revealed-monogram:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0px var(--border-color);
+}
+
+.revealed-monogram .monogram-bracket {
+    opacity: 0.45;
+    font-weight: 400;
+}
+
+.revealed-monogram .monogram-text {
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    color: var(--text-dark);
+}
+
+.monogram-reveal-anim {
+    animation: monogramPop 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes monogramPop {
+    from {
+        opacity: 0;
+        transform: scale(0.65) translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-    .dot-face .d.ey {
-        animation: none;
-        transition: none;
-    }
-    
-    .nav-logo:hover .dot-face {
-        transform: none;
+    .sisyphus-pusher,
+    .boulder-group,
+    .sisyphus-kinetic-group,
+    .revealed-monogram {
+        transition: none !important;
+        animation: none !important;
     }
 }
 
@@ -934,6 +1171,22 @@ img {
     .nav-toggle {
         display: flex;
     }
+
+    /* Ambient HUD Mobile */
+    .ambient-hud {
+        bottom: max(0.85rem, env(safe-area-inset-bottom));
+        left: 0.85rem;
+    }
+    
+    .hud-pill {
+        font-size: 0.72rem;
+        padding: 0.3rem 0.5rem;
+        gap: 0.3rem;
+    }
+    
+    .hud-cond {
+        display: none;
+    }
     
     .nav-menu {
         position: fixed;
@@ -1006,6 +1259,13 @@ img {
 
 /* Mobile */
 @media (max-width: 480px) {
+    .hud-location {
+        max-width: 70px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     :root {
         --spacing-lg: 1.5rem;
         --spacing-xl: 2rem;
